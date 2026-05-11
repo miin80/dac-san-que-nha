@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/cn";
@@ -20,11 +21,26 @@ const NAV = [
 
 /**
  * Header luxury — sticky, đổi sang nền cream khi scroll > 40px.
- * Mobile menu: full-screen overlay với typography display lớn.
+ *
+ * Logic màu:
+ *   - Trang chủ ("/") ở top  → transparent + chữ sáng (nằm trên hero tối)
+ *   - Trang chủ đã scroll    → solid cream + chữ tối
+ *   - MỌI TRANG KHÁC (/san-pham, /san-pham/[slug]) → LUÔN solid cream + chữ tối
+ *     (vì các trang này không có hero tối, chữ sáng sẽ chìm vào nền cream)
+ *
+ * Logo + tên brand → luôn link về "/" (Next.js Link, client-side navigation).
+ * Active nav: trang "/san-pham*" → highlight nhẹ menu "Cửa hàng".
  */
 export function Header() {
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+
+  // Header tối/sáng:
+  // - Trên trang chủ thì depend vào scroll
+  // - Trên trang khác thì LUÔN solid
+  const solidHeader = scrolled || !isHomepage;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -40,29 +56,43 @@ export function Header() {
     };
   }, [open]);
 
+  // Đóng mobile menu khi đổi route
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  /** Active state cho mỗi menu item */
+  const isActive = (href: string) => {
+    if (href === "/san-pham") return pathname.startsWith("/san-pham");
+    return false; // anchor links (/#...) không highlight
+  };
+
   return (
     <>
       <header
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-all duration-700 ease-expo-out",
-          scrolled
-            ? "bg-cream-50/90 backdrop-blur-xl shadow-hair border-b border-wood-100/30"
+          solidHeader
+            ? "bg-cream-50/95 backdrop-blur-xl shadow-hair border-b border-wood-100/40"
             : "bg-transparent",
         )}
       >
-        {/* Header compress khi scroll: 80px → 64px */}
         <div
           className={cn(
             "mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 transition-all duration-700 ease-expo-out sm:px-8",
-            scrolled ? "h-16" : "h-20",
+            solidHeader ? "h-16" : "h-20",
           )}
         >
-          {/* Logo — co lại khi scroll */}
-          <Link href="#top" className="flex items-center gap-3.5" aria-label={BRAND.name}>
+          {/* ─────────────── LOGO + BRAND NAME → "/" ─────────────── */}
+          <Link
+            href="/"
+            aria-label={`${BRAND.name} — Về trang chủ`}
+            className="group flex cursor-pointer items-center gap-3.5 transition-all duration-500 ease-expo-out hover:opacity-85"
+          >
             <span
               className={cn(
-                "relative overflow-hidden rounded-full ring-1 ring-wood-500/20 transition-all duration-700 ease-expo-out",
-                scrolled ? "h-10 w-10" : "h-12 w-12",
+                "relative overflow-hidden rounded-full ring-1 ring-wood-500/20 transition-all duration-700 ease-expo-out group-hover:scale-[1.03]",
+                solidHeader ? "h-10 w-10" : "h-12 w-12",
               )}
             >
               <Image
@@ -78,15 +108,17 @@ export function Header() {
               <span
                 className={cn(
                   "font-display font-semibold tracking-tight transition-all duration-700 ease-expo-out",
-                  scrolled ? "text-[15px] text-wood-900 sm:text-base" : "text-base text-cream-50 sm:text-lg",
+                  solidHeader
+                    ? "text-[15px] text-wood-900 sm:text-base"
+                    : "text-base text-cream-50 sm:text-lg",
                 )}
               >
                 {BRAND.name}
               </span>
               <span
                 className={cn(
-                  "text-[9px] uppercase tracking-luxury transition-colors duration-700 mt-0.5",
-                  scrolled ? "text-brick-500" : "text-cream-200/90",
+                  "mt-0.5 text-[9px] uppercase tracking-luxury transition-colors duration-700",
+                  solidHeader ? "text-brick-500" : "text-cream-200/90",
                 )}
               >
                 Bánh kẹo truyền thống
@@ -94,30 +126,37 @@ export function Header() {
             </span>
           </Link>
 
-          {/* Nav desktop */}
+          {/* ─────────────── NAV DESKTOP ─────────────── */}
           <nav className="hidden lg:flex items-center gap-1">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition-all duration-500 ease-expo-out",
-                  scrolled
-                    ? "text-wood-700 hover:bg-wood-900/5 hover:text-brick-500"
-                    : "text-cream-100 hover:bg-cream-50/10 hover:text-cream-50",
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV.map((item) => {
+              const active = isActive(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "rounded-full px-4 py-2 text-sm font-medium transition-all duration-500 ease-expo-out",
+                    // Active state — bất kể solidHeader
+                    active && solidHeader && "bg-brick-500/10 text-brick-500",
+                    active && !solidHeader && "bg-cream-50/15 text-cream-50",
+                    // Inactive state
+                    !active && solidHeader && "text-wood-700 hover:bg-wood-900/5 hover:text-brick-500",
+                    !active && !solidHeader && "text-cream-100 hover:bg-cream-50/10 hover:text-cream-50",
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
+          {/* ─────────────── HOTLINE + MOBILE MENU TOGGLE ─────────────── */}
           <div className="flex items-center gap-2">
             <a
               href={BRAND.hotlineHref}
               className={cn(
-                "hidden md:inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-500 ease-expo-out",
-                scrolled
+                "hidden items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-500 ease-expo-out md:inline-flex",
+                solidHeader
                   ? "bg-brick-500 text-cream-50 hover:bg-brick-600"
                   : "bg-cream-50/15 text-cream-50 backdrop-blur-md hover:bg-cream-50 hover:text-wood-900",
               )}
@@ -130,7 +169,7 @@ export function Header() {
               aria-label="Mở menu"
               className={cn(
                 "inline-flex h-12 w-12 items-center justify-center rounded-full transition-colors duration-500 lg:hidden",
-                scrolled ? "text-wood-900 hover:bg-wood-900/5" : "text-cream-50 hover:bg-cream-50/10",
+                solidHeader ? "text-wood-900 hover:bg-wood-900/5" : "text-cream-50 hover:bg-cream-50/10",
               )}
             >
               <Menu size={22} />
@@ -139,7 +178,7 @@ export function Header() {
         </div>
       </header>
 
-      {/* Full-screen mobile menu — luxury typography */}
+      {/* ─────────────── MOBILE MENU full-screen ─────────────── */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -149,7 +188,6 @@ export function Header() {
             transition={{ duration: 0.4 }}
             className="fixed inset-0 z-[55] lg:hidden"
           >
-            {/* Background — wood-950 với texture */}
             <motion.div
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
@@ -159,12 +197,18 @@ export function Header() {
             />
             <div className="pointer-events-none absolute inset-0 opacity-[0.07] bg-indochina-grid" />
 
-            {/* Header bar */}
+            {/* Header bar — logo cũng link về "/" */}
             <div className="relative flex h-20 items-center justify-between px-6 sm:px-8">
-              <span className="font-display text-lg font-semibold text-cream-50">{BRAND.name}</span>
+              <Link
+                href="/"
+                onClick={() => setOpen(false)}
+                className="font-display text-lg font-semibold text-cream-50 transition-opacity hover:opacity-85"
+              >
+                {BRAND.name}
+              </Link>
               <button
                 onClick={() => setOpen(false)}
-                className="inline-flex h-12 w-12 items-center justify-center rounded-full text-cream-50 hover:bg-cream-50/10 transition-colors"
+                className="inline-flex h-12 w-12 items-center justify-center rounded-full text-cream-50 transition-colors hover:bg-cream-50/10"
                 aria-label="Đóng menu"
               >
                 <X size={22} />
@@ -173,31 +217,49 @@ export function Header() {
 
             {/* Nav links lớn */}
             <nav className="relative mt-8 flex flex-col px-6 sm:px-8">
-              {NAV.map((item, i) => (
-                <motion.div
-                  key={item.href}
-                  initial={{ opacity: 0, x: 24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + i * 0.07, duration: 0.7, ease: luxuryEase }}
-                  className="border-b border-cream-50/10 last:border-0"
-                >
-                  <Link
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className="group flex items-center justify-between py-5"
+              {NAV.map((item, i) => {
+                const active = isActive(item.href);
+                return (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, x: 24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + i * 0.07, duration: 0.7, ease: luxuryEase }}
+                    className="border-b border-cream-50/10 last:border-0"
                   >
-                    <span className="flex items-center gap-5">
-                      <span className="font-display italic text-sm text-gold-400/80 tabular-nums">
-                        {item.number}
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="group flex items-center justify-between py-5"
+                    >
+                      <span className="flex items-center gap-5">
+                        <span
+                          className={cn(
+                            "font-display italic text-sm tabular-nums",
+                            active ? "text-gold-400" : "text-gold-400/80",
+                          )}
+                        >
+                          {item.number}
+                        </span>
+                        <span
+                          className={cn(
+                            "font-display text-[34px] font-light transition-colors sm:text-[44px]",
+                            active ? "text-gold-400" : "text-cream-50 group-hover:text-gold-400",
+                          )}
+                        >
+                          {item.label}
+                        </span>
                       </span>
-                      <span className="font-display text-[34px] font-light text-cream-50 transition-colors group-hover:text-gold-400 sm:text-[44px]">
-                        {item.label}
-                      </span>
-                    </span>
-                    <span className="h-px w-8 origin-right bg-cream-50/30 transition-all duration-500 group-hover:w-16 group-hover:bg-gold-400" />
-                  </Link>
-                </motion.div>
-              ))}
+                      <span
+                        className={cn(
+                          "h-px origin-right transition-all duration-500",
+                          active ? "w-16 bg-gold-400" : "w-8 bg-cream-50/30 group-hover:w-16 group-hover:bg-gold-400",
+                        )}
+                      />
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </nav>
 
             {/* Footer hotline */}
@@ -205,9 +267,12 @@ export function Header() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.7 }}
-              className="absolute inset-x-6 bottom-10 sm:inset-x-8 pb-safe"
+              className="absolute inset-x-6 bottom-10 pb-safe sm:inset-x-8"
             >
-              <a href={BRAND.hotlineHref} className="flex items-center justify-center gap-2.5 rounded-full bg-brick-500 px-8 py-4 text-[11px] font-semibold uppercase tracking-luxury text-cream-50 shadow-soft hover:bg-brick-600 transition-colors">
+              <a
+                href={BRAND.hotlineHref}
+                className="flex items-center justify-center gap-2.5 rounded-full bg-brick-500 px-8 py-4 text-[11px] font-semibold uppercase tracking-luxury text-cream-50 shadow-soft transition-colors hover:bg-brick-600"
+              >
                 <Phone size={14} /> Gọi {BRAND.hotline}
               </a>
               <p className="mt-4 text-center text-[10px] uppercase tracking-luxury text-cream-200/50">
