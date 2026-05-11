@@ -3,8 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Play, Facebook } from "lucide-react";
-import { BRAND } from "@/lib/data";
+import { Play } from "lucide-react";
 import { fadeUp, viewportOnce } from "@/lib/motion";
 
 /**
@@ -14,7 +13,8 @@ import { fadeUp, viewportOnce } from "@/lib/motion";
  * Click play overlay → gọi ref.play() (luôn work vì element đã mount).
  * Sau khi play → ẩn overlay, hiện native controls để user unmute/scrub.
  *
- * Nếu video lỗi load → onError trigger fallback "Xem trên Facebook".
+ * KHÔNG còn fallback Facebook tự động — nếu video lỗi, native controls
+ * sẽ hiển thị broken state. User có thể tap close hoặc tới Facebook qua FAB.
  */
 export function ProductVideo({
   src,
@@ -27,7 +27,6 @@ export function ProductVideo({
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [started, setStarted] = useState(false);
-  const [errored, setErrored] = useState(false);
 
   const handlePlay = async () => {
     const v = videoRef.current;
@@ -36,7 +35,9 @@ export function ProductVideo({
       await v.play();
       setStarted(true);
     } catch {
-      setErrored(true);
+      // Autoplay block trên iOS — vẫn set started để show controls,
+      // user có thể tap native play button trong controls
+      setStarted(true);
     }
   };
 
@@ -57,19 +58,12 @@ export function ProductVideo({
         loop
         playsInline
         preload="metadata"
-        controls={started && !errored}
-        /* Chỉ fallback khi codec/src thật sự lỗi (code 3, 4).
-           Không fallback cho network glitch hoặc autoplay block. */
-        onError={(e) => {
-          const code = (e.currentTarget as HTMLVideoElement).error?.code;
-          if (code === 3 || code === 4) setErrored(true);
-        }}
+        controls={started}
         className="absolute inset-0 h-full w-full bg-wood-950 object-cover"
       />
 
-      {/* Image overlay — phủ lên video cho tới khi user bấm play.
-          Đảm bảo không bao giờ thấy video element trống/đen. */}
-      {!started && !errored && (
+      {/* Image overlay + play button — phủ lên video cho tới khi user bấm play */}
+      {!started && (
         <>
           <Image
             src={poster}
@@ -78,7 +72,6 @@ export function ProductVideo({
             sizes="(min-width:1024px) 70vw, 95vw"
             className="object-cover"
           />
-          {/* Play button — onClick gọi handlePlay */}
           <button
             onClick={handlePlay}
             aria-label={`Phát video: ${title}`}
@@ -93,22 +86,6 @@ export function ProductVideo({
             </span>
           </button>
         </>
-      )}
-
-      {/* Fallback nếu video lỗi */}
-      {errored && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-wood-950/95 p-6">
-          <a
-            href={BRAND.facebook}
-            target="_blank"
-            rel="noreferrer"
-            className="flex flex-col items-center gap-3 rounded-2xl bg-cream-50 px-7 py-6 text-center text-wood-900 shadow-card"
-          >
-            <Facebook size={26} className="text-[#1877F2]" />
-            <span className="text-sm font-semibold">Video đang tải</span>
-            <span className="text-xs text-wood-500">Bấm để xem trên Facebook</span>
-          </a>
-        </div>
       )}
     </motion.figure>
   );

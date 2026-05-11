@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X, Facebook } from "lucide-react";
-import { REELS, BRAND } from "@/lib/data";
+import { Play, X } from "lucide-react";
+import { REELS } from "@/lib/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 
@@ -133,13 +133,6 @@ function ReelCard({
 /* -------------------------------------------------------------------------- */
 
 function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void }) {
-  const [errored, setErrored] = useState(false);
-
-  // Reset error state khi đổi reel
-  useEffect(() => {
-    setErrored(false);
-  }, [reel]);
-
   // ESC để đóng + lock body scroll
   useEffect(() => {
     if (!reel) return;
@@ -198,27 +191,17 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
             onClick={(e) => e.stopPropagation()}
             className="relative flex h-full w-full items-center justify-center sm:h-auto sm:w-auto sm:max-h-[85vh] sm:max-w-4xl"
           >
-            {errored ? (
-              <ErrorFallback reel={reel} />
-            ) : (
-              <video
-                key={reel.id}
-                src={reel.src}
-                poster={reel.poster}
-                autoPlay
-                muted       /* iOS yêu cầu muted để autoplay — user unmute qua native controls */
-                controls
-                playsInline
-                preload="metadata"
-                /* Chỉ fallback khi codec/src thật sự lỗi (code 3,4)
-                   Không fallback cho network glitch (code 2) hoặc abort (code 1) */
-                onError={(e) => {
-                  const code = (e.currentTarget as HTMLVideoElement).error?.code;
-                  if (code === 3 || code === 4) setErrored(true);
-                }}
-                className="h-full w-full bg-wood-950 object-contain sm:h-auto sm:max-h-[85vh] sm:rounded-2xl"
-              />
-            )}
+            <video
+              key={reel.id}
+              src={reel.src}
+              poster={reel.poster}
+              autoPlay
+              muted          /* iOS Safari yêu cầu muted để autoplay — user unmute qua controls */
+              controls
+              playsInline
+              preload="metadata"
+              className="h-full w-full bg-wood-950 object-contain sm:h-auto sm:max-h-[85vh] sm:rounded-2xl"
+            />
           </motion.div>
 
           {/* Caption mobile — dưới đáy modal */}
@@ -235,33 +218,5 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
         </motion.div>
       )}
     </AnimatePresence>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* ErrorFallback — khi video src không load được                              */
-/* -------------------------------------------------------------------------- */
-
-function ErrorFallback({ reel }: { reel: Reel }) {
-  return (
-    <div className="flex flex-col items-center justify-center gap-5 rounded-2xl bg-cream-50 p-8 text-center text-wood-900 shadow-card sm:p-12">
-      <Facebook size={36} className="text-[#1877F2]" />
-      <div>
-        <p className="font-display text-xl font-medium">
-          Video đang tải
-        </p>
-        <p className="mt-2 text-sm text-wood-500">
-          Bấm để xem trên Facebook
-        </p>
-      </div>
-      <a
-        href={BRAND.facebook}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-2.5 rounded-full bg-[#1877F2] px-6 py-3.5 text-sm font-semibold text-cream-50 transition-colors hover:bg-[#0e6ee1]"
-      >
-        Xem trên Facebook
-      </a>
-    </div>
   );
 }
