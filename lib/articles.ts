@@ -1,0 +1,609 @@
+/**
+ * ============================================================================
+ * HỆ THỐNG BÀI VIẾT (BLOG) — DỮ LIỆU JSON
+ * ============================================================================
+ *
+ * QUY TRÌNH THÊM BÀI MỚI:
+ *   1. Copy 1 object trong `ARTICLES` bên dưới làm template
+ *   2. Đổi `slug` (URL — ASCII không dấu), `title`, `excerpt`, `metaTitle`, `metaDescription`
+ *   3. Soạn `content` dạng mảng các block (paragraph / heading / image / quote / list)
+ *   4. Save — Next.js auto build URL `/tin-tuc/<slug>` (cần git push để Vercel deploy)
+ *
+ * NHỜ AI VIẾT BÀI MỚI — copy đoạn prompt sau gửi cho Claude/ChatGPT:
+ * ┌────────────────────────────────────────────────────────────────────────┐
+ * │ Hãy viết bài blog SEO cho thương hiệu "Đặc Sản Quê Nhà" (bánh kẹo      │
+ * │ truyền thống Việt Nam, làng nghề Bắc Bộ, bán qua Facebook Messenger).  │
+ * │                                                                        │
+ * │ Chủ đề: [ĐIỀN CHỦ ĐỀ — VD: "Kẹo dồi lạc khác kẹo lạc thế nào?"]       │
+ * │ Từ khoá SEO: [LIỆT KÊ TỪ KHOÁ]                                         │
+ * │                                                                        │
+ * │ Yêu cầu:                                                               │
+ * │ - 600-1000 từ, giọng văn editorial luxury (giống Aesop, La Mer)        │
+ * │ - KHÔNG copy nguyên văn website khác — chỉ lấy ý                       │
+ * │ - Có drop-cap paragraph mở đầu                                         │
+ * │ - 3-5 heading H2                                                       │
+ * │ - 2-3 image inline (chọn từ /public/images/...)                        │
+ * │ - 1 pull quote                                                         │
+ * │ - 1 list bullet                                                        │
+ * │ - Kết thúc cảm xúc, không hard-sell                                    │
+ * │ - Format: trả về 1 object kiểu Article TypeScript với content[] blocks │
+ * │                                                                        │
+ * │ Tham khảo template trong lib/articles.ts                               │
+ * └────────────────────────────────────────────────────────────────────────┘
+ *
+ * Cấu trúc CONTENT BLOCKS giúp:
+ *   - Render an toàn (không dangerouslySetInnerHTML)
+ *   - Dễ thêm style luxury cho từng loại block
+ *   - SEO-friendly (heading hierarchy đúng)
+ * ============================================================================
+ */
+
+export type ArticleBlock =
+  | { type: "paragraph"; text: string; dropCap?: boolean }
+  | { type: "heading"; level: 2 | 3; text: string }
+  | { type: "image"; src: string; alt: string; caption?: string }
+  | { type: "quote"; text: string; attribution?: string }
+  | { type: "list"; items: string[]; ordered?: boolean }
+  | { type: "callout"; title?: string; text: string };
+
+export type Article = {
+  slug: string;
+  title: string;                   // H1 hiển thị trên trang
+  excerpt: string;                 // 1-2 dòng — hiện trên card listing
+  category: string;                // "Kiến thức", "Câu chuyện", "Gợi ý quà"
+  coverImage: string;
+  coverImageAlt: string;
+  publishedAt: string;             // YYYY-MM-DD
+  readingMinutes: number;
+  /** SEO — nếu không có sẽ fallback về `title` (max 60 ký tự cho Google) */
+  metaTitle?: string;
+  /** SEO — nếu không có sẽ fallback về `excerpt` (max 160 ký tự) */
+  metaDescription?: string;
+  seoKeywords?: string[];
+  content: ArticleBlock[];
+  relatedProductSlugs?: string[];  // gợi ý sản phẩm liên quan cuối bài
+};
+
+/* -------------------------------------------------------------------------- */
+/* ARTICLES                                                                    */
+/* -------------------------------------------------------------------------- */
+
+export const ARTICLES: Article[] = [
+  // ════════════════════════════════════════════════════════════════════════
+  // BÀI 1 — Top bánh kẹo truyền thống Việt Nam
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    slug: "top-banh-keo-dac-san-viet-nam-lam-qua",
+    title: "Top bánh kẹo đặc sản Việt Nam làm quà — 6 món gói trọn quê hương",
+    excerpt:
+      "Sáu món bánh kẹo gắn liền với tuổi thơ người Việt, được làm thủ công từ làng nghề Bắc Bộ — gợi ý hoàn hảo cho người xa quê, biếu Tết, tặng đối tác.",
+    category: "Gợi ý quà",
+    coverImage: "/images/keo-lac/keo-lac-33.jpg",
+    coverImageAlt: "Bộ ấm trà cổ và dĩa kẹo lạc truyền thống",
+    publishedAt: "2026-02-10",
+    readingMinutes: 7,
+    metaTitle: "Top bánh kẹo đặc sản Việt Nam làm quà — 6 món đặc sắc",
+    metaDescription:
+      "Tổng hợp 6 món bánh kẹo đặc sản Việt Nam làm quà ý nghĩa: kẹo lạc, kẹo dồi, bánh cáy, kẹo mè đen, kẹo vừng, kẹo lạc hồng. Làng nghề Bắc Bộ.",
+    seoKeywords: ["bánh kẹo đặc sản Việt Nam làm quà", "đặc sản Việt Nam", "bánh kẹo truyền thống", "kẹo lạc", "bánh cáy"],
+    content: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Mỗi vùng đất Việt có một thức quà riêng — phiên chợ Bắc Bộ có mâm kẹo lạc bà bán phủ giấy đỏ, vùng Nam Định có kẹo dồi trắng muốt, Thái Bình có bánh cáy tiến vua. Sáu món bánh kẹo dưới đây là tinh hoa làng nghề, đã đi qua nhiều thế hệ mà vẫn giữ nguyên hồn cốt thuở ban đầu.",
+      },
+      { type: "heading", level: 2, text: "1. Kẹo lạc — biểu tượng phiên chợ quê" },
+      {
+        type: "image",
+        src: "/images/keo-lac/keo-lac-1.jpg",
+        alt: "Kẹo lạc cao cấp với hạt lạc rang vàng",
+        caption: "Kẹo lạc thủ công — lạc rang vàng, mạch nha tự nấu, cắt miếng vuông vắn.",
+      },
+      {
+        type: "paragraph",
+        text: "Kẹo lạc làm từ lạc nhân tuyển vùng Nghệ — Hà Tĩnh, rang tay tới độ vàng nâu vừa độ. Mạch nha tự nấu lửa nhỏ nhiều giờ, hoà cùng vừng trắng rang già. Cắn vào giòn tan, vị ngọt thanh hậu bùi của lạc — đây là một trong những loại kẹo truyền thống lâu đời nhất ở Bắc Bộ.",
+      },
+      { type: "heading", level: 2, text: "2. Kẹo dồi lạc — nghệ thuật kéo kẹo" },
+      {
+        type: "image",
+        src: "/images/keo-doi/keo-doi-1.jpg",
+        alt: "Kẹo dồi lạc thủ công bên ấm gốm cổ",
+        caption: "Kẹo dồi lạc — vỏ trắng muốt, nhân lạc bùi.",
+      },
+      {
+        type: "paragraph",
+        text: "Bốn giờ sáng, làng đã thức. Bác thợ kéo từng mẻ kẹo dồi trắng muốt, hai cánh tay chai sạn vì mấy chục năm cầm cây kéo gỗ. Nghề này không dạy được bằng sách — chỉ truyền qua đôi tay. Khi nhai, lớp vỏ giòn tách ra, lộ nhân lạc rang giã thô, vị ngọt thanh hậu bùi.",
+      },
+      { type: "heading", level: 2, text: "3. Bánh cáy Thái Bình — đặc sản tiến vua" },
+      {
+        type: "image",
+        src: "/images/banh-cay/banh-cay-3.jpg",
+        alt: "Bánh cáy Thái Bình và tách trà",
+        caption: "Bánh cáy — đặc sản từ thế kỷ XVIII, từng được dâng tiến triều đình.",
+      },
+      {
+        type: "paragraph",
+        text: "Cái tên \"bánh cáy\" không phải vì làm từ con cáy — mà vì những hạt nhân bên trong trông như trứng con cáy ngoài đồng. Bánh hoà quyện gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha. Cắt miếng vuông vắn, vị ngọt nhẹ dẻo bùi, ăn cùng tách trà nóng là chuẩn vị quê Bắc Bộ.",
+      },
+      { type: "heading", level: 2, text: "4. Kẹo mè đen — đậm đà tinh tế" },
+      {
+        type: "image",
+        src: "/images/keo-me-den/keo-me-den-1.jpg",
+        alt: "Kẹo mè đen cắt thanh trên khay tre",
+      },
+      {
+        type: "paragraph",
+        text: "Mè đen rang chín tới — hạt nào hạt nấy đen bóng, dậy mùi thơm bùi. Hoà cùng mạch nha tự nhiên, ăn không ngán, hợp khẩu vị người sành ẩm thực. Đây là một trong những loại kẹo có giá trị dinh dưỡng cao nhất trong nhóm bánh kẹo truyền thống Việt.",
+      },
+      { type: "heading", level: 2, text: "5. Kẹo vừng — đặc sản trứ danh Nam Định" },
+      {
+        type: "image",
+        src: "/images/keo-vung/keo-vung-14.jpg",
+        alt: "Kẹo vừng trắng phủ vừng rang vàng",
+      },
+      {
+        type: "paragraph",
+        text: "Cắt thanh dài, mặt phủ vừng trắng rang vàng đều. Khi cắn, vừng nổ lạo xạo trong miệng, ngọt nhẹ thanh tao. Đây là món quà chiều quen thuộc của trẻ con vùng Nam Định một thuở.",
+      },
+      { type: "heading", level: 2, text: "6. Kẹo lạc hồng — sắc đỏ may mắn" },
+      {
+        type: "image",
+        src: "/images/keo-lac-hong/keo-lac-hong-4.jpg",
+        alt: "Kẹo lạc hồng đỏ tươi từ mạch nha gấc",
+      },
+      {
+        type: "paragraph",
+        text: "Sắc đỏ tươi đặc trưng từ mạch nha gấc tự nhiên — không phẩm màu. Vị ngọt vừa phải, nhân lạc rang nguyên hạt. Người Việt hay chọn kẹo lạc hồng làm quà Tết hoặc đám cưới — vì màu đỏ tượng trưng cho may mắn, hạnh phúc.",
+      },
+      {
+        type: "quote",
+        text: "Quà quê không nằm ở giá tiền. Nó nằm ở chỗ — người làm nhớ ai, người ăn nhớ gì.",
+        attribution: "Đặc Sản Quê Nhà",
+      },
+      {
+        type: "paragraph",
+        text: "Sáu món bánh kẹo trên không chỉ là thức quà — đó là ký ức, là sợi dây nối giữa thế hệ ông bà và con cháu. Mỗi miếng kẹo gói lại một phần văn hoá ẩm thực Việt mà chúng tôi muốn gìn giữ.",
+      },
+    ],
+    relatedProductSlugs: ["keo-lac-300g", "banh-cay-thai-binh-300g", "keo-doi-lac-250g"],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // BÀI 2 — Kẹo lạc — hương vị tuổi thơ
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    slug: "keo-lac-mon-qua-que-tuoi-tho",
+    title: "Kẹo lạc — món quà quê tuổi thơ qua ba thế hệ",
+    excerpt:
+      "Từ phiên chợ sớm có tiếng rao của bà bán kẹo đến mâm cỗ Tết — kẹo lạc đã đi cùng người Việt qua nhiều thế hệ. Vì sao món quà giản dị này lại có sức sống lâu bền đến vậy?",
+    category: "Câu chuyện",
+    coverImage: "/images/keo-lac/keo-lac-1.jpg",
+    coverImageAlt: "Kẹo lạc cao cấp bên tách trà",
+    publishedAt: "2026-03-15",
+    readingMinutes: 5,
+    metaTitle: "Kẹo lạc — món quà quê tuổi thơ | Đặc Sản Quê Nhà",
+    metaDescription:
+      "Kẹo lạc — món quà quê gắn với tuổi thơ người Việt. Tìm hiểu nguồn gốc, cách làm thủ công truyền thống và cách thưởng thức đúng vị.",
+    seoKeywords: ["kẹo lạc", "kẹo lạc truyền thống", "món quà quê tuổi thơ", "đặc sản bánh kẹo"],
+    content: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Phiên chợ sớm. Mâm kẹo lạc phủ giấy đỏ. Tiếng rao của bà bán hàng len qua sương — \"Ai kẹo lạc đê…\". Đứa trẻ nắm tay bà, ngước lên, mân mê đồng năm trăm bạc nhăn nheo trong túi áo. Đó là hình ảnh đã in vào ký ức của nhiều thế hệ người Việt.",
+      },
+      { type: "heading", level: 2, text: "Kẹo lạc — món quà đơn giản, lịch sử dài" },
+      {
+        type: "paragraph",
+        text: "Không ai biết chính xác kẹo lạc xuất hiện từ khi nào. Chỉ biết rằng từ thời ông bà ta, mỗi phiên chợ làng đều có hàng kẹo lạc. Nguyên liệu giản đơn — lạc nhân, mạch nha, vừng — nhưng cách kết hợp lại tạo ra một thức quà có sức lan toả rất riêng.",
+      },
+      { type: "heading", level: 2, text: "Cách làm — chỉ truyền qua đôi tay" },
+      {
+        type: "image",
+        src: "/images/keo-lac/keo-lac-2.jpg",
+        alt: "Cận cảnh kẹo lạc với hạt lạc rang nguyên vẹn",
+        caption: "Hạt lạc rang vàng nguyên vẹn — yếu tố làm nên độ giòn đặc trưng của kẹo lạc.",
+      },
+      {
+        type: "paragraph",
+        text: "Người thợ rang lạc trên chảo gang lửa than. Mắt phải nhìn, mũi phải ngửi — khi nào hạt lạc chuyển vàng nâu, dậy mùi thơm là tắt lửa. Mạch nha nấu lửa nhỏ suốt nhiều giờ cho tới khi quánh đặc. Hai nguyên liệu trộn nhanh, đổ ra khuôn, cán mỏng, cắt miếng — tất cả phải xong trước khi mạch nha nguội.",
+      },
+      {
+        type: "paragraph",
+        text: "Không có công thức viết ra giấy. Chỉ có đôi tay — biết khi nào lạc đủ vàng, mạch nha đủ quánh, kẹo cắt được sạch sẽ. Đây là nghề truyền qua các thế hệ trong gia đình làm nghề.",
+      },
+      { type: "heading", level: 2, text: "Hương vị qua ba thế hệ" },
+      {
+        type: "paragraph",
+        text: "Người già ăn kẹo lạc nhớ thời mình còn bé. Bố mẹ ăn kẹo lạc nhớ phiên chợ tuổi thơ. Con cháu ăn kẹo lạc — học được cách thưởng thức một thứ quà chậm. Đó là sợi dây nối ba thế hệ trong cùng một gia đình.",
+      },
+      {
+        type: "quote",
+        text: "Ngọt của kẹo lạc — không phải ngọt đường. Là ngọt của một buổi sáng đã rất xa.",
+      },
+      { type: "heading", level: 2, text: "Thưởng thức đúng cách" },
+      {
+        type: "list",
+        items: [
+          "Pha một ấm trà xanh hoặc trà sen, để hơi nguội xuống còn ấm.",
+          "Cắn miếng kẹo nhỏ, đừng vội nuốt — nhai chậm để hạt lạc giải phóng vị bùi.",
+          "Nhấp một ngụm trà — vị chát nhẹ của trà sẽ cân lại độ ngọt của kẹo.",
+          "Một miếng — một ngụm. Đủ một buổi chiều.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Kẹo lạc không phải món để ăn nhanh. Nó là cái cớ để gia đình quây quần, là câu chuyện cha kể cho con trong những buổi trà chiều. Đó là lý do qua bao năm, kẹo lạc vẫn ở đó — trong khay quà Tết, trong mâm cỗ giỗ ông bà.",
+      },
+    ],
+    relatedProductSlugs: ["keo-lac-300g", "keo-lac-500g"],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // BÀI 3 — Bánh cáy là gì?
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    slug: "banh-cay-la-gi",
+    title: "Bánh cáy là gì? Vì sao được yêu thích đến vậy?",
+    excerpt:
+      "Cái tên \"bánh cáy\" khiến nhiều người tưởng làm từ con cáy ngoài đồng. Thực hư ra sao? Tìm hiểu nguồn gốc, nguyên liệu và lý do bánh cáy Thái Bình được yêu thích qua nhiều thế hệ.",
+    category: "Kiến thức",
+    coverImage: "/images/banh-cay/banh-cay-3.jpg",
+    coverImageAlt: "Bánh cáy Thái Bình và tách trà nóng",
+    publishedAt: "2026-04-08",
+    readingMinutes: 6,
+    metaTitle: "Bánh cáy là gì? Vì sao được yêu thích — Đặc sản tiến vua",
+    metaDescription:
+      "Bánh cáy là gì? Tìm hiểu nguồn gốc, nguyên liệu, cách làm và lý do bánh cáy Thái Bình — đặc sản tiến vua từ làng Nguyễn — được yêu thích qua nhiều thế hệ.",
+    seoKeywords: ["bánh cáy là gì", "vì sao bánh cáy được yêu thích", "bánh cáy Thái Bình", "đặc sản tiến vua", "bánh cáy làng Nguyễn"],
+    content: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Lần đầu nghe tên \"bánh cáy\", phần lớn người ta nghĩ ngay đến con cáy — loài cua nhỏ sống ở ruộng nước. Nhưng sự thật, bánh cáy không liên quan gì đến con cáy cả. Vậy nguồn gốc cái tên này từ đâu?",
+      },
+      { type: "heading", level: 2, text: "Vì sao gọi là \"bánh cáy\"?" },
+      {
+        type: "paragraph",
+        text: "Theo các nghệ nhân làng Nguyễn (Thái Bình) — nơi đầu tiên làm ra bánh cáy — tên gọi xuất phát từ hình dáng các hạt nhân bên trong bánh. Khi cắt miếng bánh ra, người ta thấy những hạt lạc, vừng, mỡ phần, mứt bí trộn đều — trông giống như trứng con cáy ngoài đồng. Cái tên \"bánh cáy\" được đặt vậy.",
+      },
+      { type: "heading", level: 2, text: "Lịch sử — bánh tiến vua thế kỷ XVIII" },
+      {
+        type: "image",
+        src: "/images/banh-cay/banh-cay-1.jpg",
+        alt: "Cận cảnh bánh cáy với hạt vừng phủ vàng",
+        caption: "Miếng bánh cáy cắt vuông — bên trong là các hạt nhân trộn đều như \"trứng cáy\".",
+      },
+      {
+        type: "paragraph",
+        text: "Bánh cáy có từ thời nhà Lê — Trịnh, được làm tại làng Nguyễn (nay thuộc xã Nguyên Xá, huyện Đông Hưng, tỉnh Thái Bình). Tương truyền bánh từng được tiến lên triều đình làm quà biếu vua chúa. Người dân làng Nguyễn gìn giữ công thức gia truyền qua nhiều thế hệ — đó là lý do hôm nay, bánh cáy Thái Bình vẫn giữ nguyên hương vị xưa.",
+      },
+      { type: "heading", level: 2, text: "Nguyên liệu — bí quyết của vị bùi" },
+      {
+        type: "list",
+        items: [
+          "Gạo nếp cái hoa vàng — chọn loại hạt to, đều, không pha lẫn nếp khác.",
+          "Lạc nhân — rang vàng tay, không khét.",
+          "Vừng trắng — rang già lửa.",
+          "Mứt bí + gừng — tạo vị thơm cay nhẹ.",
+          "Mỡ phần lợn — yếu tố làm nên độ bùi đặc trưng.",
+          "Mạch nha tự nấu — chất kết dính tự nhiên.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Sự kết hợp tinh tế giữa các nguyên liệu này tạo ra một loại bánh có nhiều tầng vị — ngọt thanh, bùi béo, thơm dịu của gừng, lẫn chút cay nhẹ. Bánh dẻo nhưng không dính, cắt miếng vuông vắn, giữ được lâu mà không cần chất bảo quản.",
+      },
+      { type: "heading", level: 2, text: "Cách thưởng thức bánh cáy" },
+      {
+        type: "image",
+        src: "/images/banh-cay/banh-cay-2.jpg",
+        alt: "Hộp bánh cáy đóng gói cao cấp làm quà",
+      },
+      {
+        type: "paragraph",
+        text: "Bánh cáy ngon nhất khi ăn cùng tách trà nóng — trà sen, trà nhài hoặc trà mộc. Cắt miếng vuông nhỏ, đặt lên đĩa, ăn từng miếng nhỏ. Vị béo của mỡ phần, vị bùi của lạc, vị thơm của gừng quyện vào miệng — kết hợp với cái chát thanh của trà — là một trải nghiệm vị giác rất riêng của ẩm thực Bắc Bộ.",
+      },
+      {
+        type: "quote",
+        text: "Bánh cáy không phải món ăn vội. Nó là cái cớ để pha một ấm trà — và mời người thân ngồi lại với mình.",
+      },
+      {
+        type: "callout",
+        title: "Mẹo bảo quản",
+        text: "Bánh cáy bảo quản nơi khô ráo, thoáng mát — không cần để tủ lạnh. Hạn sử dụng thường 60 ngày. Nếu để tủ lạnh, bánh sẽ cứng — trước khi ăn lấy ra ngoài 15 phút cho mềm lại.",
+      },
+      {
+        type: "paragraph",
+        text: "Bánh cáy ngày nay vẫn được làm thủ công tại làng Nguyễn — Thái Bình theo công thức gia truyền. Đó là lý do mỗi miếng bánh vẫn giữ nguyên hồn quê Bắc Bộ — một di sản ẩm thực mà chúng tôi tự hào mang đến cho khách hàng.",
+      },
+    ],
+    relatedProductSlugs: ["banh-cay-thai-binh-300g", "banh-cay-thai-binh-500g"],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // BÀI 4 — Kẹo lạc có tốt không?
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    slug: "keo-lac-co-tot-khong",
+    title: "Kẹo lạc có tốt không? Phân tích thành phần từ góc nhìn làng nghề",
+    excerpt:
+      "Câu hỏi nhiều khách thắc mắc trước khi mua: kẹo lạc có tốt cho sức khoẻ không, ai nên ăn, ai cần hạn chế? Đặc Sản Quê Nhà chia sẻ thật từ góc nhìn người làm nghề.",
+    category: "Kiến thức",
+    coverImage: "/images/keo-lac/keo-lac-8.jpg",
+    coverImageAlt: "Kẹo lạc cắt miếng bày trên đĩa",
+    publishedAt: "2026-04-22",
+    readingMinutes: 6,
+    metaTitle: "Kẹo lạc có tốt không? Phân tích thành phần — Đặc Sản Quê Nhà",
+    metaDescription:
+      "Kẹo lạc truyền thống có tốt cho sức khoẻ không? Phân tích thành phần, lợi ích, lưu ý khi ăn, và cách phân biệt kẹo lạc thật từ làng nghề.",
+    seoKeywords: ["kẹo lạc có tốt không", "kẹo lạc tốt cho sức khoẻ", "thành phần kẹo lạc", "kẹo truyền thống"],
+    content: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "\"Kẹo lạc có tốt không?\" — là câu hỏi nhiều khách hỏi shop trước khi đặt. Người lớn lo về đường, người trẻ băn khoăn dinh dưỡng, các bà nội trợ muốn biết có nên cho con ăn. Bài viết này trả lời thẳng — không marketing.",
+      },
+      { type: "heading", level: 2, text: "Thành phần kẹo lạc truyền thống — gì có gì không" },
+      {
+        type: "paragraph",
+        text: "Kẹo lạc làm thủ công đúng cách chỉ có 4 thành phần chính: lạc nhân, mạch nha (đường mía nấu lửa nhỏ), vừng trắng, một chút muối. Không phẩm màu, không chất bảo quản, không hương liệu hoá học. Đây là điểm khác biệt với kẹo công nghiệp.",
+      },
+      {
+        type: "list",
+        items: [
+          "Lạc nhân — giàu protein thực vật, chất béo lành mạnh (chiếm ~50% trọng lượng kẹo).",
+          "Mạch nha — đường tự nhiên từ mía, không pha trộn syrup ngô.",
+          "Vừng — nguồn canxi và sắt tự nhiên.",
+          "Không có: phẩm màu, hương liệu, chất bảo quản, đường hoá học.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Khi nào ăn kẹo lạc tốt?" },
+      {
+        type: "image",
+        src: "/images/keo-lac/keo-lac-33.jpg",
+        alt: "Đĩa kẹo lạc và ấm trà chiều",
+        caption: "Ăn kẹo lạc trong bữa trà chiều — giúp tỉnh táo, cân bằng vị giác.",
+      },
+      {
+        type: "paragraph",
+        text: "Bữa trà chiều là thời điểm lý tưởng nhất. Một miếng nhỏ kẹo lạc cùng tách trà nóng sẽ giúp tỉnh táo, không gây buồn ngủ như đồ ngọt công nghiệp. Lạc trong kẹo cung cấp năng lượng kéo dài, không gây tăng đường huyết đột ngột nhờ có chất béo và chất xơ tự nhiên.",
+      },
+      { type: "heading", level: 2, text: "Ai nên hạn chế?" },
+      {
+        type: "callout",
+        title: "Lưu ý quan trọng",
+        text: "Dù là kẹo truyền thống, kẹo lạc vẫn chứa đường tự nhiên. Người tiểu đường, người đang ăn kiêng giảm cân, hoặc người dị ứng với lạc nên tham khảo ý kiến bác sĩ trước khi ăn. Mỗi ngày 2-3 miếng nhỏ là vừa đủ.",
+      },
+      { type: "heading", level: 2, text: "So sánh với kẹo công nghiệp" },
+      {
+        type: "paragraph",
+        text: "Kẹo công nghiệp thường có syrup ngô, phẩm màu, hương liệu nhân tạo, chất bảo quản — những thứ giúp kẹo rẻ và lâu hỏng nhưng không tốt cho sức khoẻ về lâu dài. Kẹo lạc thủ công đắt hơn một chút, nhưng đổi lại là sự yên tâm về nguồn gốc nguyên liệu.",
+      },
+      {
+        type: "quote",
+        text: "Kẹo lạc không phải thực phẩm chức năng. Nhưng nếu phải chọn một loại đồ ngọt cho gia đình ăn lâu dài — thì kẹo lạc truyền thống vẫn là lựa chọn lành nhất.",
+      },
+      { type: "heading", level: 2, text: "Cách nhận biết kẹo lạc thật" },
+      {
+        type: "list",
+        items: [
+          "Màu vàng nhạt tự nhiên (không vàng chói lóa).",
+          "Khi cắn vào giòn rụm, không dai, không dính răng.",
+          "Mùi thơm bùi của lạc rang, không mùi hương liệu nồng.",
+          "Đóng gói đơn giản (túi kraft / hộp giấy), không bao bì màu sắc loè loẹt.",
+          "Hạn sử dụng ngắn (45-60 ngày) — kẹo có chất bảo quản thì hạn 6 tháng+.",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Tóm lại: kẹo lạc thủ công là một loại đồ ngọt tương đối lành mạnh — miễn là ăn với lượng vừa phải và chọn được nơi làm có nguồn gốc nguyên liệu rõ ràng. Tại Đặc Sản Quê Nhà, chúng tôi cam kết 100% nguyên liệu Việt, không phẩm màu, làm thủ công theo công thức truyền thống của làng nghề Bắc Bộ.",
+      },
+    ],
+    relatedProductSlugs: ["keo-lac-300g", "keo-me-den-250g"],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // BÀI 5 — Đặc sản Hà Nội làm quà
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    slug: "dac-san-que-huong-nen-mua-lam-qua",
+    title: "Đặc sản quê hương nên mua làm quà — gợi ý theo từng đối tượng",
+    excerpt:
+      "Người xa quê tìm gì khi muốn gửi một món quà về cho gia đình? Gợi ý đặc sản quê hương theo từng đối tượng — bố mẹ, bạn bè, đối tác, người yêu — bảo quản lâu, vận chuyển dễ.",
+    category: "Gợi ý quà",
+    coverImage: "/images/banh-cay/banh-cay-2.jpg",
+    coverImageAlt: "Hộp bánh cáy đóng gói cao cấp làm quà biếu",
+    publishedAt: "2026-04-30",
+    readingMinutes: 5,
+    metaTitle: "Đặc sản quê hương nên mua làm quà — Gợi ý chi tiết",
+    metaDescription:
+      "Đặc sản quê hương nên mua làm quà gì? Gợi ý chi tiết bánh kẹo truyền thống Bắc Bộ làm quà cho bố mẹ, bạn bè, đối tác, người xa quê, Việt kiều.",
+    seoKeywords: ["đặc sản quê hương làm quà", "quà quê biếu Tết", "đặc sản Bắc Bộ", "quà cho người xa quê", "quà Việt kiều"],
+    content: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Người xa quê — dù là Việt kiều ở nước ngoài hay đang công tác trong miền Nam — đến một lúc nào đó sẽ nhớ vị bánh kẹo Bắc Bộ. Một hộp kẹo lạc, một gói bánh cáy gửi về cho mẹ hay biếu bạn bè bên kia — đôi khi giá trị nhiều hơn cả những món quà đắt tiền.",
+      },
+      { type: "heading", level: 2, text: "Tiêu chí chọn quà gửi xa" },
+      {
+        type: "paragraph",
+        text: "Khác với mua tại chỗ, quà gửi đi xa cần đáp ứng vài điều kiện đặc biệt:",
+      },
+      {
+        type: "list",
+        items: [
+          "Bảo quản lâu — ít nhất 30-60 ngày ở nhiệt độ thường.",
+          "Không cần lạnh — vì vận chuyển không có tủ.",
+          "Đóng gói chắc chắn — chịu được va đập đường dài.",
+          "Mang đậm tính \"quê\" — cái mà người xa quê thấy ngay là \"hương vị nhà\".",
+          "Gọn nhẹ — dễ mang xách tay hoặc ship.",
+        ],
+      },
+      { type: "heading", level: 2, text: "Gợi ý combo quà theo đối tượng" },
+      {
+        type: "image",
+        src: "/images/keo-lac/keo-lac-12.jpg",
+        alt: "Bộ ấm trà và đĩa kẹo lạc — phong cách quà biếu truyền thống",
+        caption: "Combo trà + kẹo lạc — sự kết hợp kinh điển của quà biếu Bắc Bộ.",
+      },
+      { type: "heading", level: 3, text: "Quà cho bố mẹ, ông bà" },
+      {
+        type: "paragraph",
+        text: "Bánh cáy + kẹo lạc + kẹo mè đen. Ba loại này dẻo bùi, không quá ngọt, hợp khẩu vị người lớn tuổi. Đặc biệt bánh cáy đi cùng trà sen là chuẩn vị Tết quê.",
+      },
+      { type: "heading", level: 3, text: "Quà cho bạn bè đồng nghiệp" },
+      {
+        type: "paragraph",
+        text: "Combo 4 loại đa dạng — kẹo lạc + kẹo dồi + kẹo vừng + kẹo lạc hồng. Mỗi người một vị thích khác nhau, combo đủ loại sẽ phù hợp với nhiều người.",
+      },
+      { type: "heading", level: 3, text: "Quà Tết — sang trọng & ý nghĩa" },
+      {
+        type: "paragraph",
+        text: "Kẹo lạc hồng (màu đỏ may mắn) + bánh cáy hộp lớn 500g. Đóng gói gọn gàng, mang ý nghĩa cát tường, hợp tặng đầu năm.",
+      },
+      { type: "heading", level: 2, text: "Gửi quà đi nước ngoài — lưu ý" },
+      {
+        type: "callout",
+        title: "Hải quan + vận chuyển",
+        text: "Bánh kẹo khô như kẹo lạc, kẹo dồi, bánh cáy thường được phép nhập khẩu nhiều nước. Tuy nhiên một số nước (Úc, Mỹ) yêu cầu khai báo chính xác thành phần. Khi gửi quà cho người thân, nên ghi rõ \"traditional candy\" hoặc \"peanut brittle\" và liệt kê nguyên liệu trên nhãn.",
+      },
+      {
+        type: "paragraph",
+        text: "Về vận chuyển, các đơn vị uy tín như EMS, DHL, Viettel Post đều nhận gửi bánh kẹo truyền thống. Thời gian giao 5-10 ngày tuỳ vùng. Khuyên đóng thùng có lớp xốp để tránh vỡ.",
+      },
+      {
+        type: "quote",
+        text: "Một miếng kẹo lạc gửi sang Mỹ — không chỉ là kẹo. Đó là tiếng rao của bà bán hàng phiên chợ, là ký ức của một thời mà người ta đã rời xa.",
+      },
+      { type: "heading", level: 2, text: "Đặt qua Facebook — tư vấn miễn phí" },
+      {
+        type: "paragraph",
+        text: "Nếu bạn chưa chắc chọn combo nào phù hợp với đối tượng nhận, hãy nhắn Facebook để được tư vấn miễn phí. Chúng tôi sẽ hỏi vài câu (người nhận ở đâu, độ tuổi, sở thích vị ngọt) rồi gợi ý combo phù hợp nhất, đóng gói chỉn chu để bạn yên tâm gửi đi.",
+      },
+    ],
+    relatedProductSlugs: ["banh-cay-thai-binh-500g", "keo-lac-hong-300g", "keo-lac-300g"],
+  },
+
+  // ════════════════════════════════════════════════════════════════════════
+  // BÀI 6 — Bánh kẹo truyền thống Việt Nam tặng người thân
+  // ════════════════════════════════════════════════════════════════════════
+  {
+    slug: "banh-keo-truyen-thong-tang-nguoi-than",
+    title: "Bánh kẹo truyền thống Việt Nam tặng người thân — Trao đi hơn một món quà",
+    excerpt:
+      "Tặng người thân không nằm ở giá tiền. Một hộp bánh cáy, một túi kẹo lạc gói trong giấy kraft — đôi khi giá trị hơn cả mọi món quà công nghiệp đắt đỏ.",
+    category: "Gợi ý quà",
+    coverImage: "/images/keo-lac/keo-lac-25.jpg",
+    coverImageAlt: "Hộp bánh kẹo truyền thống đóng gói làm quà tặng",
+    publishedAt: "2026-05-05",
+    readingMinutes: 5,
+    metaTitle: "Bánh kẹo truyền thống Việt Nam tặng người thân — Ý nghĩa",
+    metaDescription:
+      "Bánh kẹo truyền thống Việt Nam tặng người thân — ý nghĩa, ấm áp, đậm hương vị quê hương. Gợi ý combo quà cho ông bà, bố mẹ, anh chị em.",
+    seoKeywords: ["bánh kẹo truyền thống tặng người thân", "quà cho người thân", "đặc sản tặng người thân", "bánh kẹo Việt làm quà"],
+    content: [
+      {
+        type: "paragraph",
+        dropCap: true,
+        text: "Có những món quà đắt nhưng không để lại dấu ấn. Có những món quà giản dị nhưng người nhận giữ trong lòng cả đời. Bánh kẹo truyền thống — kẹo lạc bố hay mua, bánh cáy bà bày trong khay Tết — thuộc nhóm thứ hai. Tặng người thân một hộp bánh kẹo quê là tặng cả ký ức.",
+      },
+      { type: "heading", level: 2, text: "Vì sao chọn bánh kẹo truyền thống làm quà tặng?" },
+      {
+        type: "paragraph",
+        text: "Trong thời đại mọi thứ đều có sẵn — sô-cô-la nhập khẩu, bánh kẹo công nghiệp ngoại — thì một hộp kẹo lạc làm thủ công từ làng nghề Việt lại trở nên đặc biệt. Nó không chỉ là thức ăn — đó là thông điệp: \"Tôi nhớ về cội nguồn, và tôi muốn chia sẻ điều đó với bạn.\"",
+      },
+      {
+        type: "image",
+        src: "/images/keo-lac/keo-lac-12.jpg",
+        alt: "Bộ ấm trà và đĩa kẹo lạc — phong cách quà biếu truyền thống",
+        caption: "Một hộp bánh kẹo quê, một bộ ấm trà — đủ để khởi đầu một chiều quây quần.",
+      },
+      { type: "heading", level: 2, text: "Gợi ý quà theo từng người thân" },
+      { type: "heading", level: 3, text: "Cho ông bà — bánh cáy + kẹo mè đen" },
+      {
+        type: "paragraph",
+        text: "Ông bà thường thích vị truyền thống, dễ ăn, không quá ngọt. Bánh cáy dẻo bùi, kẹo mè đen giàu canxi — đây là combo lý tưởng. Đóng hộp giấy lịch sự, kèm một lời chúc viết tay — đơn giản nhưng ấm áp.",
+      },
+      { type: "heading", level: 3, text: "Cho bố mẹ — combo 4 loại đa dạng" },
+      {
+        type: "paragraph",
+        text: "Bố mẹ thường ăn cùng khách, dùng tiếp tân, hoặc cho cháu nhỏ. Một combo đủ 4 loại (kẹo lạc + kẹo dồi + bánh cáy + kẹo lạc hồng) đảm bảo có gì cũng có. Hộp đóng gói gọn gàng để bố mẹ tiện lấy ra mời khách.",
+      },
+      { type: "heading", level: 3, text: "Cho anh chị em — combo nhỏ gọn" },
+      {
+        type: "paragraph",
+        text: "Anh chị em ngang lứa thường thích những thứ \"đậm chất tuổi thơ\". Một túi kẹo dồi lạc hay kẹo vừng — không cần cầu kỳ — gợi nhớ những phiên chợ ngày bé hai anh em theo bà đi.",
+      },
+      { type: "heading", level: 3, text: "Cho người yêu / vợ chồng — bánh cáy hộp lớn" },
+      {
+        type: "paragraph",
+        text: "Một hộp bánh cáy 500g đóng giấy cao cấp, kèm một bó hoa nhỏ và lời nhắn viết tay. Quà không cần lớn, chỉ cần thật. Bánh cáy có thể giữ lâu — tượng trưng cho một mối quan hệ bền bỉ.",
+      },
+      {
+        type: "quote",
+        text: "Quà quê không nằm ở giá tiền. Nó nằm ở chỗ — người làm nhớ ai, người ăn nhớ gì.",
+        attribution: "Đặc Sản Quê Nhà",
+      },
+      { type: "heading", level: 2, text: "Cách trao quà sao cho có giá trị" },
+      {
+        type: "list",
+        items: [
+          "Đừng vội đưa hộp quà rồi đi. Hãy ngồi xuống — pha một tách trà, mở hộp ra cùng người nhận.",
+          "Kể câu chuyện về món quà — vì sao bạn chọn, bạn nghĩ tới ai khi đặt nó.",
+          "Tránh bọc giấy quá cầu kỳ — bánh kẹo truyền thống đẹp nhất ở chính bao bì kraft mộc mạc.",
+          "Kèm một lời nhắn viết tay — chỉ vài dòng cũng đủ làm quà trở nên đặc biệt.",
+        ],
+      },
+      {
+        type: "callout",
+        title: "Lưu ý khi gửi quà đi xa",
+        text: "Bánh kẹo truyền thống bảo quản nơi khô ráo, thoáng mát — hạn 45-60 ngày. Khi gửi đường dài, đóng thùng có xốp chống vỡ. Đặc Sản Quê Nhà hỗ trợ đóng gói chuẩn vận chuyển — bạn chỉ cần nhắn Facebook và cho biết địa chỉ.",
+      },
+      {
+        type: "paragraph",
+        text: "Cuối cùng, người thân không cần món quà hoành tráng. Họ cần cảm nhận được rằng bạn nhớ tới họ. Một hộp bánh cáy, một túi kẹo lạc — gói trong giấy kraft mộc mạc — đôi khi nói được nhiều hơn ngàn lời.",
+      },
+    ],
+    relatedProductSlugs: ["banh-cay-thai-binh-300g", "keo-lac-300g", "keo-me-den-250g"],
+  },
+];
+
+/* -------------------------------------------------------------------------- */
+/* HELPER FUNCTIONS                                                            */
+/* -------------------------------------------------------------------------- */
+
+export const getAllArticles = (): Article[] =>
+  [...ARTICLES].sort((a, b) =>
+    new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+  );
+
+export const getArticleBySlug = (slug: string): Article | undefined =>
+  ARTICLES.find((a) => a.slug === slug);
+
+export const getRelatedArticles = (slug: string, limit = 2): Article[] => {
+  const current = getArticleBySlug(slug);
+  if (!current) return [];
+  return getAllArticles()
+    .filter((a) => a.slug !== slug && a.category === current.category)
+    .slice(0, limit);
+};
+
+/** Format ngày tháng tiếng Việt */
+export const formatDate = (iso: string): string => {
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(d);
+};
+
+/** Format ngày ngắn — VD "15 Tháng 3" */
+export const formatDateShort = (iso: string): string => {
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat("vi-VN", {
+    day: "2-digit",
+    month: "long",
+  }).format(d);
+};

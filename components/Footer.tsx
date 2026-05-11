@@ -104,10 +104,10 @@ export function Footer() {
               Hỗ trợ
             </h3>
             <ul className="space-y-3.5 text-sm">
-              <li><Link href="#gioi-thieu" className="text-cream-200/75 hover:text-gold-400 transition-colors">Câu chuyện</Link></li>
-              <li><Link href="#san-pham" className="text-cream-200/75 hover:text-gold-400 transition-colors">Đặt hàng</Link></li>
-              <li><Link href="#cam-nhan" className="text-cream-200/75 hover:text-gold-400 transition-colors">Cảm nhận</Link></li>
-              <li><Link href="#lien-he" className="text-cream-200/75 hover:text-gold-400 transition-colors">Liên hệ</Link></li>
+              <li><Link href="/#gioi-thieu" className="text-cream-200/75 hover:text-gold-400 transition-colors">Câu chuyện</Link></li>
+              <li><Link href="/san-pham" className="text-cream-200/75 hover:text-gold-400 transition-colors">Cửa hàng</Link></li>
+              <li><Link href="/tin-tuc" className="text-cream-200/75 hover:text-gold-400 transition-colors">Tin tức</Link></li>
+              <li><Link href="/#cam-nhan" className="text-cream-200/75 hover:text-gold-400 transition-colors">Cảm nhận</Link></li>
               <li><a href={BRAND.messenger} target="_blank" rel="noreferrer" className="text-cream-200/75 hover:text-gold-400 transition-colors">Nhắn Facebook đặt hàng</a></li>
             </ul>
           </div>

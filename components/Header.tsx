@@ -16,6 +16,7 @@ const NAV = [
   { href: "/san-pham", label: "Cửa hàng", number: "03" },
   { href: "/#ky-uc", label: "Ký ức quê nhà", number: "04" },
   { href: "/#huong-vi", label: "Hương vị quê", number: "05" },
+  { href: "/tin-tuc", label: "Tin tức", number: "06" },
   { href: "/#lien-he", label: "Liên hệ", number: "—" },
 ];
 
@@ -64,6 +65,7 @@ export function Header() {
   /** Active state cho mỗi menu item */
   const isActive = (href: string) => {
     if (href === "/san-pham") return pathname.startsWith("/san-pham");
+    if (href === "/tin-tuc") return pathname.startsWith("/tin-tuc");
     return false; // anchor links (/#...) không highlight
   };
 
