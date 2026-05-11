@@ -310,13 +310,5 @@ export const getRelatedProducts = (slug: string, limit = 3): Product[] => {
   return [...sameCategory, ...others].slice(0, limit);
 };
 
-/** Tạo URL Zalo với prefill text đặt hàng */
-export const buildOrderZaloUrl = (
-  zaloBase: string,
-  product: Product,
-  qty: number = 1,
-): string => {
-  const total = product.price * qty;
-  const text = `Xin chào Đặc Sản Quê Nhà!\n\nMình muốn đặt:\n• ${product.name} (${product.weight}) — ${new Intl.NumberFormat("vi-VN").format(product.price)}₫ × ${qty}\n\nTổng: ${new Intl.NumberFormat("vi-VN").format(total)}₫\n\nVui lòng tư vấn giúp mình. Cảm ơn shop!`;
-  return `${zaloBase}?text=${encodeURIComponent(text)}`;
-};
+// Đã chuyển toàn bộ sang Messenger.
+// Xem lib/pricing.ts cho hệ thống combo + buildOrderMessage / buildEnquiryMessage.

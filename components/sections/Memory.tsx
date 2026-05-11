@@ -6,19 +6,14 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { fadeUp, headlineReveal, revealClip, stagger, viewportOnce, luxuryEase } from "@/lib/motion";
 
 /**
- * "KÝ ỨC HƯƠNG VỊ QUÊ NHÀ" — magazine editorial luxury.
- *
- * 4 chương ngắn, mỗi chương 1 ảnh + 1 câu poetic + 1 đoạn ngắn 2-3 dòng.
- * Ảnh có parallax nhẹ (dịch chậm hơn nội dung khi scroll) — depth cinematic.
- * Bố cục so le, generous whitespace.
+ * "KÝ ỨC HƯƠNG VỊ QUÊ NHÀ" — đã trim còn 2 chương để dồn nhịp cho commerce.
+ * Chương I: Buổi chợ phiên
+ * Chương II: Đêm ba mươi Tết (full-bleed)
  */
 
 function ChapterLabel({ roman, title }: { roman: string; title: string }) {
   return (
-    <motion.div
-      variants={fadeUp}
-      className="flex flex-col items-center text-center"
-    >
+    <motion.div variants={fadeUp} className="flex flex-col items-center text-center">
       <span className="font-display italic text-base text-brick-500/85 tracking-wide">
         — Chương {roman} —
       </span>
@@ -33,7 +28,6 @@ function ChapterLabel({ roman, title }: { roman: string; title: string }) {
   );
 }
 
-/** Ảnh có parallax khi cuộn — image dịch -8% → +8% */
 function ParallaxImage({
   src,
   alt,
@@ -75,13 +69,12 @@ function ParallaxImage({
 
 export function Memory() {
   return (
-    <section id="ky-uc" className="relative overflow-hidden bg-cream-50 py-36 sm:py-56">
-      {/* Texture nền */}
-      <div className="pointer-events-none absolute inset-0 warm-light opacity-95" />
+    <section id="ky-uc" className="relative overflow-hidden bg-cream-50 py-32 sm:py-44">
+      <div className="pointer-events-none absolute inset-0 warm-light opacity-90" />
       <div className="pointer-events-none absolute inset-0 indo-clouds opacity-30" />
 
       <div className="relative mx-auto max-w-6xl px-6 sm:px-8">
-        {/* ────────────────────────── HEADER SECTION ───────────────────────── */}
+        {/* HEADER */}
         <motion.div
           variants={stagger(0.18, 0.14)}
           initial="hidden"
@@ -102,21 +95,12 @@ export function Memory() {
             className="mt-10 font-display text-display-lg font-light text-wood-900 text-balance sm:text-display-xl"
             style={{ letterSpacing: "-0.005em" }}
           >
-            Ký ức <span className="italic text-brick-500/95">hương vị</span> <br className="hidden sm:block" />
-            quê nhà
+            Ký ức <span className="italic text-brick-500/95">hương vị</span> quê nhà
           </motion.h2>
-
-          <motion.span
-            variants={{
-              hidden: { scaleX: 0 },
-              visible: { scaleX: 1, transition: { duration: 1.4, ease: luxuryEase } },
-            }}
-            className="mx-auto mt-12 block h-px w-20 origin-center bg-gold-500/60"
-          />
 
           <motion.p
             variants={fadeUp}
-            className="mx-auto mt-12 max-w-md text-base leading-[2.1] text-wood-500 text-pretty sm:text-[17px]"
+            className="mx-auto mt-10 max-w-md text-base leading-[2.1] text-wood-500 text-pretty sm:text-[17px]"
           >
             Có những hương vị không nằm trên lưỡi. <br />
             Chúng nằm trong ký ức.
@@ -124,7 +108,7 @@ export function Memory() {
         </motion.div>
 
         {/* ════════════════════════ CHƯƠNG I — Chợ phiên ═══════════════════ */}
-        <div className="mt-36 sm:mt-52">
+        <div className="mt-32 sm:mt-44">
           <motion.div
             variants={stagger(0.16, 0.14)}
             initial="hidden"
@@ -165,54 +149,15 @@ export function Memory() {
           </motion.div>
         </div>
 
-        {/* ════════════════════════ CHƯƠNG II — Ấm trà chiều ═══════════════ */}
-        <div className="mt-40 sm:mt-60">
-          <motion.div
-            variants={stagger(0.16, 0.14)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="grid items-center gap-14 lg:grid-cols-12 lg:gap-24"
-          >
-            <div className="lg:col-span-6 lg:order-1">
-              <ChapterLabel roman="II" title="Ấm trà chiều" />
-
-              <motion.p
-                variants={fadeUp}
-                className="drop-cap mt-14 text-lg leading-[2.05] text-wood-700 text-pretty sm:text-xl"
-              >
-                Mẹ pha trà sen. Đặt lên bàn tre đĩa kẹo dồi. Bố vừa về, áo còn vương mùi nắng đồng. Câu chuyện kéo dài đến lúc đèn dầu lên.
-              </motion.p>
-
-              <motion.div variants={fadeUp} className="mt-10 flex items-center gap-4">
-                <span className="h-px w-12 bg-brick-500/45" />
-                <span className="font-quote italic text-base text-brick-500">
-                  Một ấm trà. Một đĩa kẹo. Một buổi chiều.
-                </span>
-              </motion.div>
-            </div>
-
-            <div className="lg:col-span-6 lg:order-2">
-              <ParallaxImage
-                src="/images/banh-cay/banh-cay-3.jpg"
-                alt="Tách trà và miếng bánh cáy"
-              />
-              <figcaption className="mt-6 px-2 text-right font-quote italic text-sm leading-relaxed text-wood-500">
-                Một góc bàn tre, một tách trà ấm.
-              </figcaption>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ════════════════════════ CHƯƠNG III — Đêm 30 Tết (Full-bleed) ═══ */}
-        <div className="mt-40 sm:mt-60">
+        {/* ════════════════════════ CHƯƠNG II — Đêm 30 Tết (Full-bleed) ═══ */}
+        <div className="mt-36 sm:mt-52">
           <motion.div
             variants={stagger(0.16, 0.14)}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <ChapterLabel roman="III" title="Đêm ba mươi Tết" />
+            <ChapterLabel roman="II" title="Đêm ba mươi Tết" />
 
             <div className="mx-auto mt-16 max-w-5xl">
               <ParallaxImage
@@ -223,12 +168,9 @@ export function Memory() {
               />
             </div>
 
-            <motion.div
-              variants={fadeUp}
-              className="mx-auto mt-16 max-w-2xl"
-            >
+            <motion.div variants={fadeUp} className="mx-auto mt-14 max-w-2xl">
               <p className="drop-cap text-lg leading-[2.1] text-wood-700 text-pretty sm:text-xl">
-                Mâm bánh kẹo bày lên bàn thờ tổ tiên. Kẹo lạc hồng đỏ tươi. Bánh cáy vàng óng dưới ánh nến. Ngoài sân, bố đốt lò bánh chưng — khói trắng quyện vào sương khuya.
+                Mâm bánh kẹo bày lên bàn thờ tổ tiên. Kẹo lạc hồng đỏ tươi. Bánh cáy vàng óng dưới ánh nến. Khói trắng bánh chưng quyện vào sương khuya.
               </p>
 
               <p
@@ -242,63 +184,13 @@ export function Memory() {
           </motion.div>
         </div>
 
-        {/* ════════════════════════ CHƯƠNG IV — Làng nghề ══════════════════ */}
-        <div className="mt-40 sm:mt-60">
-          <motion.div
-            variants={stagger(0.16, 0.14)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-            className="grid gap-14 lg:grid-cols-12 lg:gap-24"
-          >
-            <div className="lg:col-span-5">
-              <ChapterLabel roman="IV" title="Tiếng kéo của làng nghề" />
-
-              <motion.p
-                variants={fadeUp}
-                className="drop-cap mt-14 text-lg leading-[2.05] text-wood-700 text-pretty sm:text-xl"
-              >
-                Bốn giờ sáng. Mạch nha bốc khói trong chảo gang. Hai cánh tay chai sạn vì mấy chục năm cầm cây kéo gỗ.
-              </motion.p>
-
-              <motion.blockquote variants={fadeUp} className="mt-12">
-                <p
-                  className="font-display text-2xl font-light italic leading-snug text-wood-900 sm:text-[30px]"
-                  style={{ letterSpacing: "-0.005em" }}
-                >
-                  Một đời thợ. <br />
-                  Một nghề thủ công. <br />
-                  Một hương vị truyền nhiều thế hệ.
-                </p>
-                <footer className="mt-5 text-[10px] uppercase tracking-luxury text-brick-500/80">
-                  — Lời người làng nghề
-                </footer>
-              </motion.blockquote>
-            </div>
-
-            <div className="lg:col-span-7 grid grid-cols-2 gap-6 sm:gap-8">
-              <ParallaxImage
-                src="/images/keo-lac-hong/keo-lac-hong-3.jpg"
-                alt="Người thợ đóng gói kẹo lạc hồng tại xưởng"
-                aspect="aspect-[3/4]"
-              />
-              <ParallaxImage
-                src="/images/keo-doi/keo-doi-1.jpg"
-                alt="Kẹo dồi lạc thành phẩm bên ấm gốm cổ"
-                aspect="aspect-[3/4]"
-                className="lg:mt-16"
-              />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* ──────────────────────── CLOSING ────────────────────────────── */}
+        {/* CLOSING */}
         <motion.div
           variants={stagger(0.2, 0.16)}
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="mt-40 text-center sm:mt-56"
+          className="mt-32 text-center sm:mt-44"
         >
           <motion.span
             variants={{
@@ -309,7 +201,7 @@ export function Memory() {
           />
           <motion.p
             variants={headlineReveal}
-            className="mx-auto mt-12 max-w-3xl font-display text-2xl font-light italic leading-[1.4] text-wood-900 text-balance sm:text-[34px]"
+            className="mx-auto mt-12 max-w-3xl font-display text-2xl font-light italic leading-[1.4] text-wood-900 text-balance sm:text-[32px]"
             style={{ letterSpacing: "-0.005em" }}
           >
             “Đặc sản quê nhà — không chỉ là vị bánh, viên kẹo. Là cả một thế giới đã rời xa.”

@@ -22,15 +22,15 @@ export type Category = {
 };
 
 /* ----------------------------- THÔNG TIN THƯƠNG HIỆU -----------------------------
- * Các trường ĐÃ XÁC THỰC theo info bạn cung cấp:
- *   - name, tagline, hotline, facebook
- * Các trường CẦN BẠN BỔ SUNG (đang để rỗng / mặc định):
- *   - email     → để rỗng "" sẽ tự ẩn dòng email trên Footer
- *   - address   → đang là mô tả chung, hãy thay địa chỉ thật khi có cửa hàng/xưởng
- *   - hours     → giờ làm việc thật của bạn
- *   - siteUrl   → đổi sau khi gắn domain Vercel
- *   - messenger → tự đoán theo handle FB, hãy verify
- *   - zalo      → suy từ hotline, hãy verify Zalo có active không
+ * Kênh bán hàng duy nhất: FACEBOOK MESSENGER.
+ * (Đã loại bỏ Zalo theo yêu cầu tập trung 100% vào Facebook.)
+ *
+ * Trường cần update khi đổi:
+ *   - hotline / hotlineHref → SĐT
+ *   - facebook              → URL fanpage
+ *   - messenger             → URL m.me (handle fanpage)
+ *   - address / hours       → địa chỉ + giờ mở cửa thật
+ *   - siteUrl               → domain sau khi gắn
  */
 export const BRAND = {
   name: "Đặc Sản Quê Nhà",
@@ -38,10 +38,9 @@ export const BRAND = {
   subTagline: "Những món bánh kẹo tuổi thơ mang đậm hương vị Việt",
   hotline: "055.988.6533",
   hotlineHref: "tel:+84559886533",
-  zalo: "https://zalo.me/0559886533",
   messenger: "https://m.me/dacsanquenhaa",
   facebook: "https://www.facebook.com/dacsanquenhaa",
-  email: "",  // ← Để rỗng cho tới khi có email thật. Footer sẽ tự ẩn.
+  email: "",
   address: "Làng nghề bánh kẹo truyền thống Bắc Bộ — Việt Nam",
   hours: "8:00 – 21:00 mỗi ngày",
   siteUrl: "https://dacsanquenha.vn",

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Facebook, MessageCircle, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Facebook, Phone, Mail, MapPin, Clock } from "lucide-react";
 import { BRAND, CATEGORIES } from "@/lib/data";
 
 /**
@@ -59,13 +59,15 @@ export function Footer() {
                 <Facebook size={17} />
               </a>
               <a
-                href={BRAND.zalo}
+                href={BRAND.messenger}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Zalo"
-                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-cream-50/10 text-cream-50 transition-all duration-500 ease-expo-out hover:bg-brick-500 hover:-translate-y-0.5"
+                aria-label="Messenger"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-cream-50/10 text-cream-50 transition-all duration-500 ease-expo-out hover:bg-[#0084FF] hover:-translate-y-0.5"
               >
-                <MessageCircle size={17} />
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z"/>
+                </svg>
               </a>
               <a
                 href={BRAND.hotlineHref}
@@ -106,7 +108,7 @@ export function Footer() {
               <li><Link href="#san-pham" className="text-cream-200/75 hover:text-gold-400 transition-colors">Đặt hàng</Link></li>
               <li><Link href="#cam-nhan" className="text-cream-200/75 hover:text-gold-400 transition-colors">Cảm nhận</Link></li>
               <li><Link href="#lien-he" className="text-cream-200/75 hover:text-gold-400 transition-colors">Liên hệ</Link></li>
-              <li><a href={BRAND.zalo} target="_blank" rel="noreferrer" className="text-cream-200/75 hover:text-gold-400 transition-colors">Đặt qua Zalo</a></li>
+              <li><a href={BRAND.messenger} target="_blank" rel="noreferrer" className="text-cream-200/75 hover:text-gold-400 transition-colors">Nhắn Facebook đặt hàng</a></li>
             </ul>
           </div>
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { type Product } from "@/lib/products";
-import { formatPrice } from "@/lib/data";
+import { formatPrice, getStartingPrice } from "@/lib/pricing";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 
 /**
@@ -79,9 +79,12 @@ export function RelatedProducts({ products }: { products: Product[] }) {
                   </h3>
                   <p className="mt-2 text-sm text-wood-500">{p.weight}</p>
                   <div className="mt-6 flex items-end justify-between gap-3 border-t border-wood-100/55 pt-5">
-                    <p className="font-display text-[24px] font-light text-wood-900 leading-none">
-                      {formatPrice(p.price)}
-                    </p>
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-luxury text-wood-500">Từ</p>
+                      <p className="mt-0.5 font-display text-[22px] font-light text-brick-500 leading-none">
+                        {formatPrice(getStartingPrice())}
+                      </p>
+                    </div>
                     <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-luxury text-wood-700 transition-colors group-hover:text-brick-500">
                       Xem
                       <ArrowUpRight size={13} strokeWidth={1.8} className="transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

@@ -4,21 +4,20 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, ShoppingBag, MessageCircle } from "lucide-react";
-import { type Product, buildOrderZaloUrl } from "@/lib/products";
-import { type Category, BRAND, formatPrice } from "@/lib/data";
-import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
+import { ArrowUpRight } from "lucide-react";
+import { type Product } from "@/lib/products";
+import { type Category } from "@/lib/data";
+import { formatPrice, getStartingPrice, buildEnquiryMessage } from "@/lib/pricing";
+import { useFacebookOrder } from "@/lib/useFacebookOrder";
+import { fadeUp, stagger } from "@/lib/motion";
 
 /**
  * ShopGrid — grid sản phẩm trang /san-pham với:
  *   - Filter chips sticky (Tất cả / Kẹo lạc / Kẹo dồi / ...)
- *   - Sort dropdown (Nổi bật / Giá thấp → cao / Giá cao → thấp / A → Z)
- *   - Mỗi card có giá rõ + 2 CTA (Xem chi tiết / Đặt qua Zalo)
+ *   - Sort dropdown
+ *   - Card có giá KHỞI ĐIỂM combo + 2 CTA: "Đặt hàng" Messenger + "Chi tiết"
  *
- * Khác với FeaturedProducts trên homepage (editorial):
- *   - Card có thêm CTA Zalo nhanh ngay trên card
- *   - Hover sáng button "Mua nhanh"
- *   - Layout 3 cột desktop, 2 cột tablet, 1 cột mobile
+ * Không hiển thị giá lẻ — chỉ "Từ XXX.XXXđ" (combo 2 = 149.000đ).
  */
 
 type SortKey = "featured" | "price-asc" | "price-desc" | "name";
@@ -49,16 +48,14 @@ export function ShopGrid({
     if (sortKey === "price-asc") list.sort((a, b) => a.price - b.price);
     else if (sortKey === "price-desc") list.sort((a, b) => b.price - a.price);
     else if (sortKey === "name") list.sort((a, b) => a.name.localeCompare(b.name, "vi"));
-    else /* featured */ list.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
+    else list.sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
     return list;
   }, [products, activeCategory, sortKey]);
 
   return (
     <>
-      {/* ────────── FILTER BAR (sticky desktop) ────────── */}
       <div className="sticky top-16 z-20 -mx-6 mb-12 border-y border-wood-100/60 bg-cream-100/85 backdrop-blur-xl sm:-mx-8 sm:top-16">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-          {/* Category chips — horizontal scroll on mobile */}
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 sm:pb-0 [&::-webkit-scrollbar]:hidden">
             <CategoryChip
               label="Tất cả"
@@ -75,7 +72,6 @@ export function ShopGrid({
             ))}
           </div>
 
-          {/* Sort */}
           <div className="flex items-center gap-3">
             <span className="text-[10px] font-semibold uppercase tracking-luxury text-wood-500 whitespace-nowrap">
               Sắp xếp
@@ -93,12 +89,10 @@ export function ShopGrid({
         </div>
       </div>
 
-      {/* ────────── COUNT ────────── */}
       <p className="mb-9 text-sm text-wood-500">
         Hiển thị <span className="font-semibold text-wood-900">{filtered.length}</span> sản phẩm
       </p>
 
-      {/* ────────── GRID ────────── */}
       <motion.div
         key={`${activeCategory}-${sortKey}`}
         variants={stagger(0.04, 0.06)}
@@ -124,9 +118,6 @@ export function ShopGrid({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* CategoryChip                                                                */
-/* -------------------------------------------------------------------------- */
 function CategoryChip({
   label,
   active,
@@ -150,11 +141,10 @@ function CategoryChip({
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/* ShopCard — phiên bản commerce với CTA mạnh hơn                              */
-/* -------------------------------------------------------------------------- */
 function ShopCard({ product: p }: { product: Product }) {
-  const orderUrl = buildOrderZaloUrl(BRAND.zalo, p, 1);
+  const { triggerOrder } = useFacebookOrder();
+  const startingPrice = getStartingPrice();
+
   return (
     <motion.article
       layout
@@ -195,40 +185,45 @@ function ShopCard({ product: p }: { product: Product }) {
         </Link>
         <p className="mt-2 text-sm text-wood-500">{p.weight}</p>
 
-        <p className="mt-5 line-clamp-2 text-sm leading-[1.85] text-wood-500">{p.shortDesc}</p>
+        <p className="mt-4 line-clamp-2 text-sm leading-[1.85] text-wood-500">{p.shortDesc}</p>
 
-        <div className="mt-6 flex items-end justify-between gap-3 border-t border-wood-100/55 pt-5">
+        {/* Giá khởi điểm */}
+        <div className="mt-5 border-t border-wood-100/55 pt-5">
+          <div className="flex items-baseline justify-between gap-2">
+            <p className="text-[10px] font-semibold uppercase tracking-luxury text-wood-500">Từ</p>
+            <span className="text-[10px] font-medium text-tea-700">Miễn ship combo 3+</span>
+          </div>
           <p
-            className="font-display text-[26px] font-light text-brick-500 leading-none"
+            className="mt-1 font-display text-[28px] font-light leading-none text-brick-500"
             style={{ letterSpacing: "-0.005em" }}
           >
-            {formatPrice(p.price)}
+            {formatPrice(startingPrice)}
           </p>
         </div>
 
-        {/* CTA buttons — 2 cột giá trị rõ ràng */}
-        <div className="mt-5 grid grid-cols-2 gap-2.5">
-          <Link
-            href={`/san-pham/${p.slug}`}
-            className="inline-flex items-center justify-center gap-1.5 rounded-full border border-wood-500/30 px-4 py-3 text-[10px] font-semibold uppercase tracking-luxury text-wood-700 transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:border-wood-900 hover:bg-wood-900 hover:text-cream-50"
-          >
-            Xem chi tiết
-            <ArrowUpRight size={12} strokeWidth={1.8} />
-          </Link>
-          <a
-            href={p.available ? orderUrl : undefined}
-            target="_blank"
-            rel="noreferrer"
-            aria-disabled={!p.available}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-full bg-brick-500 px-4 py-3 text-[10px] font-semibold uppercase tracking-luxury text-cream-50 transition-all duration-500 ease-expo-out ${
+        {/* CTA */}
+        <div className="mt-5 grid grid-cols-[1fr_auto] gap-2">
+          <button
+            disabled={!p.available}
+            onClick={() => triggerOrder(buildEnquiryMessage(p))}
+            className={`inline-flex items-center justify-center gap-1.5 rounded-full bg-[#0084FF] px-4 py-3 text-[10px] font-semibold uppercase tracking-luxury text-cream-50 transition-all duration-500 ease-expo-out ${
               p.available
-                ? "hover:-translate-y-0.5 hover:bg-brick-600 hover:shadow-soft"
+                ? "hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-soft"
                 : "cursor-not-allowed opacity-50"
             }`}
           >
-            <ShoppingBag size={12} strokeWidth={1.8} />
-            Mua ngay
-          </a>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z"/>
+            </svg>
+            Đặt hàng
+          </button>
+          <Link
+            href={`/san-pham/${p.slug}`}
+            className="inline-flex items-center justify-center gap-1 rounded-full border border-wood-500/25 px-4 py-3 text-[10px] font-semibold uppercase tracking-luxury text-wood-700 transition-all hover:border-wood-900 hover:bg-wood-900 hover:text-cream-50"
+          >
+            Chi tiết
+            <ArrowUpRight size={11} strokeWidth={1.8} />
+          </Link>
         </div>
       </div>
     </motion.article>

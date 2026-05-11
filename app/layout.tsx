@@ -128,7 +128,7 @@ const jsonLdOrganization = {
     addressLocality: "Nam Định",
     addressCountry: "VN",
   },
-  sameAs: [BRAND.facebook, BRAND.zalo],
+  sameAs: [BRAND.facebook, BRAND.messenger],
 };
 
 const jsonLdProducts = {

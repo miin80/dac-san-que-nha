@@ -19,24 +19,27 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
 
 /**
- * Trang chủ — editorial luxury single page.
+ * Trang chủ — luxury cinematic + commerce-friendly.
  *
- * Nhịp dẫn dắt (đã refine lần 2 — premium hơn, less ad-feel):
- *   Hero            → ấn tượng đầu cinematic, không trust-stats
- *   Marquee values  → ngắt nhịp brand values
- *   Story (01)      → giới thiệu thương hiệu
- *   Categories (02) → 6 đặc sản
- *   FeaturedProd(03)→ sản phẩm chọn lọc (editorial, không phải shopping cart)
- *   Memory      (04)→ ★ NEW — 4 chương ký ức quê nhà (magazine luxury)
- *   Interlude       → quote full-bleed cinematic
- *   VideoReels  (05)→ hậu trường làng nghề
- *   Marquee values  → ngắt nhịp lần 2 (dark)
- *   Culture     (06)→ kết nối văn hoá
- *   Testimonials    → cảm nhận editorial
- *   Contact         → liên hệ
- *   Footer          → brand statement
+ * Đã re-order để khách thấy SẢN PHẨM + GIÁ + NÚT MUA sớm hơn,
+ * nhưng vẫn giữ cảm giác editorial cao cấp.
  *
- * GrainOverlay đặt sau cùng → phủ noise nhẹ toàn site (cinematic film feel).
+ * Nhịp dẫn dắt (mới):
+ *   Hero               → ấn tượng đầu cinematic
+ *   Marquee values     → ngắt nhịp brand values
+ *   FeaturedProducts(02) ★ đưa LÊN SỚM — combo + giá + nút "Đặt hàng"
+ *   Categories      (03)→ 6 đặc sản (browse)
+ *   Story           (01)→ Câu chuyện thương hiệu (trust)
+ *   Memory             → ★ trim còn 2 chương (luxury soul, không lê thê)
+ *   Interlude          → quote full-bleed cinematic
+ *   VideoReels      (04)→ hậu trường làng nghề
+ *   Marquee values     → ngắt nhịp lần 2 (dark)
+ *   Culture         (05)→ kết nối văn hoá
+ *   Testimonials    (06)→ social proof
+ *   Contact            → form đặt hàng → Facebook
+ *
+ * Goal: khách mua hàng có thể chốt đơn ngay trong 30s đầu (Hero → Products → Đặt hàng),
+ * khách muốn tìm hiểu thêm thì cuộn xuống Memory/Culture/Testimonials.
  */
 export default function HomePage() {
   return (
@@ -50,14 +53,16 @@ export default function HomePage() {
 
         <ValuesMarquee variant="light" />
 
-        <Story />
-        <Categories />
+        {/* ★ PRODUCTS đưa lên đầu — bán hàng ngay */}
         <FeaturedProducts />
 
-        {/* ★ Section storytelling mới — luxury editorial */}
+        <Categories />
+
+        <Story />
+
+        {/* Cinematic soul — đã trim còn 2 chương */}
         <Memory />
 
-        {/* Cinematic interlude — full-bleed quote */}
         <Interlude
           image="/images/banh-cay/banh-cay-3.jpg"
           alt="Khoảnh khắc thưởng thức bánh cáy cùng tách trà"
@@ -79,7 +84,6 @@ export default function HomePage() {
       <FloatingContact />
       <MobileBottomBar />
 
-      {/* Film grain overlay — sau cùng để phủ tất cả */}
       <GrainOverlay intensity="light" />
     </>
   );

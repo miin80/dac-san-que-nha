@@ -122,7 +122,7 @@ export function Story() {
           className="mx-auto max-w-3xl text-center"
         >
           <motion.div variants={fadeUp} className="flex items-center justify-center gap-5">
-            <span className="section-number">01 / 06</span>
+            <span className="section-number">03 / 06</span>
             <span className="h-px w-8 bg-brick-500/40" />
             <span className="text-[10px] font-medium uppercase tracking-luxury text-brick-500">
               Câu chuyện thương hiệu
