@@ -40,6 +40,7 @@ export const BRAND = {
   hotlineHref: "tel:+84559886533",
   messenger: "https://m.me/dacsanquenhaa",
   facebook: "https://www.facebook.com/dacsanquenhaa",
+  facebookReels: "https://www.facebook.com/dacsanquenhaa/reels/",
   email: "",
   address: "Làng nghề bánh kẹo truyền thống Bắc Bộ — Việt Nam",
   hours: "8:00 – 21:00 mỗi ngày",
@@ -182,6 +183,10 @@ export type Reel = {
   caption: string;
   poster: string;
   src: string;
+  /** Optional: URL Facebook Reel cụ thể. Nếu không có, fallback dùng BRAND.facebookReels.
+   *  Khi có URL cụ thể (e.g. https://www.facebook.com/.../videos/123456), điền vào đây
+   *  để user xem được đúng reel trên FB khi mobile không decode được MP4. */
+  facebookUrl?: string;
 };
 
 export const REELS: Reel[] = [

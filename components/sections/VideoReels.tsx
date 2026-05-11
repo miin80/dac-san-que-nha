@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X } from "lucide-react";
-import { REELS } from "@/lib/data";
+import { Play, X, Facebook } from "lucide-react";
+import { REELS, BRAND } from "@/lib/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 
@@ -135,6 +135,9 @@ function ReelCard({
 function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [needsManualPlay, setNeedsManualPlay] = useState(false);
+  /** Sau 6 giây nếu video vẫn chưa playable (readyState < 3),
+   *  hiển thị overlay fallback to Facebook Reels. */
+  const [loadFailed, setLoadFailed] = useState(false);
 
   // ESC để đóng + lock body scroll
   useEffect(() => {
@@ -150,17 +153,31 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
     };
   }, [reel, onClose]);
 
-  // Gọi .play() programmatically khi modal mở.
+  // Reset state + gọi .play() khi modal mở.
   // Nếu autoplay block (iOS Safari) → show nút "Bấm để phát video".
+  // Nếu sau 6s vẫn không play được → hiển thị fallback FB Reels.
   useEffect(() => {
     if (!reel) return;
     setNeedsManualPlay(false);
+    setLoadFailed(false);
+
     const v = videoRef.current;
     if (!v) return;
-    const t = setTimeout(() => {
+
+    const playTimer = setTimeout(() => {
       v.play().catch(() => setNeedsManualPlay(true));
     }, 80);
-    return () => clearTimeout(t);
+
+    // 6s timeout — nếu video chưa playable (readyState < 3 = HAVE_FUTURE_DATA)
+    // → coi như iOS Safari không decode được file MP4 này → suggest FB Reels.
+    const failTimer = setTimeout(() => {
+      if (v.readyState < 3) setLoadFailed(true);
+    }, 6000);
+
+    return () => {
+      clearTimeout(playTimer);
+      clearTimeout(failTimer);
+    };
   }, [reel]);
 
   const handleManualPlay = () => {
@@ -168,11 +185,11 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
     if (!v) return;
     v.play()
       .then(() => setNeedsManualPlay(false))
-      .catch(() => {
-        // Vẫn fail — user tap native play button trong controls
-        setNeedsManualPlay(false);
-      });
+      .catch(() => setNeedsManualPlay(false));
   };
+
+  // URL Facebook fallback — ưu tiên reel.facebookUrl nếu có, fallback BRAND.facebookReels
+  const fbUrl = reel?.facebookUrl ?? BRAND.facebookReels;
 
   return (
     <AnimatePresence>
@@ -237,7 +254,7 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
             />
 
             {/* Manual play overlay — chỉ hiện khi autoplay block (iOS) */}
-            {needsManualPlay && (
+            {needsManualPlay && !loadFailed && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -255,7 +272,54 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
                 </span>
               </button>
             )}
+
+            {/* Fallback overlay khi video không decode được sau 6s (iOS codec issue) */}
+            {loadFailed && (
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="absolute inset-0 z-10 flex items-center justify-center bg-wood-950/85 backdrop-blur-md p-6"
+              >
+                <div className="flex max-w-sm flex-col items-center gap-5 rounded-3xl bg-cream-50 p-8 text-center shadow-card">
+                  <Facebook size={40} className="text-[#1877F2]" />
+                  <div>
+                    <p className="font-display text-xl font-medium text-wood-900">
+                      Video không tải được trên trình duyệt
+                    </p>
+                    <p className="mt-2 text-sm leading-relaxed text-wood-500">
+                      Xem trực tiếp trên fanpage Facebook để có trải nghiệm tốt nhất.
+                    </p>
+                  </div>
+                  <a
+                    href={fbUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2.5 rounded-full bg-[#1877F2] px-7 py-4 text-sm font-semibold text-cream-50 transition-colors hover:bg-[#0e6ee1]"
+                  >
+                    <Facebook size={16} fill="currentColor" />
+                    Xem trên Facebook Reels
+                  </a>
+                </div>
+              </div>
+            )}
           </motion.div>
+
+          {/* ─────────────── BOTTOM: Facebook fallback link luôn hiện ───────────────
+              Người dùng có thể luôn truy cập FB nếu video gặp trục trặc. */}
+          <div
+            className="relative z-20 flex justify-center px-5 pb-5 sm:pb-6"
+            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1.25rem)" }}
+          >
+            <a
+              href={fbUrl}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-2 rounded-full border border-cream-50/25 bg-cream-50/10 px-5 py-2.5 text-xs font-semibold text-cream-50 backdrop-blur-md transition-all duration-300 hover:bg-cream-50 hover:text-wood-900"
+            >
+              <Facebook size={14} fill="currentColor" />
+              Xem trên Facebook Reels
+            </a>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
