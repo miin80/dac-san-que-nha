@@ -3,11 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X, Facebook, Check } from "lucide-react";
+import { Play, X, Facebook, Check, ArrowRight } from "lucide-react";
 import { REELS, BRAND } from "@/lib/data";
 import { buildEnquiryMessage } from "@/lib/pricing";
 import { useFacebookOrder } from "@/lib/useFacebookOrder";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 
 /**
@@ -22,11 +21,11 @@ import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 
 type Reel = typeof REELS[number];
 
+// 3 cam kết chính — gọn, dễ nhớ, đúng pattern của shop bánh kẹo truyền thống
 const TRUST_POINTS = [
   "Làm thủ công mỗi ngày",
   "Không chất bảo quản",
-  "Đóng gói sạch sẽ",
-  "Nguyên liệu Việt 100%",
+  "Giao hàng toàn quốc",
 ];
 
 export function VideoReels() {
@@ -35,25 +34,48 @@ export function VideoReels() {
 
   return (
     <>
-      <section className="relative bg-wood-950 py-14 sm:py-24 lg:py-40 text-cream-50">
+      <section className="relative bg-wood-950 py-16 sm:py-28 lg:py-44 text-cream-50">
         <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-indochina-grid" />
 
         <div className="relative mx-auto max-w-7xl px-6 sm:px-8">
-          <SectionHeader
-            eyebrow="Hậu trường làng nghề"
-            number="04"
-            total="06"
-            title="Xem chúng tôi làm bánh, làm kẹo"
-            description="Mỗi đoạn video kể một công đoạn — nấu mạch nha, kéo kẹo, cắt miếng, đóng gói. Bấm vào video để xem."
-            light
-          />
+          {/* ────────── HEADER (custom, lớn hơn SectionHeader mặc định) ────────── */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 1.2, ease: luxuryEase }}
+            className="mx-auto max-w-3xl text-center"
+          >
+            <div className="flex items-center justify-center gap-3 sm:gap-5">
+              <span className="font-display italic text-sm text-gold-400/90 tabular-nums">
+                04 <span className="opacity-50">/ 06</span>
+              </span>
+              <span className="h-px w-8 bg-gold-400/40" />
+              <span className="text-[10px] font-semibold uppercase tracking-luxury text-gold-400">
+                Hậu trường làng nghề
+              </span>
+            </div>
 
+            <h2
+              className="mt-7 font-display text-[40px] font-light leading-[1.05] text-cream-50 text-balance sm:text-[64px] lg:text-[80px]"
+              style={{ letterSpacing: "-0.015em" }}
+            >
+              Xem chúng tôi <br className="hidden sm:block" />
+              <span className="italic text-gold-400">làm bánh, làm kẹo</span>
+            </h2>
+
+            <p className="mx-auto mt-7 max-w-xl text-[15px] leading-[1.9] text-cream-50 sm:mt-9 sm:text-[17px] sm:leading-[2]">
+              Mỗi đoạn video kể một công đoạn — nấu mạch nha, kéo kẹo, cắt miếng, đóng gói. <strong className="font-semibold">Bấm vào video để xem.</strong>
+            </p>
+          </motion.div>
+
+          {/* ────────── GRID VIDEOS ────────── */}
           <motion.div
             variants={stagger(0.06, 0.08)}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.05 }}
-            className="mt-9 grid grid-cols-2 gap-4 sm:mt-16 sm:gap-7 lg:mt-20 lg:grid-cols-3 lg:gap-8"
+            className="mt-10 grid grid-cols-2 gap-4 sm:mt-16 sm:gap-7 lg:mt-20 lg:grid-cols-3 lg:gap-8"
           >
             {REELS.map((r, i) => (
               <ReelCard
@@ -66,59 +88,60 @@ export function VideoReels() {
             ))}
           </motion.div>
 
-          {/* ─────────────── CONVERSION BLOCK — trust badges + CTA ────────────
-              Sau khi xem video, khách thấy 3-4 cam kết + CTA Messenger lớn.
-              Đây là chỗ "chốt đơn" sau khi xây niềm tin qua video. */}
+          {/* ─────────────── CONVERSION BLOCK — trust + headline + big CTA ────────────
+              Đây là điểm chốt đơn sau khi xem video. */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 1, ease: luxuryEase }}
-            className="mx-auto mt-14 max-w-3xl text-center sm:mt-20 lg:mt-24"
+            className="mx-auto mt-16 max-w-3xl text-center sm:mt-24 lg:mt-28"
           >
-            {/* Trust badges */}
-            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-8">
+            {/* 3 Trust badges */}
+            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 sm:gap-x-10">
               {TRUST_POINTS.map((point) => (
                 <li
                   key={point}
-                  className="inline-flex items-center gap-2 text-sm text-cream-100/85 sm:text-[15px]"
+                  className="inline-flex items-center gap-2.5 text-[15px] font-medium text-cream-50 sm:text-base"
                 >
-                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tea-500/25 text-tea-300">
-                    <Check size={12} strokeWidth={2.5} />
+                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-tea-500 text-cream-50 shadow-soft">
+                    <Check size={13} strokeWidth={2.8} />
                   </span>
                   {point}
                 </li>
               ))}
             </ul>
 
+            {/* Hook line lớn */}
             <p
-              className="mt-9 font-display text-[24px] font-light italic leading-snug text-cream-50 sm:text-[32px]"
-              style={{ letterSpacing: "-0.005em" }}
+              className="mt-10 font-display text-[28px] font-light italic leading-[1.2] text-cream-50 sm:mt-12 sm:text-[40px]"
+              style={{ letterSpacing: "-0.01em" }}
             >
               Sẵn sàng nếm thử <span className="text-gold-400">hương vị quê</span>?
             </p>
 
-            {/* PRIMARY CTA — Nhắn Facebook để đặt hàng */}
-            <div className="mt-9 flex flex-col items-center gap-3">
+            {/* PRIMARY CTA — to + emoji + shadow nổi bật */}
+            <div className="mt-10 flex flex-col items-center gap-4 sm:mt-12">
               <button
                 onClick={() => triggerOrder(buildEnquiryMessage())}
-                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-8 py-5 text-sm font-semibold text-cream-50 shadow-card transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-card-hover"
+                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-9 py-5 text-base font-bold text-cream-50 shadow-[0_18px_40px_-12px_rgba(0,132,255,0.55)] transition-all duration-500 ease-expo-out hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#0070D9] hover:shadow-[0_24px_50px_-12px_rgba(0,132,255,0.75)] active:scale-100 sm:px-12 sm:py-6 sm:text-lg"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="transition-transform duration-500 group-hover:scale-110">
                   <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z" />
                 </svg>
-                Nhắn Facebook để đặt hàng
+                <span className="tracking-wide">Nhắn Facebook để đặt hàng ngay</span>
+                <ArrowRight size={20} strokeWidth={2.4} className="transition-transform duration-500 group-hover:translate-x-1" />
               </button>
 
               <a
                 href={BRAND.hotlineHref}
-                className="text-[11px] uppercase tracking-luxury text-cream-100/55 transition-colors hover:text-cream-50"
+                className="text-xs font-medium uppercase tracking-luxury text-cream-100/70 transition-colors hover:text-cream-50"
               >
                 Hoặc gọi {BRAND.hotline}
               </a>
 
               {copied && (
-                <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-tea-500/20 px-4 py-2 text-xs text-tea-300">
+                <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-tea-500/25 px-4 py-2 text-xs text-tea-100">
                   <Check size={13} strokeWidth={2.5} />
                   Đã sao chép tin nhắn — dán vào Messenger
                 </span>
@@ -319,8 +342,15 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
               controls
               playsInline
               preload="auto"
-              className="max-h-full max-w-full bg-wood-950 sm:rounded-2xl"
-              style={{ width: "auto", height: "auto", maxHeight: "100%" }}
+              className="bg-wood-950 sm:rounded-2xl"
+              style={{
+                width: "auto",
+                height: "auto",
+                // 500-600px wide trên desktop (max-w-[560px]), full screen mobile.
+                // Cap max-height theo 85vh để không vượt khung nhìn.
+                maxWidth: "min(560px, 100%)",
+                maxHeight: "min(85vh, 996px)",
+              }}
             />
 
             {/* Manual play overlay — chỉ hiện khi autoplay block (iOS) */}
