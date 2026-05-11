@@ -1,9 +1,8 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { FloatingContact } from "@/components/FloatingContact";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ScrollProgress } from "@/components/ScrollProgress";
-import { MobileBottomBar } from "@/components/MobileBottomBar";
+import { MobileQuickCTA } from "@/components/MobileQuickCTA";
 import { ValuesMarquee } from "@/components/ValuesMarquee";
 import { GrainOverlay } from "@/components/GrainOverlay";
 
@@ -81,8 +80,7 @@ export default function HomePage() {
 
       <Footer />
 
-      <FloatingContact />
-      <MobileBottomBar />
+      <MobileQuickCTA />
 
       <GrainOverlay intensity="light" />
     </>

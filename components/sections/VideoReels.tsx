@@ -206,11 +206,16 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
                 src={reel.src}
                 poster={reel.poster}
                 autoPlay
-                muted={false}
+                muted       /* iOS yêu cầu muted để autoplay — user unmute qua native controls */
                 controls
                 playsInline
                 preload="metadata"
-                onError={() => setErrored(true)}
+                /* Chỉ fallback khi codec/src thật sự lỗi (code 3,4)
+                   Không fallback cho network glitch (code 2) hoặc abort (code 1) */
+                onError={(e) => {
+                  const code = (e.currentTarget as HTMLVideoElement).error?.code;
+                  if (code === 3 || code === 4) setErrored(true);
+                }}
                 className="h-full w-full bg-wood-950 object-contain sm:h-auto sm:max-h-[85vh] sm:rounded-2xl"
               />
             )}

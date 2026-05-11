@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { FloatingContact } from "@/components/FloatingContact";
+import { MobileQuickCTA } from "@/components/MobileQuickCTA";
 import { GrainOverlay } from "@/components/GrainOverlay";
 
 import { ProductGallery } from "@/components/product/ProductGallery";
@@ -190,7 +190,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
       <Footer />
 
-      <FloatingContact />
+      <MobileQuickCTA hideOnMobile />
       <ProductMobileBuyBar product={product} />
 
       <GrainOverlay intensity="light" />

@@ -58,7 +58,12 @@ export function ProductVideo({
         playsInline
         preload="metadata"
         controls={started && !errored}
-        onError={() => setErrored(true)}
+        /* Chỉ fallback khi codec/src thật sự lỗi (code 3, 4).
+           Không fallback cho network glitch hoặc autoplay block. */
+        onError={(e) => {
+          const code = (e.currentTarget as HTMLVideoElement).error?.code;
+          if (code === 3 || code === 4) setErrored(true);
+        }}
         className="absolute inset-0 h-full w-full bg-wood-950 object-cover"
       />
 

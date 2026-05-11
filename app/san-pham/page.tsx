@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { FloatingContact } from "@/components/FloatingContact";
-import { MobileBottomBar } from "@/components/MobileBottomBar";
+import { MobileQuickCTA } from "@/components/MobileQuickCTA";
 import { GrainOverlay } from "@/components/GrainOverlay";
 import { ShopGrid } from "@/components/product/ShopGrid";
 
@@ -71,8 +70,7 @@ export default function ShopPage() {
 
       <Footer />
 
-      <FloatingContact />
-      <MobileBottomBar />
+      <MobileQuickCTA />
 
       <GrainOverlay intensity="light" />
     </>

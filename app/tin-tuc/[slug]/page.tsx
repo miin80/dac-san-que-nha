@@ -6,8 +6,7 @@ import { ArrowLeft, Clock, ArrowUpRight } from "lucide-react";
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { FloatingContact } from "@/components/FloatingContact";
-import { MobileBottomBar } from "@/components/MobileBottomBar";
+import { MobileQuickCTA } from "@/components/MobileQuickCTA";
 import { GrainOverlay } from "@/components/GrainOverlay";
 import { ArticleContent } from "@/components/article/ArticleContent";
 import { ArticleFacebookCTA } from "@/components/article/ArticleFacebookCTA";
@@ -308,8 +307,7 @@ export default function ArticleDetailPage({ params }: { params: { slug: string }
       </main>
 
       <Footer />
-      <FloatingContact />
-      <MobileBottomBar />
+      <MobileQuickCTA />
       <GrainOverlay intensity="light" />
     </>
   );
