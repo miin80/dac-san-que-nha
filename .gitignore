@@ -7,3 +7,6 @@ build/
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# Backup videos gốc (sinh ra bởi scripts/reencode-videos.ps1)
+videos-original/
