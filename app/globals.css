@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   GLOBAL TOKENS & BASE
+   ============================================================ */
+@layer base {
+  :root {
+    --color-bg: 250 245 232;
+    --color-ink: 44 29 17;
+    --color-brick: 184 60 42;
+    --color-gold: 201 162 75;
+    --header-height: 80px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 80px;
+  }
+
+  body {
+    @apply bg-cream-100 text-wood-900 font-sans antialiased;
+    /* Nền gốc rất subtle — dot grain mật độ cực thấp */
+    background-image:
+      radial-gradient(rgba(107, 74, 43, 0.028) 1px, transparent 1px),
+      radial-gradient(rgba(107, 74, 43, 0.022) 1px, transparent 1px);
+    background-size: 32px 32px, 52px 52px;
+    background-position: 0 0, 16px 26px;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5 {
+    @apply font-display tracking-tight;
+  }
+
+  ::selection {
+    background: rgba(184, 60, 42, 0.85);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(107, 74, 43, 0.22);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 74, 43, 0.4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================================
+   COMPONENT CLASSES (tái sử dụng)
+   ============================================================ */
+@layer components {
+  /* Nút primary — đỏ gạch refined: chỉ underline khi hover thay vì translate */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full
+           bg-brick-500 px-8 py-4 text-[11px] font-semibold uppercase tracking-luxury
+           text-cream-50 shadow-soft transition-all duration-700 ease-expo-out
+           hover:bg-brick-600 hover:shadow-card-hover hover:-translate-y-0.5
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-brick-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-100;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full
+           border border-wood-500/30 bg-transparent px-8 py-4
+           text-[11px] font-semibold uppercase tracking-luxury text-wood-700
+           transition-all duration-700 ease-expo-out
+           hover:bg-wood-900 hover:text-cream-50 hover:border-wood-900 hover:-translate-y-0.5;
+  }
+
+  .btn-ghost-light {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-full
+           border border-cream-50/40 bg-cream-50/10 px-8 py-4 text-[11px] font-semibold
+           uppercase tracking-luxury text-cream-50 backdrop-blur-md
+           transition-all duration-700 ease-expo-out
+           hover:bg-cream-50 hover:text-wood-900 hover:-translate-y-0.5;
+  }
+
+  /* Nút văn bản trần — premium minimalist */
+  .btn-text {
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-luxury text-wood-700 transition-colors duration-500 hover:text-brick-500;
+  }
+  .btn-text-light {
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-luxury text-cream-100 transition-colors duration-500 hover:text-gold-400;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-luxury text-brick-500;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-10 bg-brick-500;
+  }
+
+  .section-number {
+    @apply font-display italic text-sm text-brick-500/80 tabular-nums;
+  }
+
+  /* Card sản phẩm bo mềm — luxury shadow */
+  .product-card {
+    @apply relative overflow-hidden rounded-[2rem] bg-cream-50 shadow-card
+           transition-all duration-1000 ease-expo-out
+           hover:shadow-card-hover hover:-translate-y-1.5;
+  }
+
+  /* Texture giấy dó overlay — subtle */
+  .paper-texture {
+    position: relative;
+  }
+  .paper-texture::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(rgba(107, 74, 43, 0.04) 1px, transparent 1px),
+      radial-gradient(rgba(107, 74, 43, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px, 50px 50px;
+    background-position: 0 0, 15px 25px;
+    mix-blend-mode: multiply;
+  }
+
+  .ornament-corner {
+    position: relative;
+  }
+  .ornament-corner::before,
+  .ornament-corner::after {
+    content: "";
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border: 1px solid currentColor;
+    opacity: 0.35;
+  }
+  .ornament-corner::before {
+    top: 0; left: 0;
+    border-right: 0;
+    border-bottom: 0;
+  }
+  .ornament-corner::after {
+    bottom: 0; right: 0;
+    border-left: 0;
+    border-top: 0;
+  }
+
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-wood-500/25 to-transparent;
+  }
+  .hairline-dark {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-cream-50/20 to-transparent;
+  }
+  .hairline-gold {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-gold-500/40 to-transparent;
+  }
+
+  /* Drop cap — luxury editorial */
+  .drop-cap::first-letter {
+    @apply font-display text-7xl float-left leading-[0.85] pr-3 pt-1 text-brick-500 italic;
+  }
+
+  /* Ánh sáng warm cinematic — radial gradient warm tone */
+  .warm-light {
+    background:
+      radial-gradient(ellipse 80% 60% at 80% 20%, rgba(212, 176, 101, 0.18), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(184, 60, 42, 0.10), transparent 60%);
+  }
+
+  /* Cinematic letterbox top-bottom */
+  .letterbox::before,
+  .letterbox::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    height: 14%;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .letterbox::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(26, 15, 8, 0.55), transparent);
+  }
+  .letterbox::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(26, 15, 8, 0.75), transparent);
+  }
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .mask-fade-b { mask-image: linear-gradient(to bottom, black 75%, transparent 100%); }
+  .mask-fade-r { mask-image: linear-gradient(to right, black 80%, transparent 100%); }
+  .ring-inset-luxury { box-shadow: inset 0 0 0 1px rgba(255, 253, 247, 0.08); }
+  .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+
+  /* Pattern hoa văn cổ Việt — đám mây stylized, rất nhẹ */
+  .indo-clouds {
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath fill='none' stroke='%23B83C2A' stroke-opacity='0.07' stroke-width='1.2' d='M20 40 Q40 20 60 40 T100 40 T140 40 T180 40 M20 100 Q40 80 60 100 T100 100 T140 100 T180 100 M20 160 Q40 140 60 160 T100 160 T140 160 T180 160'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  /* Magazine column layout */
+  .magazine-cols {
+    column-count: 1;
+  }
+  @media (min-width: 1024px) {
+    .magazine-cols-2 { column-count: 2; column-gap: 3rem; }
+  }
+}
