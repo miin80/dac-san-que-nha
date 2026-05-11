@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, X } from "lucide-react";
@@ -133,21 +133,46 @@ function ReelCard({
 /* -------------------------------------------------------------------------- */
 
 function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void }) {
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [needsManualPlay, setNeedsManualPlay] = useState(false);
+
   // ESC để đóng + lock body scroll
   useEffect(() => {
     if (!reel) return;
-
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
-
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
   }, [reel, onClose]);
+
+  // Gọi .play() programmatically khi modal mở.
+  // Nếu autoplay block (iOS Safari) → show nút "Bấm để phát video".
+  useEffect(() => {
+    if (!reel) return;
+    setNeedsManualPlay(false);
+    const v = videoRef.current;
+    if (!v) return;
+    const t = setTimeout(() => {
+      v.play().catch(() => setNeedsManualPlay(true));
+    }, 80);
+    return () => clearTimeout(t);
+  }, [reel]);
+
+  const handleManualPlay = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.play()
+      .then(() => setNeedsManualPlay(false))
+      .catch(() => {
+        // Vẫn fail — user tap native play button trong controls
+        setNeedsManualPlay(false);
+      });
+  };
 
   return (
     <AnimatePresence>
@@ -161,60 +186,76 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35, ease: luxuryEase }}
           onClick={onClose}
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-wood-950/95 p-0 backdrop-blur-xl sm:p-6"
+          className="fixed inset-0 z-[70] flex flex-col bg-wood-950/95 backdrop-blur-xl"
         >
-          {/* Nút đóng — góc trên phải */}
-          <button
-            onClick={onClose}
-            aria-label="Đóng video"
-            className="absolute right-4 top-4 z-10 inline-flex h-12 w-12 items-center justify-center rounded-full bg-cream-50/15 text-cream-50 backdrop-blur-md transition-all duration-300 hover:bg-cream-50 hover:text-wood-900 active:scale-95 sm:right-6 sm:top-6 sm:h-14 sm:w-14"
+          {/* ─────────────── TOP BAR: Title + Close X ───────────────
+              Đặt ở TOP để không che native controls của video. */}
+          <div
+            className="relative z-20 flex items-start justify-between gap-4 px-5 pt-5 pb-3 sm:px-8 sm:pt-6 sm:pb-4"
+            style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.25rem)" }}
           >
-            <X size={22} strokeWidth={1.8} />
-          </button>
-
-          {/* Title — góc trên trái (chỉ sm+) */}
-          <div className="absolute left-6 top-6 z-10 hidden max-w-md sm:block">
-            <p className="text-[10px] uppercase tracking-luxury text-gold-400">
-              Hậu trường làng nghề
-            </p>
-            <p className="mt-2 font-display text-2xl font-light text-cream-50">
-              {reel.title}
-            </p>
+            <div className="flex-1 pointer-events-none">
+              <p className="text-[10px] font-semibold uppercase tracking-luxury text-gold-400">
+                Hậu trường làng nghề
+              </p>
+              <p className="mt-1.5 font-display text-lg font-light leading-tight text-cream-50 sm:text-2xl">
+                {reel.title}
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              aria-label="Đóng video"
+              className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cream-50/15 text-cream-50 backdrop-blur-md transition-all duration-300 hover:bg-cream-50 hover:text-wood-900 active:scale-95 sm:h-14 sm:w-14"
+            >
+              <X size={22} strokeWidth={1.8} />
+            </button>
           </div>
 
-          {/* Video container — stop click propagation để click vào video không đóng modal */}
+          {/* ─────────────── VIDEO AREA — center, flex-1 ───────────────
+              stopPropagation để click vào video không close modal. */}
           <motion.div
             initial={{ scale: 0.94, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.94, opacity: 0 }}
             transition={{ duration: 0.45, ease: luxuryEase }}
             onClick={(e) => e.stopPropagation()}
-            className="relative flex h-full w-full items-center justify-center sm:h-auto sm:w-auto sm:max-h-[85vh] sm:max-w-4xl"
+            className="relative flex flex-1 items-center justify-center px-0 pb-5 sm:px-6 sm:pb-8"
           >
+            {/* Video element — TOÀN bộ thuộc tính theo yêu cầu */}
             <video
+              ref={videoRef}
               key={reel.id}
               src={reel.src}
               poster={reel.poster}
               autoPlay
-              muted          /* iOS Safari yêu cầu muted để autoplay — user unmute qua controls */
+              muted
               controls
               playsInline
-              preload="metadata"
-              className="h-full w-full bg-wood-950 object-contain sm:h-auto sm:max-h-[85vh] sm:rounded-2xl"
+              preload="auto"
+              className="max-h-full max-w-full bg-wood-950 sm:rounded-2xl"
+              style={{ width: "auto", height: "auto", maxHeight: "100%" }}
             />
-          </motion.div>
 
-          {/* Caption mobile — dưới đáy modal */}
-          <div className="absolute inset-x-0 bottom-0 z-10 p-5 pb-safe sm:hidden">
-            <div className="rounded-2xl bg-wood-950/70 p-3 backdrop-blur-md">
-              <p className="text-[10px] uppercase tracking-luxury text-gold-400">
-                Hậu trường
-              </p>
-              <p className="mt-1 font-display text-base font-light text-cream-50 leading-tight">
-                {reel.title}
-              </p>
-            </div>
-          </div>
+            {/* Manual play overlay — chỉ hiện khi autoplay block (iOS) */}
+            {needsManualPlay && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleManualPlay();
+                }}
+                className="absolute inset-0 z-10 flex items-center justify-center bg-wood-950/40"
+              >
+                <span className="flex items-center gap-3 rounded-full bg-cream-50 px-6 py-4 shadow-card">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-brick-500 text-cream-50">
+                    <Play size={14} strokeWidth={2} className="ml-0.5 fill-current" />
+                  </span>
+                  <span className="font-display text-base font-medium text-wood-900">
+                    Bấm để phát video
+                  </span>
+                </span>
+              </button>
+            )}
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
