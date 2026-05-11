@@ -165,7 +165,7 @@ export const ARTICLES: Article[] = [
         text: "Sáu món bánh kẹo trên không chỉ là thức quà — đó là ký ức, là sợi dây nối giữa thế hệ ông bà và con cháu. Mỗi miếng kẹo gói lại một phần văn hoá ẩm thực Việt mà chúng tôi muốn gìn giữ.",
       },
     ],
-    relatedProductSlugs: ["keo-lac-300g", "banh-cay-thai-binh-300g", "keo-doi-lac-250g"],
+    relatedProductSlugs: ["keo-lac-410g", "banh-cay-thai-binh-410g", "keo-doi-lac-410g"],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -235,7 +235,7 @@ export const ARTICLES: Article[] = [
         text: "Kẹo lạc không phải món để ăn nhanh. Nó là cái cớ để gia đình quây quần, là câu chuyện cha kể cho con trong những buổi trà chiều. Đó là lý do qua bao năm, kẹo lạc vẫn ở đó — trong khay quà Tết, trong mâm cỗ giỗ ông bà.",
       },
     ],
-    relatedProductSlugs: ["keo-lac-300g", "keo-lac-500g"],
+    relatedProductSlugs: ["keo-lac-410g"],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -317,7 +317,7 @@ export const ARTICLES: Article[] = [
         text: "Bánh cáy ngày nay vẫn được làm thủ công tại làng Nguyễn — Thái Bình theo công thức gia truyền. Đó là lý do mỗi miếng bánh vẫn giữ nguyên hồn quê Bắc Bộ — một di sản ẩm thực mà chúng tôi tự hào mang đến cho khách hàng.",
       },
     ],
-    relatedProductSlugs: ["banh-cay-thai-binh-300g", "banh-cay-thai-binh-500g"],
+    relatedProductSlugs: ["banh-cay-thai-binh-410g"],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -399,7 +399,7 @@ export const ARTICLES: Article[] = [
         text: "Tóm lại: kẹo lạc thủ công là một loại đồ ngọt tương đối lành mạnh — miễn là ăn với lượng vừa phải và chọn được nơi làm có nguồn gốc nguyên liệu rõ ràng. Tại Đặc Sản Quê Nhà, chúng tôi cam kết 100% nguyên liệu Việt, không phẩm màu, làm thủ công theo công thức truyền thống của làng nghề Bắc Bộ.",
       },
     ],
-    relatedProductSlugs: ["keo-lac-300g", "keo-me-den-250g"],
+    relatedProductSlugs: ["keo-lac-410g", "keo-me-den-410g"],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -482,7 +482,7 @@ export const ARTICLES: Article[] = [
         text: "Nếu bạn chưa chắc chọn combo nào phù hợp với đối tượng nhận, hãy nhắn Facebook để được tư vấn miễn phí. Chúng tôi sẽ hỏi vài câu (người nhận ở đâu, độ tuổi, sở thích vị ngọt) rồi gợi ý combo phù hợp nhất, đóng gói chỉn chu để bạn yên tâm gửi đi.",
       },
     ],
-    relatedProductSlugs: ["banh-cay-thai-binh-500g", "keo-lac-hong-300g", "keo-lac-300g"],
+    relatedProductSlugs: ["banh-cay-thai-binh-410g", "keo-lac-hong-410g", "keo-lac-410g"],
   },
 
   // ════════════════════════════════════════════════════════════════════════
@@ -565,7 +565,7 @@ export const ARTICLES: Article[] = [
         text: "Cuối cùng, người thân không cần món quà hoành tráng. Họ cần cảm nhận được rằng bạn nhớ tới họ. Một hộp bánh cáy, một túi kẹo lạc — gói trong giấy kraft mộc mạc — đôi khi nói được nhiều hơn ngàn lời.",
       },
     ],
-    relatedProductSlugs: ["banh-cay-thai-binh-300g", "keo-lac-300g", "keo-me-den-250g"],
+    relatedProductSlugs: ["banh-cay-thai-binh-410g", "keo-lac-410g", "keo-me-den-410g"],
   },
 ];
 

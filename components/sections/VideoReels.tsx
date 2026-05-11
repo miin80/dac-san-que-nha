@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X, Facebook } from "lucide-react";
+import { Play, X, Facebook, Check } from "lucide-react";
 import { REELS, BRAND } from "@/lib/data";
+import { buildEnquiryMessage } from "@/lib/pricing";
+import { useFacebookOrder } from "@/lib/useFacebookOrder";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 
@@ -20,8 +22,16 @@ import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 
 type Reel = typeof REELS[number];
 
+const TRUST_POINTS = [
+  "Làm thủ công mỗi ngày",
+  "Không chất bảo quản",
+  "Đóng gói sạch sẽ",
+  "Nguyên liệu Việt 100%",
+];
+
 export function VideoReels() {
   const [activeReel, setActiveReel] = useState<Reel | null>(null);
+  const { triggerOrder, copied } = useFacebookOrder();
 
   return (
     <>
@@ -54,6 +64,66 @@ export function VideoReels() {
                 onPlay={() => setActiveReel(r)}
               />
             ))}
+          </motion.div>
+
+          {/* ─────────────── CONVERSION BLOCK — trust badges + CTA ────────────
+              Sau khi xem video, khách thấy 3-4 cam kết + CTA Messenger lớn.
+              Đây là chỗ "chốt đơn" sau khi xây niềm tin qua video. */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 1, ease: luxuryEase }}
+            className="mx-auto mt-14 max-w-3xl text-center sm:mt-20 lg:mt-24"
+          >
+            {/* Trust badges */}
+            <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 sm:gap-x-8">
+              {TRUST_POINTS.map((point) => (
+                <li
+                  key={point}
+                  className="inline-flex items-center gap-2 text-sm text-cream-100/85 sm:text-[15px]"
+                >
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tea-500/25 text-tea-300">
+                    <Check size={12} strokeWidth={2.5} />
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+
+            <p
+              className="mt-9 font-display text-[24px] font-light italic leading-snug text-cream-50 sm:text-[32px]"
+              style={{ letterSpacing: "-0.005em" }}
+            >
+              Sẵn sàng nếm thử <span className="text-gold-400">hương vị quê</span>?
+            </p>
+
+            {/* PRIMARY CTA — Nhắn Facebook để đặt hàng */}
+            <div className="mt-9 flex flex-col items-center gap-3">
+              <button
+                onClick={() => triggerOrder(buildEnquiryMessage())}
+                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-8 py-5 text-sm font-semibold text-cream-50 shadow-card transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-card-hover"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z" />
+                </svg>
+                Nhắn Facebook để đặt hàng
+              </button>
+
+              <a
+                href={BRAND.hotlineHref}
+                className="text-[11px] uppercase tracking-luxury text-cream-100/55 transition-colors hover:text-cream-50"
+              >
+                Hoặc gọi {BRAND.hotline}
+              </a>
+
+              {copied && (
+                <span className="mt-2 inline-flex items-center gap-2 rounded-full bg-tea-500/20 px-4 py-2 text-xs text-tea-300">
+                  <Check size={13} strokeWidth={2.5} />
+                  Đã sao chép tin nhắn — dán vào Messenger
+                </span>
+              )}
+            </div>
           </motion.div>
         </div>
       </section>
@@ -273,51 +343,76 @@ function VideoModal({ reel, onClose }: { reel: Reel | null; onClose: () => void 
               </button>
             )}
 
-            {/* Fallback overlay khi video không decode được sau 6s (iOS codec issue) */}
+            {/* Fallback overlay khi video không decode được sau 6s (iOS codec issue).
+                Conversion-first: Messenger CTA primary, FB Reels secondary. */}
             {loadFailed && (
               <div
                 onClick={(e) => e.stopPropagation()}
                 className="absolute inset-0 z-10 flex items-center justify-center bg-wood-950/85 backdrop-blur-md p-6"
               >
                 <div className="flex max-w-sm flex-col items-center gap-5 rounded-3xl bg-cream-50 p-8 text-center shadow-card">
-                  <Facebook size={40} className="text-[#1877F2]" />
-                  <div>
-                    <p className="font-display text-xl font-medium text-wood-900">
-                      Video không tải được trên trình duyệt
-                    </p>
-                    <p className="mt-2 text-sm leading-relaxed text-wood-500">
-                      Xem trực tiếp trên fanpage Facebook để có trải nghiệm tốt nhất.
-                    </p>
-                  </div>
+                  <p className="font-display text-xl font-medium text-wood-900">
+                    Video không tải được trên trình duyệt
+                  </p>
+                  <p className="text-sm leading-relaxed text-wood-500">
+                    Bạn có thể nhắn shop để được tư vấn ngay, hoặc xem video trên Facebook.
+                  </p>
+                  {/* PRIMARY CTA — Messenger để chốt đơn */}
+                  <a
+                    href={BRAND.messenger}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2.5 rounded-full bg-[#0084FF] px-7 py-4 text-sm font-semibold text-cream-50 transition-all hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-card"
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z" />
+                    </svg>
+                    Nhắn Facebook để đặt hàng
+                  </a>
+                  {/* SECONDARY — Facebook Reels link nhẹ */}
                   <a
                     href={fbUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2.5 rounded-full bg-[#1877F2] px-7 py-4 text-sm font-semibold text-cream-50 transition-colors hover:bg-[#0e6ee1]"
+                    className="text-xs text-wood-500 underline underline-offset-4 transition-colors hover:text-brick-500"
                   >
-                    <Facebook size={16} fill="currentColor" />
-                    Xem trên Facebook Reels
+                    Hoặc xem video trên Facebook Reels →
                   </a>
                 </div>
               </div>
             )}
           </motion.div>
 
-          {/* ─────────────── BOTTOM: Facebook fallback link luôn hiện ───────────────
-              Người dùng có thể luôn truy cập FB nếu video gặp trục trặc. */}
+          {/* ─────────────── BOTTOM: CTA chính = "Nhắn Facebook đặt hàng" ───────────────
+              Mục tiêu: giữ khách trong web, biến lượt xem video thành đơn hàng.
+              FB Reels chuyển thành link phụ nhẹ phía dưới. */}
           <div
-            className="relative z-20 flex justify-center px-5 pb-5 sm:pb-6"
+            className="relative z-20 flex flex-col items-center gap-3 px-5 pb-5 sm:pb-6"
             style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1.25rem)" }}
           >
+            {/* PRIMARY — Messenger để chốt đơn */}
+            <a
+              href={BRAND.messenger}
+              target="_blank"
+              rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-2.5 rounded-full bg-[#0084FF] px-7 py-3.5 text-sm font-semibold text-cream-50 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0070D9]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z" />
+              </svg>
+              Nhắn Facebook để đặt hàng
+            </a>
+
+            {/* SECONDARY — Facebook Reels link nhỏ, opacity nhẹ */}
             <a
               href={fbUrl}
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-2 rounded-full border border-cream-50/25 bg-cream-50/10 px-5 py-2.5 text-xs font-semibold text-cream-50 backdrop-blur-md transition-all duration-300 hover:bg-cream-50 hover:text-wood-900"
+              className="text-[11px] text-cream-50/55 underline-offset-4 transition-colors hover:text-cream-50/90 hover:underline"
             >
-              <Facebook size={14} fill="currentColor" />
-              Xem trên Facebook Reels
+              Xem reel trên Facebook
             </a>
           </div>
         </motion.div>

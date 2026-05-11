@@ -60,7 +60,7 @@ export type Product = {
 
 export const PRODUCTS: Product[] = [
   {
-    slug: "keo-lac-300g",
+    slug: "keo-lac-410g",
     name: "Kẹo lạc cao cấp",
     category: "keo-lac",
     categoryName: "Kẹo lạc",
@@ -70,7 +70,7 @@ export const PRODUCTS: Product[] = [
     story:
       "Kẹo lạc gắn liền với phiên chợ Bắc Bộ — bà bán kẹo ngồi nép bên cổng đình, mâm kẹo phủ giấy đỏ. Mỗi miếng kẹo là một ký ức của những buổi sáng đã rất xa.",
     price: 65000,
-    weight: "Túi 300g",
+    weight: "Túi 410g",
     images: [
       "/images/keo-lac/keo-lac-1.jpg",
       "/images/keo-lac/keo-lac-33.jpg",
@@ -80,7 +80,7 @@ export const PRODUCTS: Product[] = [
     ],
     video: "/videos/keo-lac/keo-lac-1.mp4",
     specs: [
-      { label: "Khối lượng", value: "300g / túi" },
+      { label: "Khối lượng", value: "410g / túi" },
       { label: "Nguyên liệu", value: "Lạc nhân, mạch nha, vừng trắng, muối" },
       { label: "Cách làm", value: "Rang tay, nấu mạch nha thủ công, cắt tay" },
       { label: "Hạn sử dụng", value: "60 ngày kể từ ngày sản xuất" },
@@ -92,31 +92,7 @@ export const PRODUCTS: Product[] = [
     available: true,
   },
   {
-    slug: "keo-lac-500g",
-    name: "Kẹo lạc cao cấp — túi lớn",
-    category: "keo-lac",
-    categoryName: "Kẹo lạc",
-    shortDesc: "Túi 500g — phù hợp làm quà biếu hoặc thưởng thức cả gia đình.",
-    description:
-      "Cùng công thức và chất lượng như kẹo lạc cao cấp 300g, đóng túi lớn 500g — phù hợp dùng nhiều ngày hoặc làm quà biếu. Bao bì kraft cao cấp có khoá zip giữ trọn độ giòn.",
-    price: 105000,
-    weight: "Túi 500g",
-    images: [
-      "/images/keo-lac/keo-lac-4.jpg",
-      "/images/keo-lac/keo-lac-8.jpg",
-      "/images/keo-lac/keo-lac-12.jpg",
-      "/images/keo-lac/keo-lac-25.jpg",
-    ],
-    specs: [
-      { label: "Khối lượng", value: "500g / túi" },
-      { label: "Nguyên liệu", value: "Lạc nhân, mạch nha, vừng trắng, muối" },
-      { label: "Hạn sử dụng", value: "60 ngày kể từ ngày sản xuất" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-    ],
-    available: true,
-  },
-  {
-    slug: "keo-doi-lac-250g",
+    slug: "keo-doi-lac-410g",
     name: "Kẹo dồi lạc thủ công",
     category: "keo-doi-lac",
     categoryName: "Kẹo dồi lạc",
@@ -126,7 +102,7 @@ export const PRODUCTS: Product[] = [
     story:
       "Bốn giờ sáng, làng đã thức. Bác thợ kéo từng mẻ kẹo dồi trắng muốt, hai cánh tay chai sạn vì mấy chục năm cầm cây kéo gỗ. Nghề này không dạy được bằng sách — chỉ truyền qua đôi tay.",
     price: 55000,
-    weight: "Túi 250g",
+    weight: "Túi 410g",
     images: [
       "/images/keo-doi/keo-doi-1.jpg",
       "/images/keo-doi/keo-doi-5.jpg",
@@ -135,7 +111,7 @@ export const PRODUCTS: Product[] = [
     ],
     video: "/videos/keo-doi/keo-doi-1.mp4",
     specs: [
-      { label: "Khối lượng", value: "250g / túi" },
+      { label: "Khối lượng", value: "410g / túi" },
       { label: "Nguyên liệu", value: "Lạc nhân, mạch nha, bột nếp, đường mía" },
       { label: "Cách làm", value: "Kéo kẹo thủ công, cắt và gói tay từng viên" },
       { label: "Hạn sử dụng", value: "45 ngày" },
@@ -146,7 +122,7 @@ export const PRODUCTS: Product[] = [
     available: true,
   },
   {
-    slug: "keo-me-den-250g",
+    slug: "keo-me-den-410g",
     name: "Kẹo mè đen Nam Định",
     category: "keo-me-den",
     categoryName: "Kẹo mè đen",
@@ -154,7 +130,7 @@ export const PRODUCTS: Product[] = [
     description:
       "Kẹo mè đen làm từ mè đen rang chín tới — hạt nào hạt nấy đen bóng, dậy mùi thơm bùi. Hoà cùng mạch nha tự nhiên, ăn không ngán, hợp khẩu vị người sành ẩm thực.",
     price: 60000,
-    weight: "Túi 250g",
+    weight: "Túi 410g",
     images: [
       "/images/keo-me-den/keo-me-den-1.jpg",
       "/images/keo-me-den/keo-me-den-5.jpg",
@@ -163,7 +139,7 @@ export const PRODUCTS: Product[] = [
     ],
     video: "/videos/keo-me-den/keo-me-den-1.mp4",
     specs: [
-      { label: "Khối lượng", value: "250g / túi" },
+      { label: "Khối lượng", value: "410g / túi" },
       { label: "Nguyên liệu", value: "Mè đen, mạch nha, lạc, đường mía" },
       { label: "Hạn sử dụng", value: "60 ngày" },
       { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
@@ -174,7 +150,7 @@ export const PRODUCTS: Product[] = [
     available: true,
   },
   {
-    slug: "keo-vung-trang-250g",
+    slug: "keo-vung-trang-410g",
     name: "Kẹo vừng trắng",
     category: "keo-vung",
     categoryName: "Kẹo vừng",
@@ -182,7 +158,7 @@ export const PRODUCTS: Product[] = [
     description:
       "Kẹo vừng cắt thanh dài, mặt phủ vừng trắng rang vàng đều, giòn tan khi cắn, ngọt nhẹ thanh tao. Đặc sản trứ danh của vùng Nam Định, hợp khẩu vị cả người lớn lẫn trẻ nhỏ.",
     price: 55000,
-    weight: "Túi 250g",
+    weight: "Túi 410g",
     images: [
       "/images/keo-vung/keo-vung-14.jpg",
       "/images/keo-vung/keo-vung-3.jpg",
@@ -191,7 +167,7 @@ export const PRODUCTS: Product[] = [
     ],
     video: "/videos/keo-vung/keo-vung-1.mp4",
     specs: [
-      { label: "Khối lượng", value: "250g / túi" },
+      { label: "Khối lượng", value: "410g / túi" },
       { label: "Nguyên liệu", value: "Vừng trắng, mạch nha, lạc" },
       { label: "Hạn sử dụng", value: "60 ngày" },
       { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
@@ -200,7 +176,7 @@ export const PRODUCTS: Product[] = [
     available: true,
   },
   {
-    slug: "banh-cay-thai-binh-300g",
+    slug: "banh-cay-thai-binh-410g",
     name: "Bánh cáy Thái Bình",
     category: "banh-cay",
     categoryName: "Bánh cáy",
@@ -210,7 +186,7 @@ export const PRODUCTS: Product[] = [
     story:
       "Cái tên \"bánh cáy\" không phải vì làm từ con cáy — mà vì những hạt nhân bên trong trông như trứng con cáy ngoài đồng. Một loại bánh từng được tiến vua, nay vẫn được làm bằng đôi tay người làng Nguyễn — Thái Bình.",
     price: 85000,
-    weight: "Hộp 300g",
+    weight: "Hộp 410g",
     images: [
       "/images/banh-cay/banh-cay-3.jpg",
       "/images/banh-cay/banh-cay-1.jpg",
@@ -219,7 +195,7 @@ export const PRODUCTS: Product[] = [
     ],
     video: "/videos/banh-cay/banh-cay-1.mp4",
     specs: [
-      { label: "Khối lượng", value: "300g / hộp" },
+      { label: "Khối lượng", value: "410g / hộp" },
       { label: "Nguyên liệu", value: "Gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha" },
       { label: "Hạn sử dụng", value: "60 ngày" },
       { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
@@ -230,31 +206,7 @@ export const PRODUCTS: Product[] = [
     available: true,
   },
   {
-    slug: "banh-cay-thai-binh-500g",
-    name: "Bánh cáy Thái Bình — hộp lớn",
-    category: "banh-cay",
-    categoryName: "Bánh cáy",
-    shortDesc: "Hộp 500g phù hợp làm quà Tết, quà biếu.",
-    description:
-      "Cùng công thức bánh cáy 300g, đóng hộp giấy cao cấp 500g — phù hợp dùng làm quà biếu Tết, quà tân gia, hoặc quà cảm ơn. Bao bì lịch sự, bên trong có giấy lót thực phẩm an toàn.",
-    price: 135000,
-    weight: "Hộp 500g",
-    images: [
-      "/images/banh-cay/banh-cay-2.jpg",
-      "/images/banh-cay/banh-cay-3.jpg",
-      "/images/banh-cay/banh-cay-1.jpg",
-    ],
-    specs: [
-      { label: "Khối lượng", value: "500g / hộp" },
-      { label: "Nguyên liệu", value: "Gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha" },
-      { label: "Hạn sử dụng", value: "60 ngày" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-    ],
-    badge: "Quà biếu",
-    available: true,
-  },
-  {
-    slug: "keo-lac-hong-300g",
+    slug: "keo-lac-hong-410g",
     name: "Kẹo lạc hồng",
     category: "keo-lac-hong",
     categoryName: "Kẹo lạc hồng",
@@ -262,7 +214,7 @@ export const PRODUCTS: Product[] = [
     description:
       "Kẹo lạc hồng với sắc đỏ tươi đặc trưng từ mạch nha gấc tự nhiên — không phẩm màu. Vị ngọt vừa phải, nhân lạc rang nguyên hạt. Một món quà mang ý nghĩa may mắn cho ngày đầu năm, đám hỷ.",
     price: 70000,
-    weight: "Túi 300g",
+    weight: "Túi 410g",
     images: [
       "/images/keo-lac-hong/keo-lac-hong-4.jpg",
       "/images/keo-lac-hong/keo-lac-hong-3.jpg",
@@ -271,7 +223,7 @@ export const PRODUCTS: Product[] = [
     ],
     video: "/videos/keo-lac-hong/keo-lac-hong-1.mp4",
     specs: [
-      { label: "Khối lượng", value: "300g / túi" },
+      { label: "Khối lượng", value: "410g / túi" },
       { label: "Nguyên liệu", value: "Lạc nhân, mạch nha gấc tự nhiên, đường mía" },
       { label: "Hạn sử dụng", value: "60 ngày" },
       { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
