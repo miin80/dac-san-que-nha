@@ -27,7 +27,7 @@ export function FeaturedProducts() {
   const { triggerOrder } = useFacebookOrder();
 
   return (
-    <section id="san-pham" className="relative py-28 sm:py-40">
+    <section id="san-pham" className="relative py-12 sm:py-24 lg:py-36">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <SectionHeader
           eyebrow="Sản phẩm nổi bật"
@@ -42,7 +42,7 @@ export function FeaturedProducts() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="mt-20 grid gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+          className="mt-9 grid gap-5 sm:mt-16 sm:gap-7 lg:mt-20 lg:grid-cols-3 lg:gap-8 sm:grid-cols-2"
         >
           {products.map((p, i) => (
             <motion.article
@@ -136,7 +136,7 @@ export function FeaturedProducts() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-20 text-center"
+          className="mt-10 text-center sm:mt-16 lg:mt-20"
         >
           <Link
             href="/san-pham"

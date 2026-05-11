@@ -135,7 +135,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.75, duration: 1.5, ease: luxuryEase }}
-          className="mt-12 max-w-lg text-[15px] leading-[2.05] text-cream-100/78 text-pretty sm:text-base"
+          className="mt-10 max-w-lg text-[15px] leading-[1.85] text-cream-50 text-pretty sm:mt-12 sm:text-base sm:leading-[2.05]"
+          style={{
+            textShadow: "0 1px 12px rgba(26, 15, 8, 0.6), 0 1px 3px rgba(26, 15, 8, 0.4)",
+          }}
         >
           Bánh kẹo tuổi thơ — từ bàn tay thợ làng nghề Bắc Bộ,<br className="hidden sm:block" />
           theo công thức gia truyền lưu giữ qua nhiều thế hệ.

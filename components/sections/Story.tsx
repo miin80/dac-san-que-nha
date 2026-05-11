@@ -111,7 +111,7 @@ function VignetteRow({ v, index }: { v: Vignette; index: number }) {
 
 export function Story() {
   return (
-    <section id="gioi-thieu" className="relative py-36 sm:py-52">
+    <section id="gioi-thieu" className="relative py-16 sm:py-28 lg:py-48">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         {/* ────────── HEADER ────────── */}
         <motion.div
@@ -155,7 +155,7 @@ export function Story() {
         </motion.div>
 
         {/* ────────── VIGNETTES (3 rows, alternating) ────────── */}
-        <div className="mt-32 space-y-32 sm:mt-44 sm:space-y-44">
+        <div className="mt-16 space-y-20 sm:mt-28 sm:space-y-28 lg:mt-44 lg:space-y-44">
           {VIGNETTES.map((v, i) => (
             <VignetteRow key={v.title} v={v} index={i} />
           ))}

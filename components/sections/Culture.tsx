@@ -10,7 +10,7 @@ import { fadeUp, stagger, viewportOnce, luxuryEase, revealClip } from "@/lib/mot
  */
 export function Culture() {
   return (
-    <section id="huong-vi" className="relative py-32 sm:py-44">
+    <section id="huong-vi" className="relative py-14 sm:py-24 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <motion.div
           variants={stagger(0.12, 0.12)}

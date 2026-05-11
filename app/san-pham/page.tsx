@@ -39,7 +39,7 @@ export default function ShopPage() {
 
       <main>
         {/* ────────────── HEADER SECTION ────────────── */}
-        <section className="relative pt-36 pb-16 sm:pt-44 sm:pb-20">
+        <section className="relative pt-24 pb-8 sm:pt-36 sm:pb-16 lg:pt-44 lg:pb-20">
           {/* Soft warm light background */}
           <div className="pointer-events-none absolute inset-0 warm-light opacity-60" />
           <div className="pointer-events-none absolute inset-0 indo-clouds opacity-30" />

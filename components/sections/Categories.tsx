@@ -15,7 +15,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
  */
 export function Categories() {
   return (
-    <section id="dac-san" className="relative bg-cream-50 py-32 sm:py-44">
+    <section id="dac-san" className="relative bg-cream-50 py-14 sm:py-24 lg:py-40">
       <div className="pointer-events-none absolute inset-0 opacity-40 bg-paper-grain bg-grain" />
 
       <div className="relative mx-auto max-w-7xl px-6 sm:px-8">
@@ -32,7 +32,7 @@ export function Categories() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="mt-20 grid gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+          className="mt-9 grid gap-5 sm:mt-16 sm:gap-7 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8"
         >
           {CATEGORIES.map((c, i) => (
             <motion.article

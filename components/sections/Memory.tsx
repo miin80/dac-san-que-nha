@@ -69,7 +69,7 @@ function ParallaxImage({
 
 export function Memory() {
   return (
-    <section id="ky-uc" className="relative overflow-hidden bg-cream-50 py-32 sm:py-44">
+    <section id="ky-uc" className="relative overflow-hidden bg-cream-50 py-16 sm:py-28 lg:py-44">
       <div className="pointer-events-none absolute inset-0 warm-light opacity-90" />
       <div className="pointer-events-none absolute inset-0 indo-clouds opacity-30" />
 
@@ -108,7 +108,7 @@ export function Memory() {
         </motion.div>
 
         {/* ════════════════════════ CHƯƠNG I — Chợ phiên ═══════════════════ */}
-        <div className="mt-32 sm:mt-44">
+        <div className="mt-14 sm:mt-24 lg:mt-44">
           <motion.div
             variants={stagger(0.16, 0.14)}
             initial="hidden"
@@ -150,7 +150,7 @@ export function Memory() {
         </div>
 
         {/* ════════════════════════ CHƯƠNG II — Đêm 30 Tết (Full-bleed) ═══ */}
-        <div className="mt-36 sm:mt-52">
+        <div className="mt-16 sm:mt-28 lg:mt-52">
           <motion.div
             variants={stagger(0.16, 0.14)}
             initial="hidden"
@@ -190,7 +190,7 @@ export function Memory() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="mt-32 text-center sm:mt-44"
+          className="mt-16 text-center sm:mt-24 lg:mt-44"
         >
           <motion.span
             variants={{

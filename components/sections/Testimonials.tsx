@@ -30,7 +30,7 @@ export function Testimonials() {
   const t = TESTIMONIALS[index];
 
   return (
-    <section id="cam-nhan" className="relative bg-cream-50 py-32 sm:py-44">
+    <section id="cam-nhan" className="relative bg-cream-50 py-14 sm:py-24 lg:py-40">
       <div className="pointer-events-none absolute inset-0 opacity-40 bg-paper-grain bg-grain" />
 
       <div className="relative mx-auto max-w-5xl px-6 sm:px-8">
@@ -42,7 +42,7 @@ export function Testimonials() {
           description="Niềm tin từ khách hàng trên khắp Việt Nam là động lực để chúng tôi giữ vững chất lượng."
         />
 
-        <div className="relative mt-20">
+        <div className="relative mt-10 sm:mt-16 lg:mt-20">
           <div className="relative mx-auto max-w-2xl">
             <AnimatePresence mode="wait">
               <motion.figure

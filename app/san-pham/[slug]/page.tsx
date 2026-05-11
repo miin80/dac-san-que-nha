@@ -81,7 +81,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
       <main>
         {/* ────────────── HERO: Gallery + Info ────────────── */}
-        <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28">
+        <section className="relative pt-24 pb-12 sm:pt-32 sm:pb-20 lg:pt-40 lg:pb-28">
           {/* Soft warm light wash background */}
           <div className="pointer-events-none absolute inset-0 warm-light opacity-60" />
 
@@ -98,7 +98,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         </section>
 
         {/* ────────────── DESCRIPTION + STORY ────────────── */}
-        <section className="relative border-t border-wood-100/55 bg-cream-50 py-24 sm:py-36">
+        <section className="relative border-t border-wood-100/55 bg-cream-50 py-14 sm:py-24 lg:py-36">
           <div className="pointer-events-none absolute inset-0 indo-clouds opacity-25" />
           <div className="relative mx-auto max-w-3xl px-6 sm:px-8">
             <div className="text-center">
@@ -133,7 +133,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
 
         {/* ────────────── VIDEO ────────────── */}
         {product.video && (
-          <section className="relative bg-wood-950 py-24 sm:py-36">
+          <section className="relative bg-wood-950 py-14 sm:py-24 lg:py-36">
             <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-indochina-grid" />
             <div className="relative mx-auto max-w-7xl px-6 sm:px-8">
               <div className="mb-14 text-center">
@@ -157,7 +157,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
         )}
 
         {/* ────────────── SPECS ────────────── */}
-        <section className="relative py-24 sm:py-32">
+        <section className="relative py-14 sm:py-20 lg:py-32">
           <div className="mx-auto max-w-4xl px-6 sm:px-8">
             <div className="text-center">
               <span className="text-[10px] font-semibold uppercase tracking-luxury text-brick-500">

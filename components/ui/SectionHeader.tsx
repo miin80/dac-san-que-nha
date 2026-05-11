@@ -40,7 +40,7 @@ export function SectionHeader({
         <motion.div
           variants={fadeUp}
           className={cn(
-            "mb-7 flex items-center gap-5",
+            "mb-4 flex items-center gap-3 sm:mb-7 sm:gap-5",
             align === "center" ? "justify-center" : "justify-start",
           )}
         >
@@ -89,8 +89,8 @@ export function SectionHeader({
         <motion.p
           variants={fadeUp}
           className={cn(
-            "mx-auto mt-9 max-w-xl text-base leading-[2.05] text-pretty sm:text-[17px]",
-            light ? "text-cream-100/82" : "text-wood-500",
+            "mx-auto mt-5 max-w-xl text-[15px] leading-[1.75] text-pretty sm:mt-9 sm:text-[17px] sm:leading-[2.05]",
+            light ? "text-cream-100/90" : "text-wood-500",
           )}
         >
           {description}

@@ -49,7 +49,7 @@ export function Contact() {
     "w-full rounded-2xl border border-wood-100 bg-cream-50/80 px-5 py-4 text-wood-900 placeholder-wood-300 transition-all duration-500 ease-expo-out focus:border-brick-400 focus:bg-cream-50 focus:outline-none focus:ring-2 focus:ring-brick-400/20";
 
   return (
-    <section id="lien-he" className="relative py-32 sm:py-44">
+    <section id="lien-he" className="relative py-14 sm:py-24 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <SectionHeader
           eyebrow="Liên hệ — Đặt hàng"
@@ -57,7 +57,7 @@ export function Contact() {
           description="Hỗ trợ tư vấn và đặt hàng 7 ngày trong tuần. Chọn cách tiện nhất — Messenger Facebook, gọi điện, hoặc điền form."
         />
 
-        <div className="mt-20 grid gap-10 lg:grid-cols-5 lg:gap-14">
+        <div className="mt-10 grid gap-8 sm:mt-16 sm:gap-10 lg:mt-20 lg:grid-cols-5 lg:gap-14">
           {/* Form */}
           <motion.form
             onSubmit={handleSubmit}
