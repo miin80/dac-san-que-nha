@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { fadeUp, stagger, viewportOnce, luxuryEase } from "@/lib/motion";
+import { fadeUp, stagger, viewportEarly, luxuryEase } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 
 /**
@@ -27,10 +27,10 @@ export function SectionHeader({
 }) {
   return (
     <motion.div
-      variants={stagger(0.12, 0.1)}
+      variants={stagger(0.1, 0.08)}
       initial="hidden"
       whileInView="visible"
-      viewport={viewportOnce}
+      viewport={viewportEarly}
       className={cn(
         "max-w-3xl",
         align === "center" ? "mx-auto text-center" : "text-left",

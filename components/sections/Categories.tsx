@@ -5,7 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { CATEGORIES } from "@/lib/data";
-import { fadeUp, stagger, viewportOnce, luxuryEase } from "@/lib/motion";
+import { fadeUp, stagger, viewportOnce, viewportEarly, luxuryEase } from "@/lib/motion";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
 /**
@@ -28,10 +28,10 @@ export function Categories() {
         />
 
         <motion.div
-          variants={stagger(0.15, 0.12)}
+          variants={stagger(0.12, 0.1)}
           initial="hidden"
           whileInView="visible"
-          viewport={viewportOnce}
+          viewport={viewportEarly}
           className="mt-9 grid gap-5 sm:mt-16 sm:gap-7 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8"
         >
           {CATEGORIES.map((c, i) => (

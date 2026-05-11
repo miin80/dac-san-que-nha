@@ -8,7 +8,7 @@ import { getFeaturedProducts } from "@/lib/products";
 import { formatPrice, getStartingPrice, buildEnquiryMessage } from "@/lib/pricing";
 import { useFacebookOrder } from "@/lib/useFacebookOrder";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
+import { fadeUp, stagger, viewportEarly, viewportOnce } from "@/lib/motion";
 
 /**
  * Homepage Featured Products — editorial card + commerce CTA.
@@ -38,10 +38,10 @@ export function FeaturedProducts() {
         />
 
         <motion.div
-          variants={stagger(0.12, 0.1)}
+          variants={stagger(0.1, 0.08)}
           initial="hidden"
           whileInView="visible"
-          viewport={viewportOnce}
+          viewport={viewportEarly}
           className="mt-9 grid gap-5 sm:mt-16 sm:gap-7 lg:mt-20 lg:grid-cols-3 lg:gap-8 sm:grid-cols-2"
         >
           {products.map((p, i) => (

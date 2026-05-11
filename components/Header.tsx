@@ -14,9 +14,9 @@ const NAV = [
   { href: "/#gioi-thieu", label: "Giới thiệu", number: "01" },
   { href: "/#dac-san", label: "Đặc sản", number: "02" },
   { href: "/san-pham", label: "Cửa hàng", number: "03" },
-  { href: "/#ky-uc", label: "Ký ức quê nhà", number: "04" },
-  { href: "/#huong-vi", label: "Hương vị quê", number: "05" },
-  { href: "/tin-tuc", label: "Tin tức", number: "06" },
+  { href: "/tin-tuc", label: "Tin tức", number: "04" },
+  { href: "/#ky-uc", label: "Ký ức quê nhà", number: "05" },
+  { href: "/#huong-vi", label: "Hương vị quê", number: "06" },
   { href: "/#lien-he", label: "Liên hệ", number: "—" },
 ];
 

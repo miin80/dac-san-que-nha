@@ -24,7 +24,15 @@ import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
  *   - poster (ảnh hiện trước khi user tap)
  */
 
-function ReelCard({ reel, index }: { reel: typeof REELS[number]; index: number }) {
+function ReelCard({
+  reel,
+  index,
+  priority,
+}: {
+  reel: typeof REELS[number];
+  index: number;
+  priority: boolean;
+}) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [started, setStarted] = useState(false);   // user đã tap play chưa
   const [muted, setMuted] = useState(true);
@@ -52,12 +60,14 @@ function ReelCard({ reel, index }: { reel: typeof REELS[number]; index: number }
       variants={fadeUp}
       className="group relative aspect-[9/16] overflow-hidden rounded-[1.75rem] bg-wood-900 shadow-card ring-1 ring-cream-50/10 ring-inset-luxury"
     >
-      {/* Poster image — LUÔN render, đảm bảo không bị màn hình đen */}
+      {/* Poster image — LUÔN render, đảm bảo không bị màn hình đen.
+          Các card đầu set priority để load eager, tránh lazy gây trống đen trên mobile. */}
       <Image
         src={reel.poster}
         alt={reel.title}
         fill
-        sizes="(min-width:1024px) 22vw, (min-width:640px) 45vw, 90vw"
+        sizes="(min-width:1024px) 22vw, (min-width:640px) 45vw, 45vw"
+        priority={priority}
         className="object-cover"
       />
 
@@ -81,7 +91,7 @@ function ReelCard({ reel, index }: { reel: typeof REELS[number]; index: number }
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-wood-950/80 via-transparent to-wood-950/30" />
 
       {/* Số thứ tự */}
-      <span className="absolute top-4 left-4 font-display italic text-xs text-cream-50/80 tabular-nums">
+      <span className="absolute top-2.5 left-2.5 font-display italic text-[11px] text-cream-50/80 tabular-nums sm:top-4 sm:left-4 sm:text-xs">
         {String(index + 1).padStart(2, "0")}
       </span>
 
@@ -90,9 +100,9 @@ function ReelCard({ reel, index }: { reel: typeof REELS[number]; index: number }
         <button
           onClick={toggleMute}
           aria-label={muted ? "Bật tiếng" : "Tắt tiếng"}
-          className="absolute right-4 top-4 z-10 inline-flex h-10 w-10 items-center justify-center rounded-full bg-wood-950/65 text-cream-50 backdrop-blur-md transition-all duration-500 hover:bg-wood-950/85 hover:scale-105 active:scale-95"
+          className="absolute right-2.5 top-2.5 z-10 inline-flex h-8 w-8 items-center justify-center rounded-full bg-wood-950/65 text-cream-50 backdrop-blur-md transition-all duration-500 hover:bg-wood-950/85 hover:scale-105 active:scale-95 sm:right-4 sm:top-4 sm:h-10 sm:w-10"
         >
-          {muted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          {muted ? <VolumeX size={13} className="sm:h-[15px] sm:w-[15px]" /> : <Volume2 size={13} className="sm:h-[15px] sm:w-[15px]" />}
         </button>
       )}
 
@@ -103,9 +113,9 @@ function ReelCard({ reel, index }: { reel: typeof REELS[number]; index: number }
           aria-label={`Phát video: ${reel.title}`}
           className="absolute inset-0 z-10 flex items-center justify-center"
         >
-          <span className="relative inline-flex h-20 w-20 items-center justify-center rounded-full bg-cream-50/95 text-brick-500 shadow-card transition-transform duration-500 group-hover:scale-110 active:scale-95">
+          <span className="relative inline-flex h-14 w-14 items-center justify-center rounded-full bg-cream-50/95 text-brick-500 shadow-card transition-transform duration-500 group-hover:scale-110 active:scale-95 sm:h-20 sm:w-20">
             <span className="absolute inset-0 animate-ping rounded-full bg-cream-50/40" style={{ animationDuration: "2.5s" }} />
-            <Play size={26} strokeWidth={1.6} className="relative ml-1.5 fill-current" />
+            <Play size={20} strokeWidth={1.6} className="relative ml-1 fill-current sm:h-[26px] sm:w-[26px] sm:ml-1.5" />
           </span>
         </button>
       )}
@@ -127,11 +137,11 @@ function ReelCard({ reel, index }: { reel: typeof REELS[number]; index: number }
       )}
 
       {/* Caption */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5">
-        <p className="font-display text-[19px] font-light text-cream-50 leading-tight">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 p-3 sm:p-5">
+        <p className="font-display text-sm font-light text-cream-50 leading-tight sm:text-[19px]">
           {reel.title}
         </p>
-        <p className="mt-1.5 text-xs leading-relaxed text-cream-100/80 line-clamp-2">
+        <p className="mt-1 hidden text-xs leading-relaxed text-cream-100/80 line-clamp-2 sm:mt-1.5 sm:block">
           {reel.caption}
         </p>
       </div>
@@ -155,14 +165,14 @@ export function VideoReels() {
         />
 
         <motion.div
-          variants={stagger(0.08, 0.1)}
+          variants={stagger(0.06, 0.08)}
           initial="hidden"
           whileInView="visible"
-          viewport={viewportOnce}
-          className="mt-9 grid gap-5 sm:mt-16 sm:gap-7 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-8"
+          viewport={{ once: true, amount: 0.05 }}
+          className="mt-9 grid grid-cols-2 gap-4 sm:mt-16 sm:gap-7 lg:mt-20 lg:grid-cols-3 lg:gap-8"
         >
           {REELS.map((r, i) => (
-            <ReelCard key={r.id} reel={r} index={i} />
+            <ReelCard key={r.id} reel={r} index={i} priority={i < 2} />
           ))}
         </motion.div>
       </div>
