@@ -14,9 +14,9 @@ const NAV = [
   { href: "/#gioi-thieu", label: "Giới thiệu", number: "01" },
   { href: "/#dac-san", label: "Đặc sản", number: "02" },
   { href: "/san-pham", label: "Cửa hàng", number: "03" },
-  { href: "/tin-tuc", label: "Tin tức", number: "04" },
-  { href: "/#ky-uc", label: "Ký ức quê nhà", number: "05" },
-  { href: "/#huong-vi", label: "Hương vị quê", number: "06" },
+  { href: "/#ky-uc", label: "Ký ức quê nhà", number: "04" },
+  { href: "/#huong-vi", label: "Hương vị quê", number: "05" },
+  { href: "/tin-tuc", label: "Tin tức", number: "06" },
   { href: "/#lien-he", label: "Liên hệ", number: "—" },
 ];
 
@@ -180,7 +180,12 @@ export function Header() {
         </div>
       </header>
 
-      {/* ─────────────── MOBILE MENU full-screen ─────────────── */}
+      {/* ─────────────── MOBILE MENU full-screen ───────────────
+          Layout flex-col:
+            - Header bar (fixed top, h-20)
+            - Nav (flex-1, OVERFLOW-Y-AUTO — items không bao giờ bị che)
+            - Hotline footer (fixed bottom, không chồng lên nav)
+      */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -188,19 +193,20 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[55] lg:hidden"
+            className="fixed inset-0 z-[55] flex flex-col lg:hidden"
           >
+            {/* Background — wood-950 với texture */}
             <motion.div
               initial={{ scaleY: 0 }}
               animate={{ scaleY: 1 }}
               exit={{ scaleY: 0 }}
               transition={{ duration: 0.55, ease: luxuryEase }}
-              className="absolute inset-0 origin-top bg-wood-950"
+              className="pointer-events-none absolute inset-0 origin-top bg-wood-950"
             />
             <div className="pointer-events-none absolute inset-0 opacity-[0.07] bg-indochina-grid" />
 
-            {/* Header bar — logo cũng link về "/" */}
-            <div className="relative flex h-20 items-center justify-between px-6 sm:px-8">
+            {/* TOP — Brand name + close button */}
+            <div className="relative flex h-20 shrink-0 items-center justify-between px-6 sm:px-8">
               <Link
                 href="/"
                 onClick={() => setOpen(false)}
@@ -217,8 +223,8 @@ export function Header() {
               </button>
             </div>
 
-            {/* Nav links lớn */}
-            <nav className="relative mt-8 flex flex-col px-6 sm:px-8">
+            {/* NAV — flex-1, overflow auto để cuộn nếu cần */}
+            <nav className="relative flex-1 overflow-y-auto px-6 pt-2 pb-4 sm:px-8 [-webkit-overflow-scrolling:touch]">
               {NAV.map((item, i) => {
                 const active = isActive(item.href);
                 return (
@@ -226,18 +232,18 @@ export function Header() {
                     key={item.href}
                     initial={{ opacity: 0, x: 24 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.2 + i * 0.07, duration: 0.7, ease: luxuryEase }}
+                    transition={{ delay: 0.15 + i * 0.05, duration: 0.6, ease: luxuryEase }}
                     className="border-b border-cream-50/10 last:border-0"
                   >
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className="group flex items-center justify-between py-5"
+                      className="group flex items-center justify-between py-3.5 sm:py-5"
                     >
-                      <span className="flex items-center gap-5">
+                      <span className="flex items-center gap-4 sm:gap-5">
                         <span
                           className={cn(
-                            "font-display italic text-sm tabular-nums",
+                            "font-display italic text-[13px] tabular-nums sm:text-sm",
                             active ? "text-gold-400" : "text-gold-400/80",
                           )}
                         >
@@ -245,7 +251,7 @@ export function Header() {
                         </span>
                         <span
                           className={cn(
-                            "font-display text-[34px] font-light transition-colors sm:text-[44px]",
+                            "font-display text-[26px] font-light leading-none transition-colors sm:text-[34px] md:text-[40px]",
                             active ? "text-gold-400" : "text-cream-50 group-hover:text-gold-400",
                           )}
                         >
@@ -255,7 +261,7 @@ export function Header() {
                       <span
                         className={cn(
                           "h-px origin-right transition-all duration-500",
-                          active ? "w-16 bg-gold-400" : "w-8 bg-cream-50/30 group-hover:w-16 group-hover:bg-gold-400",
+                          active ? "w-12 bg-gold-400 sm:w-16" : "w-6 bg-cream-50/30 group-hover:w-16 group-hover:bg-gold-400 sm:w-8",
                         )}
                       />
                     </Link>
@@ -264,12 +270,12 @@ export function Header() {
               })}
             </nav>
 
-            {/* Footer hotline */}
+            {/* BOTTOM — Hotline (luôn ở dưới, không chèn lên nav) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.7 }}
-              className="absolute inset-x-6 bottom-10 pb-safe sm:inset-x-8"
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="relative shrink-0 border-t border-cream-50/10 bg-wood-950/95 px-6 pb-safe pt-4 backdrop-blur-md sm:px-8"
             >
               <a
                 href={BRAND.hotlineHref}
@@ -277,7 +283,7 @@ export function Header() {
               >
                 <Phone size={14} /> Gọi {BRAND.hotline}
               </a>
-              <p className="mt-4 text-center text-[10px] uppercase tracking-luxury text-cream-200/50">
+              <p className="mt-3 mb-1 text-center text-[10px] uppercase tracking-luxury text-cream-200/50">
                 Hỗ trợ {BRAND.hours}
               </p>
             </motion.div>
