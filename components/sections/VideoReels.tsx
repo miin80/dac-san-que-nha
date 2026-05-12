@@ -158,7 +158,7 @@ export function VideoReels() {
             <div className="mt-8 flex flex-col items-center gap-4 sm:mt-10">
               <button
                 onClick={() => triggerOrder(buildEnquiryMessage())}
-                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-9 py-5 text-base font-bold text-cream-50 shadow-[0_18px_40px_-12px_rgba(0,132,255,0.55)] transition-all duration-500 ease-expo-out hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#0070D9] hover:shadow-[0_24px_50px_-12px_rgba(0,132,255,0.75)] active:scale-100 sm:px-12 sm:py-6 sm:text-lg"
+                className="group inline-flex animate-pulse-glow items-center justify-center gap-3 rounded-full bg-[#0084FF] px-10 py-[22px] text-[17px] font-bold text-cream-50 transition-all duration-500 ease-expo-out hover:-translate-y-1 hover:scale-[1.04] hover:!animate-none hover:bg-[#0070D9] hover:shadow-[0_28px_56px_-12px_rgba(0,132,255,0.85)] active:scale-100 sm:px-12 sm:py-6 sm:text-lg motion-reduce:animate-none"
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="transition-transform duration-500 group-hover:scale-110">
                   <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z" />

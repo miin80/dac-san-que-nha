@@ -25,25 +25,28 @@ export function ValuesMarquee({
   const items = [...VALUES, ...VALUES];
   return (
     <div
-      className={`relative overflow-hidden border-y py-7 sm:py-9 ${
+      className={`relative overflow-hidden border-y py-8 sm:py-11 ${
         variant === "light"
           ? "border-wood-500/15 bg-cream-50/40"
           : "border-cream-50/10 bg-wood-950"
       }`}
     >
-      <div className="flex w-max animate-marquee gap-12 whitespace-nowrap will-change-transform sm:gap-16">
+      <div className="flex w-max animate-marquee gap-14 whitespace-nowrap will-change-transform sm:gap-20">
         {items.map((v, i) => (
-          <span key={i} className="flex items-center gap-12 sm:gap-16">
+          <span key={i} className="flex items-center gap-14 sm:gap-20">
             <span
-              className={`font-display text-2xl italic sm:text-3xl ${
-                variant === "light" ? "text-wood-900/80" : "text-cream-50/90"
+              className={`font-display text-[28px] font-medium italic leading-none sm:text-[38px] ${
+                variant === "light" ? "text-wood-900" : "text-cream-50"
               }`}
+              style={{ letterSpacing: "-0.005em" }}
             >
               {v}
             </span>
             <span
-              className={`inline-block h-1.5 w-1.5 rounded-full ${
-                variant === "light" ? "bg-brick-500" : "bg-gold-500"
+              className={`inline-block h-2.5 w-2.5 rounded-full ${
+                variant === "light"
+                  ? "bg-brick-500 shadow-[0_0_0_4px_rgba(184,60,42,0.12)]"
+                  : "bg-gold-500 shadow-[0_0_0_4px_rgba(201,162,75,0.18)]"
               }`}
             />
           </span>
