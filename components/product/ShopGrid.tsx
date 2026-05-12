@@ -5,19 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { type Product } from "@/lib/products";
-import { type Category } from "@/lib/data";
+import { type Product, MAIN_CATEGORIES, getCategoryCounts } from "@/lib/products";
 import { formatPrice, getStartingPrice, buildEnquiryMessage } from "@/lib/pricing";
 import { useFacebookOrder } from "@/lib/useFacebookOrder";
 import { fadeUp, stagger } from "@/lib/motion";
 
 /**
- * ShopGrid — grid sản phẩm trang /san-pham với:
- *   - Filter chips sticky (Tất cả / Kẹo lạc / Kẹo dồi / ...)
- *   - Sort dropdown
+ * ShopGrid — grid sản phẩm trang /cua-hang.
+ *   - Filter chips sticky theo MAIN_CATEGORIES: Kẹo / Bánh / Combo / Quà biếu
+ *   - Sort dropdown (Nổi bật / Giá / Tên)
  *   - Card có giá KHỞI ĐIỂM combo + 2 CTA: "Đặt hàng" Messenger + "Chi tiết"
- *
- * Không hiển thị giá lẻ — chỉ "Từ XXX.XXXđ" (combo 2 = 149.000đ).
  */
 
 type SortKey = "featured" | "price-asc" | "price-desc" | "name";
@@ -29,15 +26,10 @@ const SORT_LABELS: Record<SortKey, string> = {
   name: "Tên A → Z",
 };
 
-export function ShopGrid({
-  products,
-  categories,
-}: {
-  products: Product[];
-  categories: Category[];
-}) {
+export function ShopGrid({ products }: { products: Product[] }) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [sortKey, setSortKey] = useState<SortKey>("featured");
+  const counts = useMemo(getCategoryCounts, []);
 
   const filtered = useMemo(() => {
     let list = activeCategory === "all"
@@ -54,24 +46,29 @@ export function ShopGrid({
 
   return (
     <>
+      {/* ────────── FILTER BAR sticky ────────── */}
       <div className="sticky top-16 z-20 -mx-6 mb-12 border-y border-wood-100/60 bg-cream-100/85 backdrop-blur-xl sm:-mx-8 sm:top-16">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          {/* Category chips */}
           <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 sm:pb-0 [&::-webkit-scrollbar]:hidden">
             <CategoryChip
               label="Tất cả"
+              count={products.length}
               active={activeCategory === "all"}
               onClick={() => setActiveCategory("all")}
             />
-            {categories.map((c) => (
+            {MAIN_CATEGORIES.map((c) => (
               <CategoryChip
-                key={c.slug}
-                label={c.name}
-                active={activeCategory === c.slug}
-                onClick={() => setActiveCategory(c.slug)}
+                key={c.value}
+                label={c.label}
+                count={counts[c.value] || 0}
+                active={activeCategory === c.value}
+                onClick={() => setActiveCategory(c.value)}
               />
             ))}
           </div>
 
+          {/* Sort */}
           <div className="flex items-center gap-3">
             <span className="text-[10px] font-semibold uppercase tracking-luxury text-wood-500 whitespace-nowrap">
               Sắp xếp
@@ -112,6 +109,9 @@ export function ShopGrid({
           <p className="font-display text-2xl italic text-wood-700">
             Chưa có sản phẩm trong danh mục này.
           </p>
+          <p className="mt-3 text-sm text-wood-500">
+            Hãy quay lại sau — chúng tôi sẽ sớm cập nhật.
+          </p>
         </div>
       )}
     </>
@@ -120,10 +120,12 @@ export function ShopGrid({
 
 function CategoryChip({
   label,
+  count,
   active,
   onClick,
 }: {
   label: string;
+  count: number;
   active: boolean;
   onClick: () => void;
 }) {
@@ -137,6 +139,11 @@ function CategoryChip({
       }`}
     >
       {label}
+      {count > 0 && (
+        <span className={`ml-1.5 text-[10px] font-normal opacity-70 ${active ? "text-cream-200" : "text-wood-500"}`}>
+          ({count})
+        </span>
+      )}
     </button>
   );
 }
@@ -144,6 +151,9 @@ function CategoryChip({
 function ShopCard({ product: p }: { product: Product }) {
   const { triggerOrder } = useFacebookOrder();
   const startingPrice = getStartingPrice();
+
+  // Dùng message mặc định của sản phẩm nếu có, fallback về enquiry chung
+  const messageText = p.facebookMessageText || buildEnquiryMessage(p);
 
   return (
     <motion.article
@@ -185,7 +195,7 @@ function ShopCard({ product: p }: { product: Product }) {
         </Link>
         <p className="mt-2 text-sm text-wood-500">{p.weight}</p>
 
-        <p className="mt-4 line-clamp-2 text-sm leading-[1.85] text-wood-500">{p.shortDesc}</p>
+        <p className="mt-4 line-clamp-2 text-sm leading-[1.85] text-wood-500">{p.shortDescription}</p>
 
         {/* Giá khởi điểm */}
         <div className="mt-5 border-t border-wood-100/55 pt-5">
@@ -205,7 +215,7 @@ function ShopCard({ product: p }: { product: Product }) {
         <div className="mt-5 grid grid-cols-[1fr_auto] gap-2">
           <button
             disabled={!p.available}
-            onClick={() => triggerOrder(buildEnquiryMessage(p))}
+            onClick={() => triggerOrder(messageText)}
             className={`inline-flex items-center justify-center gap-1.5 rounded-full bg-[#0084FF] px-4 py-3 text-[10px] font-semibold uppercase tracking-luxury text-cream-50 transition-all duration-500 ease-expo-out ${
               p.available
                 ? "hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-soft"

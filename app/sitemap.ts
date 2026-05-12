@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     // Cửa hàng (listing)
     {
-      url: `${BRAND.siteUrl}/san-pham`,
+      url: `${BRAND.siteUrl}/cua-hang`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.95,

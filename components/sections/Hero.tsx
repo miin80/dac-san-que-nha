@@ -120,7 +120,7 @@ export function Hero() {
           className="mt-12 max-w-5xl font-display text-display-2xl font-light text-cream-50 text-balance"
           style={{ letterSpacing: "-0.005em" }}
         >
-          Chuẩn vị quê, <br />
+          Chuẩn vị quê <br />
           <span className="italic text-gold-400/95 font-light">sạch · chất · lành</span>
         </motion.h1>
 

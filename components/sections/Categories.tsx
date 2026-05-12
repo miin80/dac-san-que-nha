@@ -77,7 +77,7 @@ export function Categories() {
                 <div className="mt-6 flex items-center gap-3">
                   <span className="h-px w-8 bg-gold-400/70 transition-all duration-500 group-hover:w-14" />
                   <Link
-                    href={`/san-pham#${c.slug}`}
+                    href={`/cua-hang#${c.slug}`}
                     className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-luxury text-cream-50 transition-colors group-hover:text-gold-400"
                   >
                     Xem sản phẩm

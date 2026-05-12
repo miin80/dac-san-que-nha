@@ -69,63 +69,39 @@ export const getStartingPrice = (): number =>
   Math.min(...COMBOS.map((c) => c.price));
 
 /**
- * Sinh text đặt hàng combo để copy vào clipboard, user dán vào Messenger.
- * Messenger không hỗ trợ pre-fill text qua URL nên cần copy thủ công.
+ * Sinh text đặt hàng combo — copy vào clipboard, user dán vào Messenger.
+ * Messenger KHÔNG hỗ trợ pre-fill text qua URL nên phải copy thủ công.
+ *
+ * Format casual + thân thiện, có sẵn cho user chỉ cần dán + thêm địa chỉ.
  */
 export const buildOrderMessage = (product: Product, combo: Combo): string => {
-  const shipText = combo.shipping === 0
-    ? "Miễn phí ship"
-    : `+ ${formatPrice(combo.shipping)} ship`;
+  const shipText = combo.shipping === 0 ? "miễn ship" : `+ ${formatPrice(combo.shipping)} ship`;
   const total = getComboTotal(combo);
-  const badge = combo.badge ? ` (${combo.badge})` : "";
 
   return [
-    "🎁 ĐẶT HÀNG — ĐẶC SẢN QUÊ NHÀ",
-    "",
-    `Sản phẩm: ${product.name} — ${product.weight}`,
-    `Combo: ${combo.qty} túi${badge}`,
-    `Giá: ${formatPrice(combo.price)} ${shipText}`,
+    `Chào shop! Mình muốn đặt combo ${combo.qty} túi ${product.name} — ${formatPrice(combo.price)} (${shipText})`,
     `Tổng: ${formatPrice(total)}`,
     "",
-    "────────────",
     "Họ tên: ",
-    "Số điện thoại: ",
+    "SĐT: ",
     "Địa chỉ: ",
-    "",
-    "Cảm ơn shop!",
   ].join("\n");
 };
 
-/** Text liên hệ chung khi không chọn combo (VD click floating button) */
+/** Text quan tâm sản phẩm — casual, ngắn gọn */
 export const buildEnquiryMessage = (product?: Product): string => {
   if (!product) {
-    return "Xin chào shop, mình muốn tư vấn về đặc sản!";
+    return "Chào shop! Mình muốn tư vấn về đặc sản, vui lòng hỗ trợ giúp mình.";
   }
-  return [
-    `Xin chào shop! Mình quan tâm sản phẩm:`,
-    `• ${product.name} (${product.weight})`,
-    "",
-    "Vui lòng tư vấn giúp mình. Cảm ơn!",
-  ].join("\n");
+  return `Chào shop! Mình muốn đặt ${product.name} (${product.weight}) — vui lòng tư vấn giúp mình.`;
 };
 
-/** Text mua sỉ */
+/** Text hỏi giá sỉ — casual, ngắn gọn */
 export const buildWholesaleMessage = (product?: Product): string => {
-  const tierInfo = WHOLESALE_TIERS.map(
-    (t) => `• Từ ${t.minQty} túi: ${formatPrice(t.pricePerBag)}/túi`,
-  ).join("\n");
-
+  const productInfo = product ? `${product.name} (${product.weight})` : "(ghi rõ sản phẩm)";
   return [
-    "💼 HỎI GIÁ SỈ — ĐẶC SẢN QUÊ NHÀ",
-    "",
-    product
-      ? `Sản phẩm: ${product.name} (${product.weight})`
-      : "Sản phẩm: (vui lòng ghi rõ loại)",
+    `Chào shop! Mình muốn hỏi giá sỉ ${productInfo}.`,
     "Số lượng dự kiến: ",
-    "",
-    "Tham khảo:",
-    tierInfo,
-    "",
-    "Liên hệ giúp mình để báo giá chi tiết. Cảm ơn shop!",
+    "Vui lòng báo giá giúp mình.",
   ].join("\n");
 };

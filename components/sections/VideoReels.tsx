@@ -120,8 +120,42 @@ export function VideoReels() {
               Sẵn sàng nếm thử <span className="text-gold-400">hương vị quê</span>?
             </p>
 
+            {/* ───────── CÚ ĐẤM CHỐT — combo highlight ───────── */}
+            <div className="mt-10 grid grid-cols-1 gap-3 sm:mt-12 sm:grid-cols-2 sm:gap-4">
+              <div className="rounded-2xl border border-brick-500/40 bg-brick-500/10 p-5 text-left sm:p-6">
+                <p className="text-[10px] font-bold uppercase tracking-luxury text-brick-400">
+                  🔥 Combo bán chạy nhất
+                </p>
+                <p
+                  className="mt-3 font-display text-[24px] font-light text-cream-50 sm:text-[28px]"
+                  style={{ letterSpacing: "-0.005em" }}
+                >
+                  3 túi — <span className="font-medium text-gold-400">199.000đ</span>
+                </p>
+                <p className="mt-1 text-sm text-cream-100/80">Miễn phí ship toàn quốc</p>
+              </div>
+
+              <div className="rounded-2xl border border-gold-500/40 bg-gold-500/10 p-5 text-left sm:p-6">
+                <p className="text-[10px] font-bold uppercase tracking-luxury text-gold-400">
+                  💰 Tiết kiệm nhất
+                </p>
+                <p
+                  className="mt-3 font-display text-[24px] font-light text-cream-50 sm:text-[28px]"
+                  style={{ letterSpacing: "-0.005em" }}
+                >
+                  5 túi — <span className="font-medium text-gold-400">299.000đ</span>
+                </p>
+                <p className="mt-1 text-sm text-cream-100/80">Miễn ship · Tiết kiệm 51.000đ</p>
+              </div>
+            </div>
+
+            {/* Gợi ý quyết định */}
+            <p className="mt-7 text-sm text-cream-100/85 sm:text-[15px]">
+              👉 <strong className="font-semibold text-cream-50">Nên thử:</strong> Combo 3 túi (199.000đ) — phù hợp ăn thử + được miễn ship
+            </p>
+
             {/* PRIMARY CTA — to + emoji + shadow nổi bật */}
-            <div className="mt-10 flex flex-col items-center gap-4 sm:mt-12">
+            <div className="mt-8 flex flex-col items-center gap-4 sm:mt-10">
               <button
                 onClick={() => triggerOrder(buildEnquiryMessage())}
                 className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-9 py-5 text-base font-bold text-cream-50 shadow-[0_18px_40px_-12px_rgba(0,132,255,0.55)] transition-all duration-500 ease-expo-out hover:-translate-y-1 hover:scale-[1.03] hover:bg-[#0070D9] hover:shadow-[0_24px_50px_-12px_rgba(0,132,255,0.75)] active:scale-100 sm:px-12 sm:py-6 sm:text-lg"

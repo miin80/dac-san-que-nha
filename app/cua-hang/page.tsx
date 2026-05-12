@@ -6,30 +6,30 @@ import { GrainOverlay } from "@/components/GrainOverlay";
 import { ShopGrid } from "@/components/product/ShopGrid";
 
 import { PRODUCTS } from "@/lib/products";
-import { CATEGORIES, BRAND } from "@/lib/data";
+import { BRAND } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Cửa hàng — Đặc sản truyền thống",
   description:
-    "Bộ sưu tập đặc sản truyền thống Việt Nam của Đặc Sản Quê Nhà — kẹo lạc, kẹo dồi lạc, kẹo mè đen, kẹo vừng, bánh cáy, kẹo lạc hồng. Làm thủ công, nguyên liệu Việt 100%.",
+    "Bộ sưu tập đặc sản truyền thống Việt Nam của Đặc Sản Quê Nhà — kẹo, bánh, combo, quà biếu. Làm thủ công, nguyên liệu Việt 100%.",
   openGraph: {
     title: `Cửa hàng — ${BRAND.name}`,
     description:
       "Bộ sưu tập đặc sản truyền thống Việt Nam — kẹo lạc, kẹo dồi, kẹo mè đen, kẹo vừng, bánh cáy, kẹo lạc hồng.",
     images: [{ url: "/images/keo-lac/keo-lac-33.jpg", width: 1200, height: 630 }],
   },
-  alternates: { canonical: "/san-pham" },
+  alternates: { canonical: "/cua-hang" },
 };
 
 /**
- * /san-pham — Trang cửa hàng (listing).
+ * /cua-hang — Trang cửa hàng (listing chính).
  *
  * Phân biệt rõ với homepage:
  *   - Homepage = editorial luxury, storytelling
- *   - /san-pham = commerce-focused, có filter, giá rõ ràng, CTA mạnh hơn
+ *   - /cua-hang = commerce-focused, filter theo 4 main categories
  *
- * Vẫn giữ tone luxury (typography Cormorant, whitespace generous,
- * not aggressive sales tactics) nhưng layout sales-oriented.
+ * Filter: Kẹo / Bánh / Combo / Quà biếu (định nghĩa trong lib/products.ts)
+ * Để thêm sản phẩm: edit data/products.json (không cần đụng code).
  */
 export default function ShopPage() {
   return (
@@ -39,7 +39,6 @@ export default function ShopPage() {
       <main>
         {/* ────────────── HEADER SECTION ────────────── */}
         <section className="relative pt-24 pb-8 sm:pt-36 sm:pb-16 lg:pt-44 lg:pb-20">
-          {/* Soft warm light background */}
           <div className="pointer-events-none absolute inset-0 warm-light opacity-60" />
           <div className="pointer-events-none absolute inset-0 indo-clouds opacity-30" />
 
@@ -63,15 +62,13 @@ export default function ShopPage() {
         {/* ────────────── PRODUCT GRID WITH FILTER ────────────── */}
         <section className="relative py-12 sm:py-20">
           <div className="mx-auto max-w-7xl px-6 sm:px-8">
-            <ShopGrid products={PRODUCTS} categories={CATEGORIES} />
+            <ShopGrid products={PRODUCTS} />
           </div>
         </section>
       </main>
 
       <Footer />
-
       <MobileQuickCTA />
-
       <GrainOverlay intensity="light" />
     </>
   );

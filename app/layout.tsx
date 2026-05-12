@@ -140,7 +140,7 @@ const jsonLdProducts = {
     item: {
       "@type": "Product",
       name: p.name,
-      description: p.shortDesc,
+      description: p.shortDescription,
       image: `${BRAND.siteUrl}${p.images[0]}`,
       brand: { "@type": "Brand", name: BRAND.name },
       url: `${BRAND.siteUrl}/san-pham/${p.slug}`,

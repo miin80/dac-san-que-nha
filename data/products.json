@@ -1,0 +1,243 @@
+[
+  {
+    "id": "keo-lac-410g",
+    "slug": "keo-lac-410g",
+    "name": "Kẹo lạc cao cấp",
+    "category": "Kẹo",
+    "categoryName": "Kẹo lạc",
+    "price": 65000,
+    "oldPrice": null,
+    "weight": "Túi 410g",
+    "images": [
+      "/images/keo-lac/keo-lac-1.jpg",
+      "/images/keo-lac/keo-lac-33.jpg",
+      "/images/keo-lac/keo-lac-2.jpg",
+      "/images/keo-lac/keo-lac-13.jpg",
+      "/images/keo-lac/keo-lac-20.jpg"
+    ],
+    "video": "/videos/keo-lac/keo-lac-1.mp4",
+    "shortDescription": "Lạc rang vàng tay, mạch nha truyền thống, giòn rụm thơm bùi.",
+    "description": "Kẹo lạc thủ công làm từ lạc nhân tuyển vùng Nghệ — Hà Tĩnh, rang tay tới độ vàng nâu vừa độ. Mạch nha tự nấu lửa nhỏ nhiều giờ, hoà cùng vừng trắng rang già, cắt miếng vuông vắn, giòn tan trong miệng.",
+    "story": "Kẹo lạc gắn liền với phiên chợ Bắc Bộ — bà bán kẹo ngồi nép bên cổng đình, mâm kẹo phủ giấy đỏ. Mỗi miếng kẹo là một ký ức của những buổi sáng đã rất xa.",
+    "ingredients": "Lạc nhân, mạch nha, vừng trắng, muối",
+    "reasonsToBuy": [
+      "Lạc rang vàng tay, không khét",
+      "Mạch nha tự nấu lửa nhỏ — vị ngọt thanh",
+      "Cắt miếng vuông vắn, đều tay",
+      "100% nguyên liệu Việt, không phẩm màu"
+    ],
+    "specs": [
+      { "label": "Khối lượng", "value": "410g / túi" },
+      { "label": "Nguyên liệu", "value": "Lạc nhân, mạch nha, vừng trắng, muối" },
+      { "label": "Cách làm", "value": "Rang tay, nấu mạch nha thủ công, cắt tay" },
+      { "label": "Hạn sử dụng", "value": "60 ngày kể từ ngày sản xuất" },
+      { "label": "Bảo quản", "value": "Nơi khô ráo, thoáng mát, tránh ánh nắng" },
+      { "label": "Xuất xứ", "value": "Làng nghề Bắc Bộ — Việt Nam" }
+    ],
+    "badge": "Bán chạy",
+    "isBestSeller": true,
+    "featured": true,
+    "available": true,
+    "comboSuggestion": "Đặt Combo 3 túi trở lên — miễn phí ship, tiết kiệm tới 26.000đ",
+    "facebookMessageText": "Chào shop! Mình muốn đặt Kẹo lạc cao cấp (Túi 410g) — vui lòng tư vấn giúp mình."
+  },
+  {
+    "id": "keo-doi-lac-410g",
+    "slug": "keo-doi-lac-410g",
+    "name": "Kẹo dồi lạc thủ công",
+    "category": "Kẹo",
+    "categoryName": "Kẹo dồi lạc",
+    "price": 55000,
+    "oldPrice": null,
+    "weight": "Túi 410g",
+    "images": [
+      "/images/keo-doi/keo-doi-1.jpg",
+      "/images/keo-doi/keo-doi-5.jpg",
+      "/images/keo-doi/keo-doi-8.jpg",
+      "/images/keo-doi/keo-doi-11.jpg"
+    ],
+    "video": "/videos/keo-doi/keo-doi-1.mp4",
+    "shortDescription": "Vỏ trắng giòn tan, nhân lạc rang bùi béo gói trong giấy kẹo.",
+    "description": "Kẹo dồi lạc với lớp vỏ kéo trắng mịn bao quanh nhân lạc rang giã thô. Cắn vào nghe tiếng tách giòn, vị ngọt thanh hậu bùi — một thức quà gắn liền tuổi thơ nhiều thế hệ người Bắc.",
+    "story": "Bốn giờ sáng, làng đã thức. Bác thợ kéo từng mẻ kẹo dồi trắng muốt, hai cánh tay chai sạn vì mấy chục năm cầm cây kéo gỗ. Nghề này không dạy được bằng sách — chỉ truyền qua đôi tay.",
+    "ingredients": "Lạc nhân, mạch nha, bột nếp, đường mía",
+    "reasonsToBuy": [
+      "Vỏ kẹo kéo tay, trắng muốt, giòn tan",
+      "Nhân lạc rang giã thô, bùi béo",
+      "Gói trong giấy kẹo thực phẩm an toàn",
+      "Đặc sản trứ danh làng nghề Nam Định"
+    ],
+    "specs": [
+      { "label": "Khối lượng", "value": "410g / túi" },
+      { "label": "Nguyên liệu", "value": "Lạc nhân, mạch nha, bột nếp, đường mía" },
+      { "label": "Cách làm", "value": "Kéo kẹo thủ công, cắt và gói tay từng viên" },
+      { "label": "Hạn sử dụng", "value": "45 ngày" },
+      { "label": "Bảo quản", "value": "Nơi khô ráo, thoáng mát" },
+      { "label": "Xuất xứ", "value": "Làng nghề Nam Định" }
+    ],
+    "badge": null,
+    "isBestSeller": false,
+    "featured": true,
+    "available": true,
+    "comboSuggestion": "Combo 3 túi đa dạng vị — bao gồm cả kẹo dồi + kẹo lạc + kẹo mè",
+    "facebookMessageText": "Chào shop! Mình muốn đặt Kẹo dồi lạc thủ công (Túi 410g) — vui lòng tư vấn giúp mình."
+  },
+  {
+    "id": "keo-me-den-410g",
+    "slug": "keo-me-den-410g",
+    "name": "Kẹo mè đen Nam Định",
+    "category": "Kẹo",
+    "categoryName": "Kẹo mè đen",
+    "price": 60000,
+    "oldPrice": null,
+    "weight": "Túi 410g",
+    "images": [
+      "/images/keo-me-den/keo-me-den-1.jpg",
+      "/images/keo-me-den/keo-me-den-5.jpg",
+      "/images/keo-me-den/keo-me-den-8.jpg",
+      "/images/keo-me-den/keo-me-den-12.jpg"
+    ],
+    "video": "/videos/keo-me-den/keo-me-den-1.mp4",
+    "shortDescription": "Mè đen rang già lửa, mạch nha vàng óng, đậm đà tinh tế.",
+    "description": "Kẹo mè đen làm từ mè đen rang chín tới — hạt nào hạt nấy đen bóng, dậy mùi thơm bùi. Hoà cùng mạch nha tự nhiên, ăn không ngán, hợp khẩu vị người sành ẩm thực.",
+    "story": null,
+    "ingredients": "Mè đen, mạch nha, lạc, đường mía",
+    "reasonsToBuy": [
+      "Mè đen rang già lửa, đen bóng tự nhiên",
+      "Giàu canxi và sắt — tốt cho sức khoẻ",
+      "Vị bùi đậm, không quá ngọt",
+      "Phù hợp ăn cùng trà chiều"
+    ],
+    "specs": [
+      { "label": "Khối lượng", "value": "410g / túi" },
+      { "label": "Nguyên liệu", "value": "Mè đen, mạch nha, lạc, đường mía" },
+      { "label": "Hạn sử dụng", "value": "60 ngày" },
+      { "label": "Bảo quản", "value": "Nơi khô ráo, thoáng mát" },
+      { "label": "Xuất xứ", "value": "Làng nghề Nam Định" }
+    ],
+    "badge": "Yêu thích",
+    "isBestSeller": false,
+    "featured": true,
+    "available": true,
+    "comboSuggestion": "Combo 3 túi đa dạng vị — thêm kẹo mè đen vào để cân bằng vị giác",
+    "facebookMessageText": "Chào shop! Mình muốn đặt Kẹo mè đen Nam Định (Túi 410g) — vui lòng tư vấn giúp mình."
+  },
+  {
+    "id": "keo-vung-trang-410g",
+    "slug": "keo-vung-trang-410g",
+    "name": "Kẹo vừng trắng",
+    "category": "Kẹo",
+    "categoryName": "Kẹo vừng",
+    "price": 55000,
+    "oldPrice": null,
+    "weight": "Túi 410g",
+    "images": [
+      "/images/keo-vung/keo-vung-14.jpg",
+      "/images/keo-vung/keo-vung-3.jpg",
+      "/images/keo-vung/keo-vung-1.jpg",
+      "/images/keo-vung/keo-vung-15.jpg"
+    ],
+    "video": "/videos/keo-vung/keo-vung-1.mp4",
+    "shortDescription": "Vừng trắng phủ đều, thanh dài, giòn tan, ngọt thanh.",
+    "description": "Kẹo vừng cắt thanh dài, mặt phủ vừng trắng rang vàng đều, giòn tan khi cắn, ngọt nhẹ thanh tao. Đặc sản trứ danh của vùng Nam Định, hợp khẩu vị cả người lớn lẫn trẻ nhỏ.",
+    "story": null,
+    "ingredients": "Vừng trắng, mạch nha, lạc",
+    "reasonsToBuy": [
+      "Vừng trắng rang vàng đều, phủ mặt kẹo",
+      "Giòn tan khi cắn, không dính răng",
+      "Ngọt thanh, không quá đường",
+      "Trẻ con người lớn đều thích"
+    ],
+    "specs": [
+      { "label": "Khối lượng", "value": "410g / túi" },
+      { "label": "Nguyên liệu", "value": "Vừng trắng, mạch nha, lạc" },
+      { "label": "Hạn sử dụng", "value": "60 ngày" },
+      { "label": "Bảo quản", "value": "Nơi khô ráo, thoáng mát" }
+    ],
+    "badge": null,
+    "isBestSeller": false,
+    "featured": true,
+    "available": true,
+    "comboSuggestion": "Combo 3 túi — thêm kẹo vừng để có vị thanh nhẹ cho trẻ nhỏ",
+    "facebookMessageText": "Chào shop! Mình muốn đặt Kẹo vừng trắng (Túi 410g) — vui lòng tư vấn giúp mình."
+  },
+  {
+    "id": "banh-cay-thai-binh-410g",
+    "slug": "banh-cay-thai-binh-410g",
+    "name": "Bánh cáy Thái Bình",
+    "category": "Bánh",
+    "categoryName": "Bánh cáy",
+    "price": 85000,
+    "oldPrice": null,
+    "weight": "Hộp 410g",
+    "images": [
+      "/images/banh-cay/banh-cay-3.jpg",
+      "/images/banh-cay/banh-cay-1.jpg",
+      "/images/banh-cay/banh-cay-2.jpg",
+      "/images/banh-cay/banh-cay-4.jpg"
+    ],
+    "video": "/videos/banh-cay/banh-cay-1.mp4",
+    "shortDescription": "Đặc sản tiến vua, dẻo bùi, hợp uống trà những chiều quê.",
+    "description": "Bánh cáy Thái Bình — đặc sản tiến vua từ thế kỷ XVIII. Hòa quyện gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha. Cắt miếng vuông, vị ngọt nhẹ, dẻo bùi, ăn cùng tách trà nóng là chuẩn vị quê Bắc Bộ.",
+    "story": "Cái tên \"bánh cáy\" không phải vì làm từ con cáy — mà vì những hạt nhân bên trong trông như trứng con cáy ngoài đồng. Một loại bánh từng được tiến vua, nay vẫn được làm bằng đôi tay người làng Nguyễn — Thái Bình.",
+    "ingredients": "Gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha",
+    "reasonsToBuy": [
+      "Đặc sản tiến vua từ thế kỷ XVIII",
+      "Công thức gia truyền làng Nguyễn — Thái Bình",
+      "Dẻo bùi, hợp uống trà",
+      "Đóng hộp đẹp — phù hợp làm quà biếu"
+    ],
+    "specs": [
+      { "label": "Khối lượng", "value": "410g / hộp" },
+      { "label": "Nguyên liệu", "value": "Gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha" },
+      { "label": "Hạn sử dụng", "value": "60 ngày" },
+      { "label": "Bảo quản", "value": "Nơi khô ráo, thoáng mát" },
+      { "label": "Xuất xứ", "value": "Làng nghề bánh cáy Thái Bình" }
+    ],
+    "badge": "Tiến vua",
+    "isBestSeller": true,
+    "featured": true,
+    "available": true,
+    "comboSuggestion": "Combo 3 hộp bánh cáy — quà Tết sang trọng, ý nghĩa",
+    "facebookMessageText": "Chào shop! Mình muốn đặt Bánh cáy Thái Bình (Hộp 410g) — vui lòng tư vấn giúp mình."
+  },
+  {
+    "id": "keo-lac-hong-410g",
+    "slug": "keo-lac-hong-410g",
+    "name": "Kẹo lạc hồng",
+    "category": "Kẹo",
+    "categoryName": "Kẹo lạc hồng",
+    "price": 70000,
+    "oldPrice": null,
+    "weight": "Túi 410g",
+    "images": [
+      "/images/keo-lac-hong/keo-lac-hong-4.jpg",
+      "/images/keo-lac-hong/keo-lac-hong-3.jpg",
+      "/images/keo-lac-hong/keo-lac-hong-2.jpg",
+      "/images/keo-lac-hong/keo-lac-hong-8.jpg"
+    ],
+    "video": "/videos/keo-lac-hong/keo-lac-hong-1.mp4",
+    "shortDescription": "Sắc đỏ may mắn, vị ngọt vừa, lạc rang nguyên hạt.",
+    "description": "Kẹo lạc hồng với sắc đỏ tươi đặc trưng từ mạch nha gấc tự nhiên — không phẩm màu. Vị ngọt vừa phải, nhân lạc rang nguyên hạt. Một món quà mang ý nghĩa may mắn cho ngày đầu năm, đám hỷ.",
+    "story": null,
+    "ingredients": "Lạc nhân, mạch nha gấc tự nhiên, đường mía",
+    "reasonsToBuy": [
+      "Sắc đỏ tự nhiên từ mạch nha gấc — không phẩm màu",
+      "Mang ý nghĩa may mắn — hợp quà Tết, đám hỷ",
+      "Nhân lạc nguyên hạt, vị ngọt vừa",
+      "Đóng gói viên nhỏ — tiện chia sẻ"
+    ],
+    "specs": [
+      { "label": "Khối lượng", "value": "410g / túi" },
+      { "label": "Nguyên liệu", "value": "Lạc nhân, mạch nha gấc tự nhiên, đường mía" },
+      { "label": "Hạn sử dụng", "value": "60 ngày" },
+      { "label": "Bảo quản", "value": "Nơi khô ráo, thoáng mát" }
+    ],
+    "badge": "Quà Tết",
+    "isBestSeller": false,
+    "featured": true,
+    "available": true,
+    "comboSuggestion": "Combo 3 túi kẹo lạc hồng — quà Tết may mắn cho người thân",
+    "facebookMessageText": "Chào shop! Mình muốn đặt Kẹo lạc hồng (Túi 410g) — vui lòng tư vấn giúp mình."
+  }
+]

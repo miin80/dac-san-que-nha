@@ -31,10 +31,10 @@ export async function generateMetadata(
 
   return {
     title: `${product.name} — ${product.weight}`,
-    description: product.shortDesc,
+    description: product.shortDescription,
     openGraph: {
       title: `${product.name} | ${BRAND.name}`,
-      description: product.shortDesc,
+      description: product.shortDescription,
       images: [{ url: product.images[0], width: 1200, height: 1500, alt: product.name }],
       type: "website",
     },
@@ -56,7 +56,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    description: product.shortDesc,
+    description: product.shortDescription,
     image: product.images.map((img) => `${BRAND.siteUrl}${img}`),
     brand: { "@type": "Brand", name: BRAND.name },
     offers: {
@@ -118,6 +118,37 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
               {product.description}
             </p>
 
+            {/* Lý do nên mua — bullet point */}
+            {product.reasonsToBuy && product.reasonsToBuy.length > 0 && (
+              <div className="mt-12 rounded-2xl border border-tea-500/30 bg-tea-100/40 p-7 sm:p-9">
+                <p className="text-[10px] font-bold uppercase tracking-luxury text-tea-700">
+                  Vì sao nên chọn?
+                </p>
+                <ul className="mt-5 space-y-3">
+                  {product.reasonsToBuy.map((reason) => (
+                    <li key={reason} className="flex items-start gap-3 text-base leading-relaxed text-wood-700 sm:text-[17px]">
+                      <span className="mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-tea-500 text-cream-50">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      </span>
+                      {reason}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Gợi ý combo — banner gold */}
+            {product.comboSuggestion && (
+              <div className="mt-9 rounded-2xl border-l-4 border-gold-500 bg-gold-500/10 p-6 sm:p-7">
+                <p className="text-[10px] font-bold uppercase tracking-luxury text-gold-600">
+                  💡 Gợi ý
+                </p>
+                <p className="mt-3 text-base leading-relaxed text-wood-700 sm:text-[17px]">
+                  {product.comboSuggestion}
+                </p>
+              </div>
+            )}
+
             {product.story && (
               <blockquote className="mt-12 border-l-2 border-brick-500/55 pl-7">
                 <p
@@ -172,7 +203,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
             </div>
 
             <dl className="mt-16 divide-y divide-wood-100/70 rounded-[2rem] border border-wood-100/60 bg-cream-50/60 backdrop-blur-sm">
-              {product.specs.map((s) => (
+              {(product.specs || []).map((s) => (
                 <div key={s.label} className="grid grid-cols-1 gap-3 px-7 py-6 sm:grid-cols-[200px_1fr] sm:gap-8">
                   <dt className="text-[10px] font-semibold uppercase tracking-luxury text-brick-500 sm:self-center">
                     {s.label}

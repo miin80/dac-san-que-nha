@@ -13,7 +13,7 @@ import { luxuryEase } from "@/lib/motion";
 const NAV = [
   { href: "/#gioi-thieu", label: "Giới thiệu", number: "01" },
   { href: "/#dac-san", label: "Đặc sản", number: "02" },
-  { href: "/san-pham", label: "Cửa hàng", number: "03" },
+  { href: "/cua-hang", label: "Cửa hàng", number: "03" },
   { href: "/#ky-uc", label: "Ký ức quê nhà", number: "04" },
   { href: "/#huong-vi", label: "Hương vị quê", number: "05" },
   { href: "/tin-tuc", label: "Tin tức", number: "06" },
@@ -64,7 +64,8 @@ export function Header() {
 
   /** Active state cho mỗi menu item */
   const isActive = (href: string) => {
-    if (href === "/san-pham") return pathname.startsWith("/san-pham");
+    // Cửa hàng: active cho cả /cua-hang VÀ /san-pham/[slug] (detail product)
+    if (href === "/cua-hang") return pathname.startsWith("/cua-hang") || pathname.startsWith("/san-pham");
     if (href === "/tin-tuc") return pathname.startsWith("/tin-tuc");
     return false; // anchor links (/#...) không highlight
   };

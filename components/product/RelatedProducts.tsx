@@ -38,7 +38,7 @@ export function RelatedProducts({ products }: { products: Product[] }) {
             </h2>
           </div>
           <Link
-            href="/san-pham"
+            href="/cua-hang"
             className="group inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-luxury text-wood-700 transition-colors hover:text-brick-500"
           >
             Xem tất cả

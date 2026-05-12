@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Phone, MapPin, Clock, Check, Facebook } from "lucide-react";
+import { Send, Phone, MapPin, Clock, Check, Facebook, X, PartyPopper } from "lucide-react";
 import { BRAND } from "@/lib/data";
 import { useFacebookOrder } from "@/lib/useFacebookOrder";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
@@ -15,6 +15,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 export function Contact() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [touched, setTouched] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const { triggerOrder, copied } = useFacebookOrder();
 
   const validPhone = /^(0|\+84)\d{9,10}$/.test(form.phone.replace(/[\s.-]/g, ""));
@@ -39,16 +40,34 @@ export function Contact() {
 
     triggerOrder(text);
 
+    // Hiện popup success — user có thể click "Nhắn Facebook ngay" để chốt đơn
+    setShowSuccess(true);
+
     setTimeout(() => {
       setForm({ name: "", phone: "", message: "" });
       setTouched(false);
-    }, 3500);
+    }, 500);
   };
+
+  const closeSuccess = () => setShowSuccess(false);
+
+  // ESC để đóng popup + lock body scroll khi mở
+  useEffect(() => {
+    if (!showSuccess) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setShowSuccess(false);
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [showSuccess]);
 
   const inputCls =
     "w-full rounded-2xl border border-wood-100 bg-cream-50/80 px-5 py-4 text-wood-900 placeholder-wood-300 transition-all duration-500 ease-expo-out focus:border-brick-400 focus:bg-cream-50 focus:outline-none focus:ring-2 focus:ring-brick-400/20";
 
   return (
+    <>
     <section id="lien-he" className="relative py-14 sm:py-24 lg:py-40">
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         <SectionHeader
@@ -251,5 +270,82 @@ export function Contact() {
         </div>
       </div>
     </section>
+
+    {/* ──────────────── SUCCESS POPUP ────────────────
+        Hiện sau khi user submit form. CTA chính: "Nhắn Facebook ngay"
+        để chuyển đổi nhanh hơn (vì form chỉ copy text, chưa thực sự gửi). */}
+    <AnimatePresence>
+      {showSuccess && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          onClick={closeSuccess}
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-wood-950/55 backdrop-blur-sm p-5 sm:p-8"
+        >
+          <motion.div
+            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 8 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-md overflow-hidden rounded-[2rem] bg-cream-50 p-8 text-center shadow-cinematic sm:p-10"
+          >
+            {/* Close button */}
+            <button
+              onClick={closeSuccess}
+              aria-label="Đóng"
+              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full text-wood-500 transition-colors hover:bg-wood-900/5 hover:text-wood-900"
+            >
+              <X size={18} />
+            </button>
+
+            {/* Success icon */}
+            <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-tea-500/15 text-tea-700">
+              <PartyPopper size={28} strokeWidth={1.8} />
+            </div>
+
+            <h3
+              className="font-display text-[28px] font-light leading-tight text-wood-900 sm:text-[32px]"
+              style={{ letterSpacing: "-0.005em" }}
+            >
+              🎉 Đặt hàng thành công
+            </h3>
+            <p className="mt-4 text-base leading-relaxed text-wood-500 sm:text-[17px]">
+              Chúng tôi sẽ liên hệ bạn sớm nhất.
+            </p>
+            <p className="mt-2 text-sm text-wood-500">
+              👉 <strong className="font-semibold text-wood-900">Nhắn Facebook để được xử lý nhanh hơn</strong>
+            </p>
+
+            {/* Primary: Nhắn Facebook ngay */}
+            <div className="mt-8 flex flex-col gap-3">
+              <a
+                href={BRAND.messenger}
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeSuccess}
+                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-7 py-4 text-sm font-bold text-cream-50 shadow-soft transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-card-hover"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2C6.486 2 2 6.262 2 11.5c0 2.928 1.404 5.55 3.612 7.288v3.462l3.303-1.814c.984.272 2.012.416 3.085.416 5.514 0 10-4.262 10-9.5S17.514 2 12 2zm.926 12.79l-2.55-2.73-5.05 2.73 5.55-5.9 2.62 2.73 4.98-2.73-5.55 5.9z" />
+                </svg>
+                Nhắn Facebook ngay
+              </a>
+              <button
+                onClick={closeSuccess}
+                className="text-xs uppercase tracking-luxury text-wood-500 transition-colors hover:text-wood-900"
+              >
+                Đóng
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+    </>
   );
 }

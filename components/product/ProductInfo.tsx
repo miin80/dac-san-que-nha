@@ -69,7 +69,7 @@ export function ProductInfo({ product }: { product: Product }) {
       >
         <Link href="/" className="hover:text-brick-500 transition-colors">Trang chủ</Link>
         <span className="text-wood-300">/</span>
-        <Link href="/san-pham" className="hover:text-brick-500 transition-colors">Cửa hàng</Link>
+        <Link href="/cua-hang" className="hover:text-brick-500 transition-colors">Cửa hàng</Link>
         <span className="text-wood-300">/</span>
         <span className="text-brick-500">{product.categoryName}</span>
       </motion.nav>
@@ -107,7 +107,7 @@ export function ProductInfo({ product }: { product: Product }) {
         variants={fadeUp}
         className="mt-7 text-base leading-[1.95] text-wood-700 sm:text-[17px]"
       >
-        {product.shortDesc}
+        {product.shortDescription}
       </motion.p>
 
       {/* Hairline */}

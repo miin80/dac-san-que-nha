@@ -34,7 +34,7 @@ export type Category = {
  */
 export const BRAND = {
   name: "Đặc Sản Quê Nhà",
-  tagline: "Chuẩn vị quê – Sạch, chất, lành!",
+  tagline: "Chuẩn vị quê — sạch · chất · lành",
   subTagline: "Những món bánh kẹo tuổi thơ mang đậm hương vị Việt",
   hotline: "055.988.6533",
   hotlineHref: "tel:+84559886533",

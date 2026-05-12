@@ -1,238 +1,80 @@
 /**
  * ============================================================================
- * HỆ THỐNG SẢN PHẨM (catalog) — DỮ LIỆU JSON
+ * HỆ THỐNG SẢN PHẨM (catalog)
  * ============================================================================
  *
- * MUỐN THÊM SẢN PHẨM MỚI:
- *   1. Copy 1 object trong `PRODUCTS` bên dưới
- *   2. Đổi `slug` (URL — chỉ chữ-số-gạch ngang, không dấu), `name`, `price` ...
- *   3. Đặt ảnh vào `/public/images/<category>/` rồi điền đường dẫn vào `images`
- *   4. Save file — Next.js sẽ tự build URL `/san-pham/<slug>`
+ * Dữ liệu thật ở `data/products.json` — JSON pure, không cần kiến thức code.
+ * File này chỉ load JSON + cung cấp type + helper functions.
  *
- * MUỐN ẨN SẢN PHẨM tạm thời:
- *   - Đặt `available: false` → vẫn render trang nhưng disable nút Mua
- *   - Hoặc xoá hẳn object khỏi mảng
+ * ❶ THÊM SẢN PHẨM MỚI:
+ *   - Mở file `data/products.json`
+ *   - Copy 1 object trong mảng → đổi `id`, `slug`, `name`, `price`...
+ *   - Save → Next.js auto build URL `/san-pham/<slug>`
  *
- * MUỐN HIỆN SẢN PHẨM TRÊN TRANG CHỦ "SẢN PHẨM NỔI BẬT":
- *   - Đặt `featured: true`
+ * ❷ THÊM DANH MỤC MỚI:
+ *   - Hiện có 4 main categories: Kẹo / Bánh / Combo / Quà biếu
+ *   - Thêm vào `MAIN_CATEGORIES` bên dưới + dùng tên đó trong field `category`
+ *
+ * ❸ BADGE:
+ *   - "Bán chạy", "Mới", "Tiến vua", "Quà Tết", "Yêu thích"…
+ *   - Hoặc null nếu không cần badge
  *
  * ============================================================================
  */
 
+import productsData from "@/data/products.json";
+
 export type ProductSpec = { label: string; value: string };
 
+/** Main categories cho filter trang /cua-hang */
+export type MainCategory = "Kẹo" | "Bánh" | "Combo" | "Quà biếu";
+
 export type Product = {
-  /** URL slug — chỉ ASCII, viết thường, gạch ngang */
+  id: string;
   slug: string;
-  /** Tên sản phẩm hiển thị */
   name: string;
-  /** Slug của Category cha (xem CATEGORIES trong lib/data.ts) */
-  category: string;
-  /** Tên category hiển thị (cache, tránh lookup) */
+  category: MainCategory;
+  /** Tên category con để hiển thị (VD: "Kẹo lạc", "Bánh cáy") */
   categoryName: string;
-  /** 1 dòng mô tả ngắn — hiện ở card listing */
-  shortDesc: string;
-  /** 2-3 đoạn mô tả chính — hiện ở detail page */
-  description: string;
-  /** Đoạn storytelling — không bắt buộc, hiện ở detail page */
-  story?: string;
-  /** Giá VND (số nguyên) */
   price: number;
-  /** Khối lượng / đóng gói */
+  oldPrice?: number | null;
   weight: string;
-  /** Mảng ảnh — ảnh đầu là ảnh hero */
   images: string[];
-  /** Video MP4 đặt trong /public/videos — optional */
   video?: string;
-  /** Bảng thông số chi tiết — render dạng list */
-  specs: ProductSpec[];
-  /** Badge nhỏ italic Lora trên card */
-  badge?: string;
-  /** Hiện trên trang chủ "Sản phẩm nổi bật" */
+  shortDescription: string;
+  description: string;
+  /** Đoạn storytelling — không bắt buộc */
+  story?: string | null;
+  /** Thành phần chính (single string, hiển thị card) */
+  ingredients: string;
+  /** Lý do nên mua — bullet points hiển thị trên detail page */
+  reasonsToBuy?: string[];
+  /** Bảng thông số chi tiết */
+  specs?: ProductSpec[];
+  badge?: string | null;
+  isBestSeller?: boolean;
   featured?: boolean;
-  /** Cho phép mua (false = sắp về hàng) */
   available: boolean;
+  /** Gợi ý combo — hiển thị trên detail page */
+  comboSuggestion?: string;
+  /** Text mặc định để copy vào Messenger khi user click "Đặt hàng" */
+  facebookMessageText?: string;
 };
 
 /* -------------------------------------------------------------------------- */
-/* PRODUCTS                                                                    */
+/* MAIN CATEGORIES — dùng cho filter /cua-hang                                 */
 /* -------------------------------------------------------------------------- */
-
-export const PRODUCTS: Product[] = [
-  {
-    slug: "keo-lac-410g",
-    name: "Kẹo lạc cao cấp",
-    category: "keo-lac",
-    categoryName: "Kẹo lạc",
-    shortDesc: "Lạc rang vàng tay, mạch nha truyền thống, giòn rụm thơm bùi.",
-    description:
-      "Kẹo lạc thủ công làm từ lạc nhân tuyển vùng Nghệ — Hà Tĩnh, rang tay tới độ vàng nâu vừa độ. Mạch nha tự nấu lửa nhỏ nhiều giờ, hoà cùng vừng trắng rang già, cắt miếng vuông vắn, giòn tan trong miệng.",
-    story:
-      "Kẹo lạc gắn liền với phiên chợ Bắc Bộ — bà bán kẹo ngồi nép bên cổng đình, mâm kẹo phủ giấy đỏ. Mỗi miếng kẹo là một ký ức của những buổi sáng đã rất xa.",
-    price: 65000,
-    weight: "Túi 410g",
-    images: [
-      "/images/keo-lac/keo-lac-1.jpg",
-      "/images/keo-lac/keo-lac-33.jpg",
-      "/images/keo-lac/keo-lac-2.jpg",
-      "/images/keo-lac/keo-lac-13.jpg",
-      "/images/keo-lac/keo-lac-20.jpg",
-    ],
-    video: "/videos/keo-lac/keo-lac-1.mp4",
-    specs: [
-      { label: "Khối lượng", value: "410g / túi" },
-      { label: "Nguyên liệu", value: "Lạc nhân, mạch nha, vừng trắng, muối" },
-      { label: "Cách làm", value: "Rang tay, nấu mạch nha thủ công, cắt tay" },
-      { label: "Hạn sử dụng", value: "60 ngày kể từ ngày sản xuất" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát, tránh ánh nắng" },
-      { label: "Xuất xứ", value: "Làng nghề Bắc Bộ — Việt Nam" },
-    ],
-    badge: "Bán chạy",
-    featured: true,
-    available: true,
-  },
-  {
-    slug: "keo-doi-lac-410g",
-    name: "Kẹo dồi lạc thủ công",
-    category: "keo-doi-lac",
-    categoryName: "Kẹo dồi lạc",
-    shortDesc: "Vỏ trắng giòn tan, nhân lạc rang bùi béo gói trong giấy kẹo.",
-    description:
-      "Kẹo dồi lạc với lớp vỏ kéo trắng mịn bao quanh nhân lạc rang giã thô. Cắn vào nghe tiếng tách giòn, vị ngọt thanh hậu bùi — một thức quà gắn liền tuổi thơ nhiều thế hệ người Bắc.",
-    story:
-      "Bốn giờ sáng, làng đã thức. Bác thợ kéo từng mẻ kẹo dồi trắng muốt, hai cánh tay chai sạn vì mấy chục năm cầm cây kéo gỗ. Nghề này không dạy được bằng sách — chỉ truyền qua đôi tay.",
-    price: 55000,
-    weight: "Túi 410g",
-    images: [
-      "/images/keo-doi/keo-doi-1.jpg",
-      "/images/keo-doi/keo-doi-5.jpg",
-      "/images/keo-doi/keo-doi-8.jpg",
-      "/images/keo-doi/keo-doi-11.jpg",
-    ],
-    video: "/videos/keo-doi/keo-doi-1.mp4",
-    specs: [
-      { label: "Khối lượng", value: "410g / túi" },
-      { label: "Nguyên liệu", value: "Lạc nhân, mạch nha, bột nếp, đường mía" },
-      { label: "Cách làm", value: "Kéo kẹo thủ công, cắt và gói tay từng viên" },
-      { label: "Hạn sử dụng", value: "45 ngày" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-      { label: "Xuất xứ", value: "Làng nghề Nam Định" },
-    ],
-    featured: true,
-    available: true,
-  },
-  {
-    slug: "keo-me-den-410g",
-    name: "Kẹo mè đen Nam Định",
-    category: "keo-me-den",
-    categoryName: "Kẹo mè đen",
-    shortDesc: "Mè đen rang già lửa, mạch nha vàng óng, đậm đà tinh tế.",
-    description:
-      "Kẹo mè đen làm từ mè đen rang chín tới — hạt nào hạt nấy đen bóng, dậy mùi thơm bùi. Hoà cùng mạch nha tự nhiên, ăn không ngán, hợp khẩu vị người sành ẩm thực.",
-    price: 60000,
-    weight: "Túi 410g",
-    images: [
-      "/images/keo-me-den/keo-me-den-1.jpg",
-      "/images/keo-me-den/keo-me-den-5.jpg",
-      "/images/keo-me-den/keo-me-den-8.jpg",
-      "/images/keo-me-den/keo-me-den-12.jpg",
-    ],
-    video: "/videos/keo-me-den/keo-me-den-1.mp4",
-    specs: [
-      { label: "Khối lượng", value: "410g / túi" },
-      { label: "Nguyên liệu", value: "Mè đen, mạch nha, lạc, đường mía" },
-      { label: "Hạn sử dụng", value: "60 ngày" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-      { label: "Xuất xứ", value: "Làng nghề Nam Định" },
-    ],
-    badge: "Yêu thích",
-    featured: true,
-    available: true,
-  },
-  {
-    slug: "keo-vung-trang-410g",
-    name: "Kẹo vừng trắng",
-    category: "keo-vung",
-    categoryName: "Kẹo vừng",
-    shortDesc: "Vừng trắng phủ đều, thanh dài, giòn tan, ngọt thanh.",
-    description:
-      "Kẹo vừng cắt thanh dài, mặt phủ vừng trắng rang vàng đều, giòn tan khi cắn, ngọt nhẹ thanh tao. Đặc sản trứ danh của vùng Nam Định, hợp khẩu vị cả người lớn lẫn trẻ nhỏ.",
-    price: 55000,
-    weight: "Túi 410g",
-    images: [
-      "/images/keo-vung/keo-vung-14.jpg",
-      "/images/keo-vung/keo-vung-3.jpg",
-      "/images/keo-vung/keo-vung-1.jpg",
-      "/images/keo-vung/keo-vung-15.jpg",
-    ],
-    video: "/videos/keo-vung/keo-vung-1.mp4",
-    specs: [
-      { label: "Khối lượng", value: "410g / túi" },
-      { label: "Nguyên liệu", value: "Vừng trắng, mạch nha, lạc" },
-      { label: "Hạn sử dụng", value: "60 ngày" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-    ],
-    featured: true,
-    available: true,
-  },
-  {
-    slug: "banh-cay-thai-binh-410g",
-    name: "Bánh cáy Thái Bình",
-    category: "banh-cay",
-    categoryName: "Bánh cáy",
-    shortDesc: "Đặc sản tiến vua, dẻo bùi, hợp uống trà những chiều quê.",
-    description:
-      "Bánh cáy Thái Bình — đặc sản tiến vua từ thế kỷ XVIII. Hòa quyện gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha. Cắt miếng vuông, vị ngọt nhẹ, dẻo bùi, ăn cùng tách trà nóng là chuẩn vị quê Bắc Bộ.",
-    story:
-      "Cái tên \"bánh cáy\" không phải vì làm từ con cáy — mà vì những hạt nhân bên trong trông như trứng con cáy ngoài đồng. Một loại bánh từng được tiến vua, nay vẫn được làm bằng đôi tay người làng Nguyễn — Thái Bình.",
-    price: 85000,
-    weight: "Hộp 410g",
-    images: [
-      "/images/banh-cay/banh-cay-3.jpg",
-      "/images/banh-cay/banh-cay-1.jpg",
-      "/images/banh-cay/banh-cay-2.jpg",
-      "/images/banh-cay/banh-cay-4.jpg",
-    ],
-    video: "/videos/banh-cay/banh-cay-1.mp4",
-    specs: [
-      { label: "Khối lượng", value: "410g / hộp" },
-      { label: "Nguyên liệu", value: "Gạo nếp, lạc, vừng, gừng, mỡ phần, mứt bí, mạch nha" },
-      { label: "Hạn sử dụng", value: "60 ngày" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-      { label: "Xuất xứ", value: "Làng nghề bánh cáy Thái Bình" },
-    ],
-    badge: "Tiến vua",
-    featured: true,
-    available: true,
-  },
-  {
-    slug: "keo-lac-hong-410g",
-    name: "Kẹo lạc hồng",
-    category: "keo-lac-hong",
-    categoryName: "Kẹo lạc hồng",
-    shortDesc: "Sắc đỏ may mắn, vị ngọt vừa, lạc rang nguyên hạt.",
-    description:
-      "Kẹo lạc hồng với sắc đỏ tươi đặc trưng từ mạch nha gấc tự nhiên — không phẩm màu. Vị ngọt vừa phải, nhân lạc rang nguyên hạt. Một món quà mang ý nghĩa may mắn cho ngày đầu năm, đám hỷ.",
-    price: 70000,
-    weight: "Túi 410g",
-    images: [
-      "/images/keo-lac-hong/keo-lac-hong-4.jpg",
-      "/images/keo-lac-hong/keo-lac-hong-3.jpg",
-      "/images/keo-lac-hong/keo-lac-hong-2.jpg",
-      "/images/keo-lac-hong/keo-lac-hong-8.jpg",
-    ],
-    video: "/videos/keo-lac-hong/keo-lac-hong-1.mp4",
-    specs: [
-      { label: "Khối lượng", value: "410g / túi" },
-      { label: "Nguyên liệu", value: "Lạc nhân, mạch nha gấc tự nhiên, đường mía" },
-      { label: "Hạn sử dụng", value: "60 ngày" },
-      { label: "Bảo quản", value: "Nơi khô ráo, thoáng mát" },
-    ],
-    badge: "Quà Tết",
-    featured: true,
-    available: true,
-  },
+export const MAIN_CATEGORIES: { value: MainCategory; label: string }[] = [
+  { value: "Kẹo",      label: "Kẹo" },
+  { value: "Bánh",     label: "Bánh" },
+  { value: "Combo",    label: "Combo" },
+  { value: "Quà biếu", label: "Quà biếu" },
 ];
+
+/* -------------------------------------------------------------------------- */
+/* PRODUCTS — load từ JSON                                                     */
+/* -------------------------------------------------------------------------- */
+export const PRODUCTS: Product[] = productsData as Product[];
 
 /* -------------------------------------------------------------------------- */
 /* HELPER FUNCTIONS                                                            */
@@ -243,16 +85,18 @@ export const getAllProducts = (): Product[] => PRODUCTS;
 export const getProductBySlug = (slug: string): Product | undefined =>
   PRODUCTS.find((p) => p.slug === slug);
 
-export const getProductsByCategory = (categorySlug: string): Product[] =>
-  PRODUCTS.filter((p) => p.category === categorySlug);
+export const getProductsByCategory = (category: MainCategory | string): Product[] =>
+  PRODUCTS.filter((p) => p.category === category);
 
 export const getFeaturedProducts = (): Product[] =>
   PRODUCTS.filter((p) => p.featured);
 
+export const getBestSellers = (): Product[] =>
+  PRODUCTS.filter((p) => p.isBestSeller);
+
 export const getRelatedProducts = (slug: string, limit = 3): Product[] => {
   const current = getProductBySlug(slug);
   if (!current) return [];
-  // Ưu tiên cùng category, nếu thiếu thì lấy ngẫu nhiên
   const sameCategory = PRODUCTS.filter(
     (p) => p.category === current.category && p.slug !== slug,
   );
@@ -262,5 +106,10 @@ export const getRelatedProducts = (slug: string, limit = 3): Product[] => {
   return [...sameCategory, ...others].slice(0, limit);
 };
 
-// Đã chuyển toàn bộ sang Messenger.
-// Xem lib/pricing.ts cho hệ thống combo + buildOrderMessage / buildEnquiryMessage.
+/** Số lượng sản phẩm trong mỗi main category — dùng để hiển thị badge count */
+export const getCategoryCounts = (): Record<MainCategory, number> => {
+  const counts: Record<string, number> = {};
+  MAIN_CATEGORIES.forEach((c) => { counts[c.value] = 0; });
+  PRODUCTS.forEach((p) => { counts[p.category] = (counts[p.category] || 0) + 1; });
+  return counts as Record<MainCategory, number>;
+};

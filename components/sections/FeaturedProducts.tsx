@@ -82,7 +82,7 @@ export function FeaturedProducts() {
                 <p className="mt-2 text-sm text-wood-500">{p.weight}</p>
 
                 <p className="mt-4 line-clamp-2 text-sm leading-[1.85] text-wood-500">
-                  {p.shortDesc}
+                  {p.shortDescription}
                 </p>
 
                 <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-tea-700/90">
@@ -139,7 +139,7 @@ export function FeaturedProducts() {
           className="mt-10 text-center sm:mt-16 lg:mt-20"
         >
           <Link
-            href="/san-pham"
+            href="/cua-hang"
             className="group inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-luxury text-wood-700 transition-colors hover:text-brick-500"
           >
             <span className="h-px w-12 bg-wood-500/40 transition-all duration-500 group-hover:w-20 group-hover:bg-brick-500" />
