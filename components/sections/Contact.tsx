@@ -2,47 +2,79 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Phone, MapPin, Clock, Check, Facebook, X, PartyPopper } from "lucide-react";
+import { ShoppingBag, Phone, MapPin, Clock, Facebook, X, PartyPopper, Loader2 } from "lucide-react";
 import { BRAND } from "@/lib/data";
-import { useFacebookOrder } from "@/lib/useFacebookOrder";
 import { fadeUp, stagger, viewportOnce } from "@/lib/motion";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
 /**
- * Form liên hệ — submit qua Messenger Facebook.
- * Workflow: user điền form → copy text vào clipboard → mở Messenger → paste & gửi.
+ * Form đặt hàng — submit qua Google Sheets (webhook Apps Script).
+ *
+ * Flow:
+ *   1. User điền form, bấm "ĐẶT HÀNG NGAY"
+ *   2. POST JSON đến NEXT_PUBLIC_SHEETS_WEBHOOK_URL (Google Apps Script)
+ *   3. Apps Script append row vào Google Sheet
+ *   4. Hiển thị popup "Đặt hàng thành công" + CTA Messenger để chốt nhanh
+ *
+ * Fallback (khi env chưa cấu hình hoặc network fail):
+ *   - Vẫn copy nội dung vào clipboard
+ *   - Vẫn hiện popup → user có thể dán vào Messenger
+ *   → KHÔNG BAO GIỜ làm user mất đơn hàng
  */
+const SHEETS_WEBHOOK_URL = process.env.NEXT_PUBLIC_SHEETS_WEBHOOK_URL;
+
 export function Contact() {
   const [form, setForm] = useState({ name: "", phone: "", message: "" });
   const [touched, setTouched] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const { triggerOrder, copied } = useFacebookOrder();
 
   const validPhone = /^(0|\+84)\d{9,10}$/.test(form.phone.replace(/[\s.-]/g, ""));
   const isValid = form.name.trim().length >= 2 && validPhone && form.message.trim().length >= 5;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched(true);
-    if (!isValid) return;
+    if (!isValid || submitting) return;
 
-    const text = [
-      "✉️ LIÊN HỆ — ĐẶC SẢN QUÊ NHÀ",
-      "",
+    setSubmitting(true);
+
+    // 1) Copy nội dung vào clipboard (dù gửi Sheet thành công hay fail,
+    //    user vẫn có thể paste sang Messenger từ popup)
+    const messengerText = [
       `Họ tên: ${form.name}`,
-      `Số điện thoại: ${form.phone}`,
-      "",
-      "Nội dung:",
-      form.message,
-      "",
-      "Vui lòng tư vấn giúp mình. Cảm ơn!",
+      `SĐT: ${form.phone}`,
+      `Nội dung: ${form.message}`,
     ].join("\n");
+    try {
+      await navigator.clipboard.writeText(messengerText);
+    } catch {
+      /* ignore — clipboard không phải critical */
+    }
 
-    triggerOrder(text);
+    // 2) Gửi data lên Google Sheet (nếu đã cấu hình webhook)
+    if (SHEETS_WEBHOOK_URL) {
+      try {
+        await fetch(SHEETS_WEBHOOK_URL, {
+          method: "POST",
+          // text/plain để tránh CORS preflight với Apps Script (Apps Script accept body any type)
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            message: form.message,
+            source: "Form liên hệ",
+            timestamp: new Date().toISOString(),
+          }),
+        });
+      } catch {
+        /* Sheet POST fail — vẫn hiện popup, user còn flow Messenger fallback */
+      }
+    }
 
-    // Hiện popup success — user có thể click "Nhắn Facebook ngay" để chốt đơn
+    // 3) Show popup + reset form
     setShowSuccess(true);
-
+    setSubmitting(false);
     setTimeout(() => {
       setForm({ name: "", phone: "", message: "" });
       setTouched(false);
@@ -90,10 +122,10 @@ export function Contact() {
               variants={fadeUp}
               className="font-display text-[32px] font-light text-wood-900 sm:text-[38px]"
             >
-              Để lại thông tin
+              Đặt hàng nhanh
             </motion.h3>
             <motion.p variants={fadeUp} className="mt-3 text-sm leading-relaxed text-wood-500">
-              Điền form → bấm gửi → tin nhắn được sao chép tự động → Messenger mở ra → dán &amp; gửi.
+              Điền form bên dưới — chúng tôi sẽ gọi lại trong vòng 15 phút (giờ hành chính). Hoặc gọi trực tiếp để chốt đơn ngay.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-9 space-y-5">
@@ -142,48 +174,36 @@ export function Contact() {
               </div>
             </motion.div>
 
-            <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-3 sm:flex-row">
+            {/* CTA stack: nút chính lớn xanh "ĐẶT HÀNG NGAY", nút phụ outline "Gọi" */}
+            <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-3">
+              {/* PRIMARY — submit form */}
               <button
                 type="submit"
-                className="group inline-flex flex-1 items-center justify-center gap-3 rounded-full bg-[#0084FF] px-8 py-4 text-[12px] font-semibold uppercase tracking-luxury text-cream-50 shadow-soft transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:bg-[#0070D9] hover:shadow-card-hover"
+                disabled={submitting}
+                className="group inline-flex items-center justify-center gap-3 rounded-full bg-[#0084FF] px-8 py-[18px] text-[15px] font-bold uppercase tracking-wide text-cream-50 shadow-[0_18px_40px_-12px_rgba(0,132,255,0.55)] transition-all duration-500 ease-expo-out hover:-translate-y-1 hover:scale-[1.02] hover:bg-[#0070D9] hover:shadow-[0_24px_50px_-12px_rgba(0,132,255,0.75)] active:scale-100 disabled:cursor-wait disabled:opacity-80 sm:py-5 sm:text-base"
               >
-                {copied ? (
-                  <><Check size={14} /> Đã sao chép — đang mở Messenger</>
+                {submitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Đang gửi…
+                  </>
                 ) : (
                   <>
-                    <Send size={14} className="transition-transform duration-500 group-hover:translate-x-0.5" />
-                    Gửi qua Facebook
+                    <ShoppingBag size={18} strokeWidth={2.2} />
+                    ĐẶT HÀNG NGAY
                   </>
                 )}
               </button>
+
+              {/* SECONDARY — gọi hotline, outline nhẹ */}
               <a
                 href={BRAND.hotlineHref}
-                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-wood-500/30 bg-cream-50 px-8 py-4 text-[11px] font-semibold uppercase tracking-luxury text-wood-700 transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:border-wood-900 hover:bg-wood-900 hover:text-cream-50"
+                className="group inline-flex items-center justify-center gap-2 rounded-full border border-wood-500/25 bg-transparent px-6 py-3 text-sm font-medium text-wood-700 transition-all duration-500 hover:border-wood-900 hover:bg-wood-900/5 hover:text-wood-900"
               >
-                <Phone size={14} />
-                Gọi {BRAND.hotline}
+                <Phone size={14} strokeWidth={2} className="transition-transform duration-500 group-hover:rotate-12" />
+                Hoặc gọi {BRAND.hotline}
               </a>
             </motion.div>
-
-            {/* Toast khi đã copy */}
-            <AnimatePresence>
-              {copied && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mt-5 flex items-start gap-3 rounded-xl border border-tea-500/30 bg-tea-100/70 p-4 text-sm"
-                >
-                  <Check size={18} className="mt-0.5 shrink-0 text-tea-700" strokeWidth={2.5} />
-                  <div>
-                    <p className="font-semibold text-wood-900">Đã sao chép thông tin</p>
-                    <p className="mt-1 text-xs leading-relaxed text-wood-500">
-                      Dán (Ctrl+V) vào tin nhắn Messenger để gửi.
-                    </p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.form>
 
           {/* Thông tin liên hệ */}
