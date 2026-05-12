@@ -97,15 +97,18 @@ export function Hero() {
         }}
       />
 
-      {/* ─────────────── CONTENT ────────────────────────────────────────────── */}
+      {/* ─────────────── CONTENT ──────────────────────────────────────────────
+          Entrance timings tối ưu LCP: H1 = LCP element, render gần như instant
+          (opacity 0→1 trong 0.4s, không blur filter). Các element khác fade in
+          sau nhẹ để vẫn giữ cảm giác cinematic mà không khoá LCP. */}
       <motion.div
         style={{ y: contentY }}
         className="relative z-10 flex h-full flex-col items-center justify-center px-6 sm:px-8 text-center"
       >
         <motion.span
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 1.4, ease: luxuryEase }}
+          transition={{ delay: 0.15, duration: 0.5, ease: luxuryEase }}
           className="inline-flex items-center gap-5 text-[10px] font-medium uppercase tracking-luxury text-gold-400/95 sm:text-[11px]"
         >
           <span className="h-px w-14 bg-gold-400/50" />
@@ -114,9 +117,9 @@ export function Hero() {
         </motion.span>
 
         <motion.h1
-          initial={{ opacity: 0, y: 40, filter: "blur(14px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 1.1, duration: 1.8, ease: luxuryEase }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: luxuryEase }}
           className="mt-12 max-w-5xl font-display text-display-2xl font-light text-cream-50 text-balance"
           style={{ letterSpacing: "-0.005em" }}
         >
@@ -127,14 +130,14 @@ export function Hero() {
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ delay: 1.6, duration: 1.4, ease: luxuryEase }}
+          transition={{ delay: 0.3, duration: 0.6, ease: luxuryEase }}
           className="mt-14 h-px w-28 origin-center bg-gold-400/60"
         />
 
         <motion.p
-          initial={{ opacity: 0, y: 22 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.75, duration: 1.5, ease: luxuryEase }}
+          transition={{ delay: 0.4, duration: 0.5, ease: luxuryEase }}
           className="mt-10 max-w-lg text-[15px] leading-[1.85] text-cream-50 text-pretty sm:mt-12 sm:text-base sm:leading-[2.05]"
           style={{
             textShadow: "0 1px 12px rgba(26, 15, 8, 0.6), 0 1px 3px rgba(26, 15, 8, 0.4)",
@@ -145,9 +148,9 @@ export function Hero() {
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 22 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.05, duration: 1.4, ease: luxuryEase }}
+          transition={{ delay: 0.55, duration: 0.5, ease: luxuryEase }}
           className="mt-16 flex flex-col items-center gap-4 sm:flex-row sm:gap-5"
         >
           <Link
@@ -165,7 +168,7 @@ export function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.7, duration: 1.5 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
         className="absolute inset-x-0 bottom-10 z-10 flex justify-center"
       >
         <motion.div
