@@ -1,10 +1,12 @@
 "use client";
 
 /**
- * Marquee dải giá trị thương hiệu chạy ngang vô tận — luxury signature
- * (Hermès, Aesop, La Mer hay dùng kiểu này để ngắt nhịp giữa các section).
+ * Marquee dải giá trị thương hiệu chạy ngang vô tận — luxury signature.
  *
- * Cách lặp: duplicate nội dung 2 lần, animate translateX(-50%) → seamless loop.
+ * Implementation: 1 chuỗi text liên tục với " · " làm separator THẬT trong text
+ *   → HTML rendered có nội dung readable: "A · B · C · D · ..."
+ *   → Copy text, screen-reader, SEO scrape đều nhận đúng separator (không dính chữ)
+ * Duplicate sequence 2 lần để animate translateX(-50%) loop seamless.
  */
 const VALUES = [
   "Thủ công làng nghề",
@@ -14,7 +16,7 @@ const VALUES = [
   "Mạch nha tự nấu",
   "Lạc rang vàng tay",
   "Chuẩn vị quê",
-  "Sạch · Chất · Lành",
+  "Sạch — Chất — Lành",
 ];
 
 export function ValuesMarquee({
@@ -22,7 +24,10 @@ export function ValuesMarquee({
 }: {
   variant?: "light" | "dark";
 }) {
-  const items = [...VALUES, ...VALUES];
+  // Join với " · " (space + middle dot + space) — separator nằm TRONG text content
+  // Thêm " · " ở cuối để loop sang vòng 2 không bị 2 giá trị dính nhau
+  const sequence = VALUES.join(" · ") + " · ";
+
   return (
     <div
       className={`relative overflow-hidden border-y py-8 sm:py-11 ${
@@ -31,28 +36,25 @@ export function ValuesMarquee({
           : "border-cream-50/10 bg-wood-950"
       }`}
     >
-      <div className="flex w-max animate-marquee gap-14 whitespace-nowrap will-change-transform sm:gap-20">
-        {items.map((v, i) => (
-          <span key={i} className="flex items-center gap-14 sm:gap-20">
-            <span
-              className={`font-display text-[28px] font-medium italic leading-none sm:text-[38px] ${
-                variant === "light" ? "text-wood-900" : "text-cream-50"
-              }`}
-              style={{ letterSpacing: "-0.005em" }}
-            >
-              {v}
-            </span>
-            {/* Separator là ký tự "·" thật — readable trong HTML source, screen-reader, khi copy text */}
-            <span
-              aria-hidden="true"
-              className={`text-[28px] leading-none sm:text-[38px] ${
-                variant === "light" ? "text-brick-500" : "text-gold-500"
-              }`}
-            >
-              ·
-            </span>
-          </span>
-        ))}
+      <div className="flex w-max animate-marquee whitespace-nowrap will-change-transform">
+        {/* 2 lần để seamless loop. aria-hidden ở bản 2 để screen-reader đọc 1 lần. */}
+        <span
+          className={`font-display text-[28px] font-medium italic leading-none sm:text-[38px] ${
+            variant === "light" ? "text-wood-900" : "text-cream-50"
+          }`}
+          style={{ letterSpacing: "-0.005em" }}
+        >
+          {sequence}
+        </span>
+        <span
+          aria-hidden="true"
+          className={`font-display text-[28px] font-medium italic leading-none sm:text-[38px] ${
+            variant === "light" ? "text-wood-900" : "text-cream-50"
+          }`}
+          style={{ letterSpacing: "-0.005em" }}
+        >
+          {sequence}
+        </span>
       </div>
     </div>
   );
