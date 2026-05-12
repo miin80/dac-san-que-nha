@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, X, Facebook, Check, ArrowRight } from "lucide-react";
+import { Play, X, Facebook, Check, ArrowRight, Phone } from "lucide-react";
 import { REELS, BRAND } from "@/lib/data";
 import { buildEnquiryMessage } from "@/lib/pricing";
 import { useFacebookOrder } from "@/lib/useFacebookOrder";
@@ -153,8 +153,11 @@ export function VideoReels() {
               👉 <strong className="font-semibold text-cream-50">Nên thử:</strong> Combo 3 túi (199.000đ) — phù hợp ăn thử + được miễn ship
             </p>
 
-            {/* PRIMARY CTA — to + emoji + shadow nổi bật */}
-            <div className="mt-8 flex flex-col items-center gap-4 sm:mt-10">
+            {/* CTA STACK — 2 nút rõ ràng:
+                  1. PRIMARY: nút xanh "Nhắn Facebook" — pulse-glow, ăn tiền
+                  2. SECONDARY: nút outline "Gọi điện" — cho user thích gọi hơn nhắn
+                Tách bằng cụm "hoặc" mảnh ở giữa để rõ ràng đây là 2 lựa chọn riêng. */}
+            <div className="mt-8 flex flex-col items-center gap-5 sm:mt-10">
               <button
                 onClick={() => triggerOrder(buildEnquiryMessage())}
                 className="group inline-flex animate-pulse-glow items-center justify-center gap-3 rounded-full bg-[#0084FF] px-10 py-[22px] text-[17px] font-bold text-cream-50 transition-all duration-500 ease-expo-out hover:-translate-y-1 hover:scale-[1.04] hover:!animate-none hover:bg-[#0070D9] hover:shadow-[0_28px_56px_-12px_rgba(0,132,255,0.85)] active:scale-100 sm:px-12 sm:py-6 sm:text-lg motion-reduce:animate-none"
@@ -166,11 +169,19 @@ export function VideoReels() {
                 <ArrowRight size={20} strokeWidth={2.4} className="transition-transform duration-500 group-hover:translate-x-1" />
               </button>
 
+              {/* "hoặc" mảnh — ngắt rõ giữa 2 lựa chọn */}
+              <div className="flex items-center gap-3 text-[10px] font-medium uppercase tracking-luxury text-cream-100/40">
+                <span className="h-px w-8 bg-cream-100/25" />
+                hoặc
+                <span className="h-px w-8 bg-cream-100/25" />
+              </div>
+
               <a
                 href={BRAND.hotlineHref}
-                className="text-xs font-medium uppercase tracking-luxury text-cream-100/70 transition-colors hover:text-cream-50"
+                className="group inline-flex items-center justify-center gap-3 rounded-full border border-cream-50/40 bg-cream-50/5 px-9 py-4 text-[15px] font-semibold text-cream-50 backdrop-blur-md transition-all duration-500 ease-expo-out hover:-translate-y-0.5 hover:border-cream-50 hover:bg-cream-50 hover:text-wood-900 sm:px-11 sm:py-[18px] sm:text-base"
               >
-                Hoặc gọi {BRAND.hotline}
+                <Phone size={18} strokeWidth={2} className="transition-transform duration-500 group-hover:rotate-12" />
+                Gọi {BRAND.hotline}
               </a>
 
               {copied && (

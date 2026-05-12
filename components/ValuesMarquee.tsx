@@ -42,13 +42,15 @@ export function ValuesMarquee({
             >
               {v}
             </span>
+            {/* Separator là ký tự "·" thật — readable trong HTML source, screen-reader, khi copy text */}
             <span
-              className={`inline-block h-2.5 w-2.5 rounded-full ${
-                variant === "light"
-                  ? "bg-brick-500 shadow-[0_0_0_4px_rgba(184,60,42,0.12)]"
-                  : "bg-gold-500 shadow-[0_0_0_4px_rgba(201,162,75,0.18)]"
+              aria-hidden="true"
+              className={`text-[28px] leading-none sm:text-[38px] ${
+                variant === "light" ? "text-brick-500" : "text-gold-500"
               }`}
-            />
+            >
+              ·
+            </span>
           </span>
         ))}
       </div>
