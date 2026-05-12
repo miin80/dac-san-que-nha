@@ -82,7 +82,6 @@ export function VideoReels() {
                 key={r.id}
                 reel={r}
                 index={i}
-                priority={i < 2}
                 onPlay={() => setActiveReel(r)}
               />
             ))}
@@ -198,12 +197,10 @@ export function VideoReels() {
 function ReelCard({
   reel,
   index,
-  priority,
   onPlay,
 }: {
   reel: Reel;
   index: number;
-  priority: boolean;
   onPlay: () => void;
 }) {
   return (
@@ -213,13 +210,13 @@ function ReelCard({
       aria-label={`Phát video: ${reel.title}`}
       className="group relative aspect-[9/16] overflow-hidden rounded-[1.75rem] bg-wood-900 text-left shadow-card ring-1 ring-cream-50/10 transition-all duration-700 ease-expo-out hover:-translate-y-1 hover:shadow-card-hover ring-inset-luxury"
     >
-      {/* Poster — luôn render, priority cho 2 card đầu */}
+      {/* Poster lazy — section below the fold, không cần priority */}
       <Image
         src={reel.poster}
         alt={reel.title}
         fill
         sizes="(min-width:1024px) 22vw, 45vw"
-        priority={priority}
+        loading="lazy"
         className="object-cover transition-transform duration-[1800ms] ease-expo-out group-hover:scale-[1.05]"
       />
 

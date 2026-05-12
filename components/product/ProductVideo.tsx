@@ -49,7 +49,8 @@ export function ProductVideo({
       viewport={viewportOnce}
       className="relative mx-auto aspect-[16/10] max-w-4xl overflow-hidden rounded-[2.5rem] bg-wood-900 shadow-cinematic letterbox"
     >
-      {/* Video — LUÔN render. Muted để autoplay work trên iOS sau user tap. */}
+      {/* Video LUÔN render nhưng preload="none" — chỉ fetch khi user tap play.
+          Tối ưu LCP: trên detail page, video không cần tải đến khi cần. */}
       <video
         ref={videoRef}
         src={src}
@@ -57,7 +58,7 @@ export function ProductVideo({
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
         controls={started}
         className="absolute inset-0 h-full w-full bg-wood-950 object-cover"
       />
