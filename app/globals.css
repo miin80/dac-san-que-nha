@@ -65,39 +65,6 @@
    COMPONENT CLASSES (tái sử dụng)
    ============================================================ */
 @layer components {
-  /* Nút primary — đỏ gạch refined: chỉ underline khi hover thay vì translate */
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2.5 rounded-full
-           bg-brick-500 px-8 py-4 text-[11px] font-semibold uppercase tracking-luxury
-           text-cream-50 shadow-soft transition-all duration-700 ease-expo-out
-           hover:bg-brick-600 hover:shadow-card-hover hover:-translate-y-0.5
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-brick-400 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-100;
-  }
-
-  .btn-outline {
-    @apply inline-flex items-center justify-center gap-2.5 rounded-full
-           border border-wood-500/30 bg-transparent px-8 py-4
-           text-[11px] font-semibold uppercase tracking-luxury text-wood-700
-           transition-all duration-700 ease-expo-out
-           hover:bg-wood-900 hover:text-cream-50 hover:border-wood-900 hover:-translate-y-0.5;
-  }
-
-  .btn-ghost-light {
-    @apply inline-flex items-center justify-center gap-2.5 rounded-full
-           border border-cream-50/40 bg-cream-50/10 px-8 py-4 text-[11px] font-semibold
-           uppercase tracking-luxury text-cream-50 backdrop-blur-md
-           transition-all duration-700 ease-expo-out
-           hover:bg-cream-50 hover:text-wood-900 hover:-translate-y-0.5;
-  }
-
-  /* Nút văn bản trần — premium minimalist */
-  .btn-text {
-    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-luxury text-wood-700 transition-colors duration-500 hover:text-brick-500;
-  }
-  .btn-text-light {
-    @apply inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-luxury text-cream-100 transition-colors duration-500 hover:text-gold-400;
-  }
-
   .eyebrow {
     @apply inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-luxury text-brick-500;
   }
@@ -115,23 +82,6 @@
     @apply relative overflow-hidden rounded-[2rem] bg-cream-50 shadow-card
            transition-all duration-1000 ease-expo-out
            hover:shadow-card-hover hover:-translate-y-1.5;
-  }
-
-  /* Texture giấy dó overlay — subtle */
-  .paper-texture {
-    position: relative;
-  }
-  .paper-texture::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      radial-gradient(rgba(107, 74, 43, 0.04) 1px, transparent 1px),
-      radial-gradient(rgba(107, 74, 43, 0.03) 1px, transparent 1px);
-    background-size: 30px 30px, 50px 50px;
-    background-position: 0 0, 15px 25px;
-    mix-blend-mode: multiply;
   }
 
   .ornament-corner {
@@ -162,9 +112,6 @@
   }
   .hairline-dark {
     @apply h-px w-full bg-gradient-to-r from-transparent via-cream-50/20 to-transparent;
-  }
-  .hairline-gold {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-gold-500/40 to-transparent;
   }
 
   /* Drop cap — luxury editorial */
@@ -216,11 +163,4 @@
     background-size: 200px 200px;
   }
 
-  /* Magazine column layout */
-  .magazine-cols {
-    column-count: 1;
-  }
-  @media (min-width: 1024px) {
-    .magazine-cols-2 { column-count: 2; column-gap: 3rem; }
-  }
 }

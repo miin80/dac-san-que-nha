@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Be_Vietnam_Pro, Lora } from "next/font/google";
-import { BRAND, CATEGORIES } from "@/lib/data";
+import { Cormorant_Garamond, Be_Vietnam_Pro } from "next/font/google";
+import { BRAND } from "@/lib/data";
 import { getFeaturedProducts } from "@/lib/products";
 import "./globals.css";
 
@@ -8,26 +8,13 @@ import "./globals.css";
  * HEADING FONT — Cormorant Garamond
  *   Serif Garamond hiện đại tinh tế, contrast cao nhưng vẫn dịu — đang được
  *   các brand luxury (La Mer, Hermès editorial, Aesop) hay dùng cho display.
- *   Hỗ trợ tiếng Việt qua subset "vietnamese".
- *   Italic của Cormorant đặc biệt đẹp — dùng cho accent.
+ *   Italic của Cormorant cũng dùng cho quote/caption (gộp font, bỏ Lora).
  */
 const fontDisplay = Cormorant_Garamond({
   subsets: ["latin", "latin-ext", "vietnamese"],
   weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
   variable: "--font-display",
-  display: "swap",
-});
-
-/**
- * QUOTE FONT — Lora
- *   Dùng cho italic quote, caption, pull-quote nhỏ — chân chữ hài hoà.
- */
-const fontQuote = Lora({
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500"],
-  style: ["italic"],
-  variable: "--font-quote",
   display: "swap",
 });
 
@@ -157,20 +144,9 @@ const jsonLdProducts = {
   })),
 };
 
-const jsonLdBreadcrumb = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: CATEGORIES.map((c, i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    name: c.name,
-    item: `${BRAND.siteUrl}/#${c.slug}`,
-  })),
-};
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" className={`${fontDisplay.variable} ${fontQuote.variable} ${fontSans.variable}`}>
+    <html lang="vi" className={`${fontDisplay.variable} ${fontSans.variable}`}>
       <head>
         <script
           type="application/ld+json"
@@ -179,10 +155,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdProducts) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
         />
       </head>
       <body>{children}</body>

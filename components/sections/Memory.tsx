@@ -121,7 +121,7 @@ export function Memory() {
                 src="/images/keo-lac/keo-lac-1.jpg"
                 alt="Kẹo lạc bên ấm trà — buổi sớm quê"
               />
-              <figcaption className="mt-6 px-2 font-quote italic text-sm leading-relaxed text-wood-500">
+              <figcaption className="mt-6 px-2 font-display italic text-sm leading-relaxed text-wood-500">
                 Bóng kẹo lạc bên tách trà sớm.
               </figcaption>
             </div>
@@ -133,14 +133,14 @@ export function Memory() {
                 variants={fadeUp}
                 className="drop-cap mt-14 text-lg leading-[2.05] text-wood-700 text-pretty sm:text-xl"
               >
-                Phiên chợ sớm. Mâm kẹo lạc phủ giấy đỏ. Tiếng rao của bà len qua sương — <em className="font-quote italic">“Ai kẹo lạc đê…”</em>
+                Phiên chợ sớm. Mâm kẹo lạc phủ giấy đỏ. Tiếng rao của bà len qua sương — <em className="font-display italic">“Ai kẹo lạc đê…”</em>
               </motion.p>
 
               <motion.blockquote
                 variants={fadeUp}
                 className="mt-10 border-l border-brick-500/45 pl-7"
               >
-                <p className="font-quote text-xl italic leading-snug text-wood-900 sm:text-2xl">
+                <p className="font-display text-xl italic leading-snug text-wood-900 sm:text-2xl">
                   Ngọt của kẹo lạc — không phải ngọt đường. <br />
                   Là ngọt của một buổi sáng đã rất xa.
                 </p>

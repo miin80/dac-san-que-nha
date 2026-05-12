@@ -67,7 +67,7 @@ export function ArticleContent({ blocks }: { blocks: ArticleBlock[] }) {
                   />
                 </div>
                 {block.caption && (
-                  <figcaption className="mt-4 text-center font-quote italic text-sm leading-relaxed text-wood-500 sm:text-[15px]">
+                  <figcaption className="mt-4 text-center font-display italic text-sm leading-relaxed text-wood-500 sm:text-[15px]">
                     {block.caption}
                   </figcaption>
                 )}

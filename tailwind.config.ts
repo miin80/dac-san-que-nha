@@ -62,7 +62,6 @@ const config: Config = {
       },
       fontFamily: {
         display: ["var(--font-display)", "Cormorant Garamond", "Garamond", "Georgia", "serif"],
-        quote: ["var(--font-quote)", "var(--font-display)", "Georgia", "serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
       },
       fontSize: {
