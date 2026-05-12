@@ -16,33 +16,10 @@ export const fadeUp: Variants = {
   },
 };
 
-export const fadeUpSmall: Variants = {
-  hidden: { opacity: 0, y: 22 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.2, ease: luxuryEase },
-  },
-};
-
-export const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 1.6, ease: luxuryEase } },
-};
-
 export const stagger = (delayChildren = 0.15, staggerChildren = 0.14): Variants => ({
   hidden: {},
   visible: { transition: { delayChildren, staggerChildren } },
 });
-
-export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.93 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 1.5, ease: luxuryEase },
-  },
-};
 
 // Cinematic image reveal — clip-path từ dưới lên (chậm hơn)
 export const revealClip: Variants = {

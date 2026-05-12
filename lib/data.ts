@@ -23,7 +23,6 @@ export type Category = {
 
 /* ----------------------------- THÔNG TIN THƯƠNG HIỆU -----------------------------
  * Kênh bán hàng duy nhất: FACEBOOK MESSENGER.
- * (Đã loại bỏ Zalo theo yêu cầu tập trung 100% vào Facebook.)
  *
  * Trường cần update khi đổi:
  *   - hotline / hotlineHref → SĐT

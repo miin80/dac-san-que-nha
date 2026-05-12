@@ -85,9 +85,6 @@ export const getAllProducts = (): Product[] => PRODUCTS;
 export const getProductBySlug = (slug: string): Product | undefined =>
   PRODUCTS.find((p) => p.slug === slug);
 
-export const getProductsByCategory = (category: MainCategory | string): Product[] =>
-  PRODUCTS.filter((p) => p.category === category);
-
 export const getFeaturedProducts = (): Product[] =>
   PRODUCTS.filter((p) => p.featured);
 

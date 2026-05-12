@@ -6,7 +6,7 @@ import { BRAND } from "@/lib/data";
 /**
  * Hook đặt hàng qua Messenger Facebook.
  *
- * Vì Messenger không hỗ trợ pre-fill text qua URL (khác với Zalo), workflow:
+ * Workflow: Messenger không hỗ trợ pre-fill text qua URL nên phải copy thủ công:
  *   1. Copy text đặt hàng vào clipboard
  *   2. Mở m.me link → Messenger
  *   3. Hiển thị toast "Đã sao chép — dán vào Messenger"
