@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
@@ -16,6 +17,13 @@ import { VideoReels } from "@/components/sections/VideoReels";
 import { Culture } from "@/components/sections/Culture";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { Contact } from "@/components/sections/Contact";
+
+// Canonical tag: dồn ranking SEO về 1 URL gốc duy nhất, tránh loãng khi user
+// share kèm ?fbclid / ?gclid / ?utm_* (từ Facebook ads, Google Ads, share link).
+// Các field title/description/og... inherited từ layout.tsx.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 /**
  * Trang chủ — luxury cinematic + commerce-friendly.
