@@ -85,6 +85,14 @@ export const metadata: Metadata = {
     icon: "/images/logo.jpg",
     apple: "/images/logo.jpg",
   },
+  // Facebook Domain Verification — verify ownership cho Business Manager.
+  // Render thẻ <meta name="facebook-domain-verification" content="..."> trong <head>.
+  // Cần thiết để chạy ads + iOS 14.5+ Aggregated Event Measurement.
+  verification: {
+    other: {
+      "facebook-domain-verification": "8z9qr1ru34iev1lw2uz84gb475lq6r",
+    },
+  },
 };
 
 export const viewport: Viewport = {
